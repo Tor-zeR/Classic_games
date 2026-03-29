@@ -1,0 +1,17 @@
+{
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".xml": "application/xml"
+  },
+  "responseOverrides": {
+    "404": {
+      "redirect": "/",
+      "statusCode": 302
+    }
+  }
+}
