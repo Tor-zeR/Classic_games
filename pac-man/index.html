@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>PAC-MAN — NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="pac-man.css">
+</head>
+<body>
+  <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 110%,#2a2000 0%,#0a0800 40%,#000 100%);"></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">PAC-MAN REQUIRES PORTRAIT MODE</div>
+  </div>
+
+  <div class="page">
+    <nav class="topbar">
+      <a href="../index.html" class="back-link">◄ HOME</a>
+      <div class="music-controls">
+        <button class="music-btn" id="music-toggle">♪ 8BIT</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <div class="game-area">
+
+      <aside class="side-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value hi" id="hi-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LIVES</div>
+          <div class="panel-value lives" id="lives-display">●●●</div>
+        </div>
+      </aside>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title neon-yellow flicker">PAC-MAN</div>
+          <div class="overlay-sub desktop-hints">
+            ARROW KEYS — MOVE &nbsp;|&nbsp; P — PAUSE<br>
+            EAT ALL THE DOTS<br>
+            POWER PELLETS STUN GHOSTS<br>
+            AMMO CRATE → SPACE FIRES BULLETS<br>
+            <span style="color:var(--yellow)">10 PTS</span> DOT &nbsp;·&nbsp;
+            <span style="color:var(--yellow)">50 PTS</span> PELLET
+          </div>
+          <div class="overlay-sub mobile-hints">
+            SWIPE — MOVE<br>
+            EAT ALL THE DOTS<br>
+            POWER PELLETS STUN GHOSTS<br>
+            GRAB AMMO CRATE → AUTO-FIRES<br>
+            <span style="color:var(--yellow)">10 PTS</span> DOT &nbsp;·&nbsp;
+            <span style="color:var(--yellow)">50 PTS</span> PELLET
+          </div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title neon-yellow pulse">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-levelup">
+          <div class="overlay-title neon-yellow pulse" id="lvl-title">LEVEL CLEAR!</div>
+          <div class="overlay-sub" style="color:var(--yellow)">PREPARING NEXT MAZE…</div>
+        </div>
+
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title neon-yellow flicker">GAME OVER</div>
+          <div class="overlay-score" id="go-score"></div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="panel-box">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value lvl neon-yellow" id="level-display">1</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">MAZE</div>
+          <div class="panel-value neon-yellow" id="maze-display">1 / 4</div>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="portrait-stats">
+      <div class="pstat"><span class="pstat-label">SCORE</span><span class="pstat-value" id="p-score-display">0</span></div>
+      <div class="pstat"><span class="pstat-label">BEST</span><span class="pstat-value pstat-hi" id="p-hi-display">0</span></div>
+      <div class="pstat"><span class="pstat-label">LIVES</span><span class="pstat-value pstat-lives" id="p-lives-display">●●●</span></div>
+      <div class="pstat"><span class="pstat-label">LEVEL</span><span class="pstat-value pstat-lvl" id="p-level-display">1</span></div>
+      <div class="pstat"><span class="pstat-label">MAZE</span><span class="pstat-value" id="p-maze-display">1/4</span></div>
+    </div>
+
+    <div class="controls-hint">
+      ARROW KEYS — MOVE &nbsp;|&nbsp;
+      EAT ALL DOTS TO ADVANCE &nbsp;|&nbsp;
+      POWER PELLETS STUN GHOSTS &nbsp;|&nbsp;
+      GRAB BOMB → SPACE TO SHOOT &nbsp;|&nbsp;
+      P — PAUSE
+    </div>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="pac-man.js"></script>
+</body>
+</html>

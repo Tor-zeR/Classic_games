@@ -1,0 +1,481 @@
+/* ============================================================
+   Lode Runner — Game Page Styles (red / gold theme)
+   ============================================================ */
+
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Top nav bar ── */
+.topbar {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 8px;
+  border-bottom: 1px solid rgba(255,0,68,0.15);
+}
+
+.game-title-bar {
+  font-size: 13px;
+  color: var(--red);
+  text-shadow: 0 0 10px var(--red);
+  letter-spacing: 0.15em;
+}
+
+.music-btn {
+  font-family: var(--font);
+  font-size: 8px;
+  background: transparent;
+  border: 1px solid rgba(255,0,68,0.35);
+  color: rgba(255,0,68,0.65);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+.music-btn:hover { border-color: var(--red); color: var(--red); }
+.music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+
+.back-link { color: var(--red); }
+.back-link:hover { text-shadow: 0 0 12px var(--red); }
+
+/* ── Main game area ── */
+.game-area {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 16px 12px;
+  width: 100%;
+  flex: 1;
+}
+
+/* ── Side panels ── */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 96px;
+}
+
+.panel-box {
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,0,68,0.18);
+  padding: 9px 11px;
+}
+.panel-label {
+  font-size: 6px;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 0.3em;
+  margin-bottom: 5px;
+}
+.panel-value {
+  font-size: 15px;
+  color: var(--red);
+  text-shadow: 0 0 8px var(--red);
+}
+.panel-value.hi    { font-size: 12px; }
+.panel-value.level { font-size: 22px; }
+.panel-value.lives { font-size: 11px; color: #ff6688; text-shadow: 0 0 8px #ff6688; }
+.panel-value.gold  { font-size: 12px; color: #ffd700; text-shadow: 0 0 8px #ffd700; }
+
+/* ── Canvas wrapper ── */
+.canvas-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#game-canvas {
+  display: block;
+  background: #0a0004;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.canvas-glow {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--red);
+  box-shadow: 0 0 14px var(--red), 0 0 32px rgba(255,0,68,0.12), inset 0 0 12px rgba(255,0,68,0.04);
+  pointer-events: none;
+}
+
+/* ── Overlays ── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.86);
+  gap: 14px;
+  z-index: 10;
+}
+.overlay.hidden { display: none; }
+
+.overlay-title {
+  font-size: clamp(9px, 1.8vw, 13px);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+.overlay-sub {
+  font-size: 6px;
+  color: rgba(255,255,255,0.42);
+  letter-spacing: 0.18em;
+  line-height: 2.4;
+  text-align: center;
+}
+
+/* ── Mobile/desktop hint visibility ── */
+.mobile-hints  { display: none; }
+.desktop-hints { display: block; }
+
+.fullscreen-note {
+  font-size: 6px;
+  color: rgba(255, 0, 68, 0.55);
+  letter-spacing: 0.18em;
+  text-align: center;
+  margin-top: -4px;
+}
+.overlay-score {
+  font-size: 10px;
+  color: var(--red);
+  text-shadow: 0 0 10px var(--red);
+  letter-spacing: 0.1em;
+}
+.overlay-btn {
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  padding: 10px 22px;
+  background: transparent;
+  border: 2px solid var(--red);
+  color: var(--red);
+  box-shadow: 0 0 10px rgba(255,0,68,0.4);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+.overlay-btn:hover  { background: rgba(255,0,68,0.08); box-shadow: 0 0 24px rgba(255,0,68,0.5); }
+.overlay-btn:active { transform: scale(0.95); }
+.overlay-btn-sm {
+  font-size: 7px;
+  padding: 7px 16px;
+  border-color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.4);
+  box-shadow: none;
+}
+.overlay-btn-sm:hover { background: rgba(255,255,255,0.05); box-shadow: none; color: rgba(255,255,255,0.7); }
+
+.neon-red { color: var(--red); text-shadow: 0 0 12px var(--red), 0 0 30px rgba(255,0,68,0.4); }
+
+/* ── Controls hint ── */
+.controls-hint {
+  font-size: 9px;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.15em;
+  text-align: center;
+  padding: 6px 16px 18px;
+  line-height: 2.6;
+}
+
+/* ── Touch d-pad ── */
+.touch-controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 16px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dpad-row {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.dpad-btn {
+  width: 52px;
+  height: 52px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,0,68,0.35);
+  color: var(--red);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+  border-radius: 4px;
+}
+.dpad-btn:active, .dpad-btn.pressed {
+  background: rgba(255,0,68,0.15);
+  box-shadow: 0 0 12px var(--red);
+}
+.dpad-center { width: 52px; height: 52px; }
+.dpad-btn.dig-btn {
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  border-color: rgba(255,215,0,0.4);
+  color: #ffd700;
+  text-shadow: 0 0 6px rgba(255,215,0,0.6);
+}
+.dpad-btn.dig-btn:active, .dpad-btn.dig-btn.pressed {
+  background: rgba(255,215,0,0.12);
+  box-shadow: 0 0 12px rgba(255,215,0,0.5);
+}
+.dpad-btn.pause-small {
+  width: 52px;
+  height: 36px;
+  font-size: 7px;
+  font-family: var(--font);
+  letter-spacing: 0.05em;
+  border-color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.35);
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .game-area      { gap: 8px; padding: 4px 8px 8px; }
+  .side-panel     { min-width: 72px; gap: 7px; }
+  .panel-value    { font-size: 12px; }
+  .panel-box      { padding: 7px 8px; }
+  .touch-controls { display: flex; }
+  .controls-hint  { display: none; }
+
+  .canvas-wrapper:has(#overlay-start:not(.hidden)) .canvas-glow {
+    display: none;
+  }
+}
+@media (max-width: 440px) {
+  .topbar         { padding: 10px 10px 4px; }
+  .game-title-bar { font-size: 10px; }
+  .side-panel     { min-width: 58px; }
+  .panel-value    { font-size: 10px; }
+  .panel-value.level { font-size: 16px; }
+  .panel-label    { font-size: 5px; }
+}
+
+@media (orientation: portrait) and (max-width: 640px) {
+  .touch-controls { display: none; }
+}
+
+/* ── Mobile touch controls ── */
+.mobile-dpad,
+.mobile-dig-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.dpad-cross {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dpad-cell {
+  background: rgba(255, 60, 0, 0.08);
+  border: 1px solid rgba(255, 60, 0, 0.45);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red);
+  font-size: 18px;
+}
+.dpad-cell.empty {
+  background: transparent;
+  border-color: transparent;
+}
+.dpad-cell.dpad-mid {
+  background: rgba(255, 60, 0, 0.04);
+  border-color: rgba(255, 60, 0, 0.18);
+}
+.dpad-cell.active {
+  background: rgba(255, 60, 0, 0.28);
+  box-shadow: 0 0 10px var(--red);
+}
+
+.mobile-ctrl-hint {
+  font-family: var(--font);
+  font-size: 5px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.15em;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.dig-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dig-btn-touch {
+  width: 80px;
+  height: 56px;
+  border-radius: 8px;
+  background: rgba(255, 60, 0, 0.08);
+  border: 2px solid var(--red);
+  color: var(--red);
+  font-family: var(--font);
+  font-size: 6px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  text-shadow: 0 0 8px var(--red);
+  box-shadow: 0 0 8px rgba(255,60,0,0.18);
+  transition: background 0.08s;
+}
+.dig-btn-touch.pressed {
+  background: rgba(255, 60, 0, 0.28);
+  box-shadow: 0 0 18px var(--red);
+}
+
+/* When mobile controls are active */
+body.is-mobile .game-area {
+  position: relative;
+  justify-content: center;
+  padding: 0;
+  gap: 0;
+}
+/* Panels are absolutely positioned so they never push/overlap the canvas */
+body.is-mobile .side-panel {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 130px;
+  z-index: 10;
+  background: rgba(0,0,0,0.88);
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: center;
+}
+body.is-mobile #left-panel  { left: 0;  border-right: 1px solid rgba(255,60,0,0.15); }
+body.is-mobile #right-panel { right: 0; border-left:  1px solid rgba(255,60,0,0.15); }
+/* Canvas wrapper gets matching margins so it never goes under the panels */
+body.is-mobile .canvas-wrapper { margin: 0 130px; }
+/* Smaller dpad cells so they fit inside the panel */
+body.is-mobile .dpad-cross {
+  grid-template-columns: repeat(3, 38px);
+  grid-template-rows: repeat(3, 38px);
+  gap: 3px;
+}
+body.is-mobile .dpad-cell { font-size: 14px; }
+body.is-mobile .dig-btn-touch { width: 74px; }
+body.is-mobile .mobile-dpad,
+body.is-mobile .mobile-dig-wrap {
+  display: flex;
+  order: 0;
+  flex: 1;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+body.is-mobile .side-panel .panel-box {
+  order: 1;
+  margin-top: 0 !important;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(255,60,0,0.12);
+  padding: 5px 8px;
+  text-align: center;
+  width: 100%;
+}
+body.is-mobile .side-panel .panel-label { font-size: 5px; margin-bottom: 3px; }
+body.is-mobile .side-panel .panel-value       { font-size: 11px; }
+body.is-mobile .side-panel .panel-value.hi    { font-size: 11px; }
+body.is-mobile .side-panel .panel-value.level { font-size: 13px; }
+body.is-mobile .panel-hints  { display: none !important; }
+body.is-mobile .controls-hint { display: none; }
+body.is-mobile .mobile-hints  { display: block; }
+body.is-mobile .desktop-hints { display: none; }
+
+/* Hide touch controls + canvas border on start screen */
+body.is-mobile:has(#overlay-start:not(.hidden)) .mobile-dpad,
+body.is-mobile:has(#overlay-start:not(.hidden)) .mobile-dig-wrap {
+  display: none !important;
+}
+body.is-mobile .canvas-wrapper:has(#overlay-start:not(.hidden)) .canvas-glow {
+  display: none;
+}
+
+@media (max-height: 420px) {
+  .dpad-cross {
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 3px;
+  }
+  .dpad-cell { font-size: 15px; }
+  .dig-btn-touch { width: 66px; height: 46px; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  body.is-mobile .topbar    { padding: 4px 10px; }
+  body.is-mobile .game-area { padding: 2px 0; gap: 0; }
+}
+
+/* ── Rotate-device overlay ── */
+.rotate-prompt {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.rotate-icon {
+  font-size: 64px;
+  color: var(--red);
+  text-shadow: 0 0 20px var(--red);
+  animation: rotate-hint 1.8s ease-in-out infinite;
+}
+.rotate-text {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--red);
+  text-shadow: 0 0 10px var(--red);
+  letter-spacing: 0.15em;
+}
+.rotate-sub {
+  font-family: var(--font);
+  font-size: 7px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+@keyframes rotate-hint {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(90deg); }
+  60%  { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@media (orientation: portrait) {
+  .rotate-prompt { display: flex; }
+  .page          { display: none; }
+}

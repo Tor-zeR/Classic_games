@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>SNAKE — NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="snake.css">
+</head>
+<body>
+  <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 110%,#1a0a00 0%,#080400 40%,#000 100%);"></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">SNAKE REQUIRES LANDSCAPE MODE</div>
+  </div>
+
+  <div class="page">
+    <nav class="topbar">
+      <a href="../index.html" class="back-link">◄ HOME</a>
+      <div class="music-controls">
+        <button class="music-btn" id="music-toggle">♪ CHIP</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <div class="game-area">
+
+      <aside class="side-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value hi" id="hi-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LENGTH</div>
+          <div class="panel-value length" id="length-display">3</div>
+        </div>
+      </aside>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title neon-orange flicker">SNAKE</div>
+          <div class="overlay-sub desktop-hints">
+            ARROW KEYS OR WASD — MOVE<br>
+            EAT FOOD TO GROW<br>
+            AVOID WALLS AND YOUR TAIL<br>
+            <span style="color:var(--orange)">+10 PTS</span> PER FOOD<br>
+            SPEED INCREASES EVERY BITE<br>
+            <span style="color:#00d2ff">RANDOM WALLS</span> APPEAR AFTER LENGTH 10<br>
+            <span style="color:#fff">★ BONUS</span> AT LENGTH 15 — AUTO-SHOOT OR SHIELD<br>
+            <span style="color:#aaddff">❄ SNOWFLAKE</span> — SLOW DOWN (LVL 6+)
+          </div>
+          <div class="overlay-sub mobile-hints">
+            SWIPE — MOVE<br>
+            EAT FOOD TO GROW<br>
+            AVOID WALLS AND YOUR TAIL<br>
+            <span style="color:var(--orange)">+10 PTS</span> PER FOOD<br>
+            SPEED INCREASES EVERY BITE<br>
+            <span style="color:#00d2ff">RANDOM WALLS</span> APPEAR AFTER LENGTH 10<br>
+            <span style="color:#fff">★ BONUS</span> AT LENGTH 15 — AUTO-SHOOT OR SHIELD<br>
+            <span style="color:#aaddff">❄ SNOWFLAKE</span> — SLOW DOWN (LVL 6+)
+          </div>
+          <div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title neon-orange pulse">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title neon-orange flicker">GAME OVER</div>
+          <div class="overlay-score" id="go-score"></div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="panel-box">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value lvl neon-orange" id="level-display">1</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">FOODS</div>
+          <div class="panel-value foods" id="foods-display">0</div>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="controls-hint">
+      ARROW KEYS / WASD — MOVE &nbsp;|&nbsp;
+      EAT FOOD TO GROW &nbsp;|&nbsp;
+      AVOID WALLS AND YOUR TAIL &nbsp;|&nbsp;
+      P — PAUSE
+    </div>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="snake.js"></script>
+</body>
+</html>

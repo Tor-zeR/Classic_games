@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>BERZERK — NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="berzerk.css">
+</head>
+<body>
+  <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 110%,#1a0030 0%,#080010 40%,#000 100%);"></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">BERZERK REQUIRES LANDSCAPE MODE</div>
+  </div>
+
+  <div class="page">
+    <nav class="topbar">
+      <a href="../index.html" class="back-link">◄ HOME</a>
+      <div class="music-controls">
+        <button class="music-btn" id="music-toggle">♪ 8BIT</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <div class="game-area">
+
+      <aside class="side-panel" id="left-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value hi" id="hi-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LIVES</div>
+          <div class="panel-value lives" id="lives-display">3</div>
+        </div>
+        <div class="mobile-dpad" id="mobile-dpad">
+          <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
+          <div class="dpad-cross" id="dpad-cross">
+            <div class="dpad-cell dpad-diag" id="dpad-ul">◤</div>
+            <div class="dpad-cell" id="dpad-up">▲</div>
+            <div class="dpad-cell dpad-diag" id="dpad-ur">◥</div>
+            <div class="dpad-cell" id="dpad-left">◄</div>
+            <div class="dpad-cell dpad-mid"></div>
+            <div class="dpad-cell" id="dpad-right">►</div>
+            <div class="dpad-cell dpad-diag" id="dpad-dl">◣</div>
+            <div class="dpad-cell" id="dpad-down">▼</div>
+            <div class="dpad-cell dpad-diag" id="dpad-dr">◢</div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title neon-green flicker">BERZERK</div>
+          <div class="overlay-sub desktop-hints">
+            ARROWS/WASD — MOVE &nbsp;|&nbsp; SPACE/Z — FIRE<br>
+            <span style="color:#ff4466">FIRING LOCKS MOVEMENT</span><br>
+            SHOOT ALL ROBOTS FOR BONUS<br>
+            EXIT THROUGH ANY DOORWAY<br>
+            ROOM 10: <span style="color:#ff4466">MASTER SWITCH</span> DESTROYS OTTO
+          </div>
+          <div class="overlay-sub mobile-hints">
+            D-PAD — MOVE (8 DIRECTIONS)<br>
+            FIRE BUTTON — SHOOT<br>
+            <span style="color:#ff4466">FIRING LOCKS MOVEMENT</span><br>
+            SHOOT ALL ROBOTS FOR BONUS<br>
+            EXIT THROUGH ANY DOORWAY<br>
+            ROOM 10: <span style="color:#ff4466">MASTER SWITCH</span> DESTROYS OTTO
+          </div>
+          <div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title neon-green pulse">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title neon-green flicker">GAME OVER</div>
+          <div class="overlay-score" id="go-score"></div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-victory">
+          <div class="overlay-title" style="color:#ffee00;text-shadow:0 0 18px #ffee00;">CONGRATULATIONS!</div>
+          <div class="overlay-sub">YOU DESTROYED BOSS OTTO<br><span style="color:#ffee00">+10000 BONUS POINTS</span></div>
+          <div class="overlay-score" id="victory-score"></div>
+          <button class="overlay-btn" id="btn-victory">► PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <aside class="side-panel" id="right-panel">
+        <div class="panel-box">
+          <div class="panel-label">ROOM</div>
+          <div class="panel-value room neon-green" id="room-display">1</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">ROBOTS</div>
+          <div class="panel-value robots" id="robots-display">0</div>
+        </div>
+        <div class="mobile-fire-wrap" id="mobile-fire-wrap">
+          <div class="mobile-ctrl-hint">TOUCH / HOLD TO FIRE</div>
+          <button class="fire-btn-touch" id="btn-fire-touch">FIRE</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="controls-hint">
+      ARROW KEYS / WASD — MOVE &nbsp;|&nbsp;
+      SPACE — FIRE (STOPS MOVEMENT) &nbsp;|&nbsp;
+      EXIT ANY DOORWAY TO ADVANCE &nbsp;|&nbsp;
+      P — PAUSE
+    </div>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="berzerk.js"></script>
+</body>
+</html>

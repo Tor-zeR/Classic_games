@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>TETRIS — NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="tetris.css">
+</head>
+<body>
+  <!-- Subtle static background (no animated grid — keep focus on game) -->
+  <div style="
+    position:fixed; inset:0; z-index:0;
+    background: radial-gradient(ellipse at 50% 110%, #1a0035 0%, #0a0018 40%, #020008 100%);
+  "></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">TETRIS REQUIRES PORTRAIT MODE</div>
+  </div>
+
+  <div class="page">
+
+    <!-- Top bar -->
+    <nav class="topbar">
+      <a href="../index.html" class="back-link">◄ HOME</a>
+      <div class="music-controls">
+        <button class="music-btn" id="music-toggle" title="Cycle music track">♪ CHIP</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <!-- Game area -->
+    <div class="game-area">
+
+      <!-- Left panel: Score -->
+      <aside class="side-panel" id="left-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value best" id="best-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LINES</div>
+          <div class="panel-value lines" id="lines-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value lvl neon-magenta" id="level-display">1</div>
+        </div>
+      </aside>
+
+      <!-- Canvas -->
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <!-- Overlay: Start screen -->
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title neon-cyan flicker">TETRIS</div>
+          <div class="overlay-sub desktop-hints">
+            ◄ ► — MOVE &nbsp;|&nbsp; ↑ — ROTATE<br>
+            ↓ — SOFT DROP &nbsp;|&nbsp; SPACE — HARD DROP<br>
+            P — PAUSE
+          </div>
+          <div class="overlay-sub mobile-hints">
+            SWIPE ← → — MOVE<br>
+            SWIPE ↑ — ROTATE &nbsp;|&nbsp; TAP — ROTATE<br>
+            SWIPE ↓ — DROP
+          </div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <!-- Overlay: Pause -->
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title neon-yellow pulse">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <!-- Overlay: Game Over -->
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title neon-magenta flicker">GAME OVER</div>
+          <div class="overlay-score" id="final-score"></div>
+          <div class="overlay-sub" id="new-best-msg" style="display:none; color:var(--yellow);">
+            ★ NEW HIGH SCORE ★
+          </div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <!-- Right panel: Next piece -->
+      <aside class="side-panel" id="right-panel">
+        <div class="panel-box">
+          <div class="panel-label">NEXT</div>
+          <canvas id="next-canvas"></canvas>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Controls hint (desktop) -->
+    <div class="controls-hint">
+      ARROW KEYS — MOVE &amp; ROTATE &nbsp;|&nbsp;
+      SPACE — HARD DROP &nbsp;|&nbsp;
+      Z — ROTATE CCW &nbsp;|&nbsp;
+      P — PAUSE
+    </div>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="tetris.js"></script>
+</body>
+</html>

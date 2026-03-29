@@ -1,0 +1,360 @@
+/* ============================================================
+   Tetris — Game Page Styles
+   ============================================================ */
+
+/* ── Page layout ── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Top nav bar ── */
+.topbar {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 8px;
+}
+
+.game-title-bar {
+  font-size: 13px;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan);
+  letter-spacing: 0.15em;
+}
+
+.music-btn {
+  font-family: var(--font);
+  font-size: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,255,255,0.35);
+  color: rgba(0,255,255,0.6);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+.music-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+
+/* ── Main game area ── */
+.game-area {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 8px 20px 16px;
+  width: 100%;
+  flex: 1;
+}
+
+/* ── Left / Right side panels ── */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 100px;
+}
+#left-panel  { justify-self: end; }
+#right-panel { justify-self: start; }
+
+.panel-box {
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(0,255,255,0.2);
+  padding: 10px 12px;
+}
+.panel-label {
+  font-size: 6px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+.panel-value {
+  font-size: 16px;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+  letter-spacing: 0.05em;
+}
+.panel-value.best {
+  font-size: 13px;
+  color: var(--yellow);
+  text-shadow: 0 0 8px var(--yellow);
+}
+.panel-value.lvl {
+  font-size: 20px;
+}
+.panel-value.lines {
+  font-size: 14px;
+  color: var(--magenta);
+  text-shadow: 0 0 8px var(--magenta);
+}
+
+/* ── Next piece canvas ── */
+#next-canvas {
+  display: block;
+  background: rgba(0,0,0,0.4);
+}
+
+/* ── Game canvas wrapper ── */
+.canvas-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#game-canvas {
+  display: block;
+  background: #000;
+  image-rendering: pixelated;
+}
+
+/* Canvas border glow */
+.canvas-glow {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 12px var(--cyan), 0 0 30px rgba(0,255,255,0.25), inset 0 0 12px rgba(0,255,255,0.06);
+  pointer-events: none;
+}
+
+/* ── Overlay screens (start / pause / game-over) ── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.82);
+  gap: 16px;
+  z-index: 10;
+}
+.overlay.hidden { display: none; }
+
+.overlay-title {
+  font-size: clamp(9px, 1.8vw, 13px);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+
+.overlay-sub {
+  font-size: 6px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.2em;
+  text-align: center;
+  line-height: 2.2;
+}
+
+/* ── Mobile/desktop hint visibility ── */
+.mobile-hints  { display: none; }
+.desktop-hints { display: block; }
+
+@media (pointer: coarse) {
+  .mobile-hints  { display: block; }
+  .desktop-hints { display: none; }
+}
+
+.overlay-score {
+  font-size: 11px;
+  color: var(--yellow);
+  text-shadow: 0 0 10px var(--yellow);
+  letter-spacing: 0.1em;
+}
+
+.overlay-btn {
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  padding: 10px 22px;
+  background: transparent;
+  border: 2px solid var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 6px;
+}
+.overlay-btn:hover {
+  background: rgba(0,255,255,0.12);
+  box-shadow: 0 0 22px var(--cyan);
+}
+.overlay-btn:active { transform: scale(0.95); }
+
+/* ── Controls hint ── */
+.controls-hint {
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.15em;
+  text-align: center;
+  padding: 8px 20px 20px;
+  line-height: 2.4;
+}
+
+/* ── Mobile on-screen controls ── */
+.touch-controls {
+  display: none; /* shown via JS when touch detected */
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px 20px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.dpad-btn {
+  width: 52px;
+  height: 52px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(0,255,255,0.35);
+  color: var(--cyan);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s, box-shadow 0.1s;
+  border-radius: 4px;
+}
+.dpad-btn:active,
+.dpad-btn.pressed {
+  background: rgba(0,255,255,0.15);
+  box-shadow: 0 0 12px var(--cyan);
+}
+
+.dpad-btn.hard-drop {
+  width: 116px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  height: 40px;
+  font-family: var(--font);
+  border-color: rgba(255,255,0,0.4);
+  color: var(--yellow);
+}
+.dpad-btn.hard-drop:active { background: rgba(255,255,0,0.12); box-shadow: 0 0 12px var(--yellow); }
+
+.dpad-btn.pause-small {
+  width: 52px;
+  height: 40px;
+  font-size: 8px;
+  font-family: var(--font);
+  letter-spacing: 0.1em;
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .game-area { gap: 8px; padding: 4px 10px 8px; grid-template-columns: 1fr auto 1fr; }
+  .side-panel { min-width: 76px; }
+  .panel-value { font-size: 13px; }
+  .panel-box { padding: 8px 8px; }
+  .panel-label { font-size: 5px; }
+  .touch-controls { display: flex; }
+  .controls-hint { display: none; }
+}
+
+@media (max-width: 440px) {
+  .topbar { padding: 10px 12px 4px; }
+  .game-title-bar { font-size: 10px; }
+  .side-panel { min-width: 64px; gap: 8px; }
+  .panel-value { font-size: 11px; }
+  .panel-value.lvl { font-size: 16px; }
+  .game-area { gap: 6px; padding: 2px 6px 6px; }
+}
+
+@media (orientation: portrait) and (max-width: 640px) {
+  html, body { overflow: hidden; height: 100%; }
+  .touch-controls { display: none; }
+  .controls-hint  { display: none; }
+
+  /* Stack vertically: stats → canvas → next */
+  .game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0 12px;
+  }
+
+  /* Scores strip — top */
+  #left-panel {
+    order: 1;
+    flex-direction: row;
+    width: 95vw;
+    min-width: unset;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  #left-panel .panel-box {
+    flex: 1;
+    text-align: center;
+    padding: 6px 4px;
+  }
+  #left-panel .panel-label { font-size: 5px; margin-bottom: 3px; }
+  #left-panel .panel-value { font-size: 11px; }
+  #left-panel .panel-value.best { font-size: 9px; }
+  #left-panel .panel-value.lvl  { font-size: 13px; }
+  #left-panel .panel-value.lines { font-size: 10px; }
+
+  /* Canvas — middle */
+  .canvas-wrapper { order: 2; }
+
+  /* Hide next piece panel entirely */
+  #right-panel { display: none; }
+}
+
+/* ── Rotate-device overlay (landscape → ask for portrait) ── */
+.rotate-prompt {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.rotate-icon {
+  font-size: 64px;
+  color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan);
+  animation: rotate-hint 1.8s ease-in-out infinite;
+}
+.rotate-text {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan);
+  letter-spacing: 0.15em;
+}
+.rotate-sub {
+  font-family: var(--font);
+  font-size: 7px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+@keyframes rotate-hint {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(-90deg); }
+  60%  { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@media (orientation: landscape) and (max-height: 640px) {
+  .rotate-prompt { display: flex; }
+  .page          { display: none; }
+}

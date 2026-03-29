@@ -1,0 +1,438 @@
+/* ============================================================
+   Space Invaders — Game Page Styles  (green theme)
+   ============================================================ */
+
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topbar {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 8px;
+}
+
+.game-title-bar {
+  font-size: 11px;
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green);
+  letter-spacing: 0.12em;
+}
+
+.music-btn {
+  font-family: var(--font);
+  font-size: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,255,68,0.35);
+  color: rgba(0,255,68,0.6);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+.music-btn:hover { border-color: var(--green); color: var(--green); }
+.music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+
+.game-area {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 20px 16px;
+  width: 100%;
+  flex: 1;
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 100px;
+}
+
+.panel-box {
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(0,255,68,0.2);
+  padding: 10px 12px;
+}
+.panel-label {
+  font-size: 6px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+.panel-value {
+  font-size: 16px;
+  color: var(--green);
+  text-shadow: 0 0 8px var(--green);
+  letter-spacing: 0.05em;
+}
+.panel-value.hi {
+  font-size: 13px;
+  color: var(--yellow);
+  text-shadow: 0 0 8px var(--yellow);
+}
+.panel-value.lives {
+  font-size: 13px;
+  color: var(--magenta);
+  text-shadow: 0 0 8px var(--magenta);
+}
+.panel-value.lvl { font-size: 20px; }
+
+.canvas-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#game-canvas {
+  display: block;
+  background: #000;
+  image-rendering: pixelated;
+}
+
+.canvas-glow {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--green);
+  box-shadow: 0 0 12px var(--green), 0 0 30px rgba(0,255,68,0.25), inset 0 0 12px rgba(0,255,68,0.06);
+  pointer-events: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.82);
+  gap: 16px;
+  z-index: 10;
+}
+.overlay.hidden { display: none; }
+
+.overlay-title {
+  font-size: clamp(8px, 1.8vw, 12px);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+.overlay-sub {
+  font-size: 6px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.18em;
+  text-align: center;
+  line-height: 2.4;
+}
+
+/* ── Mobile/desktop hint visibility ── */
+.mobile-hints  { display: none; }
+.desktop-hints { display: block; }
+
+.fullscreen-note {
+  font-size: 6px;
+  color: rgba(0, 255, 0, 0.55);
+  letter-spacing: 0.18em;
+  text-align: center;
+  margin-top: -4px;
+}
+.overlay-score {
+  font-size: 11px;
+  color: var(--yellow);
+  text-shadow: 0 0 10px var(--yellow);
+  letter-spacing: 0.1em;
+}
+.overlay-btn {
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  padding: 10px 22px;
+  background: transparent;
+  border: 2px solid var(--green);
+  color: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 6px;
+}
+.overlay-btn:hover { background: rgba(0,255,68,0.12); box-shadow: 0 0 22px var(--green); }
+.overlay-btn:active { transform: scale(0.95); }
+
+.controls-hint {
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.15em;
+  text-align: center;
+  padding: 8px 20px 20px;
+  line-height: 2.4;
+}
+
+.touch-controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px 20px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dpad-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.dpad-btn {
+  width: 52px;
+  height: 52px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(0,255,68,0.35);
+  color: var(--green);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s, box-shadow 0.1s;
+  border-radius: 4px;
+}
+.dpad-btn:active, .dpad-btn.pressed {
+  background: rgba(0,255,68,0.15);
+  box-shadow: 0 0 12px var(--green);
+}
+.dpad-btn.fire-btn {
+  width: 90px;
+  font-size: 9px;
+  font-family: var(--font);
+  letter-spacing: 0.1em;
+  border-color: rgba(255,255,0,0.4);
+  color: var(--yellow);
+}
+.dpad-btn.fire-btn:active { background: rgba(255,255,0,0.12); box-shadow: 0 0 12px var(--yellow); }
+.dpad-btn.pause-small {
+  width: 80px;
+  height: 40px;
+  font-size: 8px;
+  font-family: var(--font);
+  letter-spacing: 0.1em;
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.4);
+}
+
+@media (max-width: 700px) {
+  .game-area { gap: 8px; padding: 4px 10px 8px; }
+  .side-panel { min-width: 76px; }
+  .panel-value { font-size: 13px; }
+  .panel-box { padding: 8px 8px; }
+  .panel-label { font-size: 5px; }
+  .touch-controls { display: flex; }
+  .controls-hint { display: none; }
+}
+@media (max-width: 440px) {
+  .topbar { padding: 10px 12px 4px; }
+  .game-title-bar { font-size: 9px; }
+  .side-panel { min-width: 60px; gap: 8px; }
+  .panel-value { font-size: 11px; }
+  .panel-value.lvl { font-size: 16px; }
+  .game-area { gap: 6px; padding: 2px 6px 6px; }
+}
+
+@media (orientation: portrait) and (max-width: 640px) {
+  .touch-controls { display: none; }
+}
+
+/* ── Mobile touch controls (shown via JS on touch devices) ── */
+.mobile-dpad,
+.mobile-fire-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.dpad-cross {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dpad-cell {
+  background: rgba(0,255,68,0.08);
+  border: 1px solid rgba(0,255,68,0.35);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  font-size: 18px;
+}
+.dpad-cell.empty {
+  background: transparent;
+  border-color: transparent;
+}
+.dpad-cell.dpad-mid {
+  background: rgba(0,255,68,0.04);
+  border-color: rgba(0,255,68,0.15);
+}
+.dpad-cell.active {
+  background: rgba(0,255,68,0.28);
+  box-shadow: 0 0 10px var(--green);
+}
+
+.mobile-ctrl-hint {
+  font-family: var(--font);
+  font-size: 5px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.15em;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.fire-btn-touch {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: rgba(255,255,0,0.06);
+  border: 2px solid var(--yellow);
+  color: var(--yellow);
+  font-family: var(--font);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  text-shadow: 0 0 8px var(--yellow);
+  box-shadow: 0 0 10px rgba(255,255,0,0.18);
+  transition: background 0.08s;
+}
+.fire-btn-touch.pressed {
+  background: rgba(255,255,0,0.22);
+  box-shadow: 0 0 22px var(--yellow);
+}
+
+/* When mobile controls are active */
+body.is-mobile .game-area {
+  justify-content: center;
+  padding: 4px 0;
+  gap: 0;
+}
+body.is-mobile .side-panel {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: center;
+}
+/* Controls above stats — pushed toward the bottom of available space */
+body.is-mobile .mobile-dpad,
+body.is-mobile .mobile-fire-wrap {
+  order: 0;
+  flex: 1;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+body.is-mobile .side-panel .panel-box {
+  order: 1;
+  margin-top: 0 !important;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(0,255,68,0.12);
+  padding: 5px 8px;
+  text-align: center;
+  width: 100%;
+}
+body.is-mobile .side-panel .panel-label {
+  font-size: 5px;
+  margin-bottom: 3px;
+}
+body.is-mobile .side-panel .panel-value      { font-size: 11px; }
+body.is-mobile .side-panel .panel-value.hi   { font-size: 11px; }
+body.is-mobile .side-panel .panel-value.lives{ font-size: 10px; letter-spacing: 0.05em; }
+body.is-mobile .side-panel .panel-value.lvl  { font-size: 13px; }
+body.is-mobile .panel-hints  { display: none !important; }
+body.is-mobile .controls-hint { display: none; }
+body.is-mobile .mobile-hints  { display: block; }
+body.is-mobile .desktop-hints { display: none; }
+body.is-mobile #dpad-up,
+body.is-mobile #dpad-down    { visibility: hidden; pointer-events: none; }
+
+@media (max-height: 420px) {
+  .dpad-cross {
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 3px;
+  }
+  .dpad-cell { font-size: 15px; }
+  .fire-btn-touch { width: 68px; height: 68px; }
+}
+
+/* ── Rotate-device overlay ── */
+.rotate-prompt {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.rotate-icon {
+  font-size: 64px;
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green);
+  animation: rotate-hint 1.8s ease-in-out infinite;
+}
+.rotate-text {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green);
+  letter-spacing: 0.15em;
+}
+.rotate-sub {
+  font-family: var(--font);
+  font-size: 7px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+@keyframes rotate-hint {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(90deg); }
+  60%  { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@media (orientation: portrait) {
+  .rotate-prompt { display: flex; }
+  .page          { display: none; }
+}
+
+/* ── Hide touch controls + canvas border on start screen (mobile landscape) ── */
+body.is-mobile:has(#overlay-start:not(.hidden)) .mobile-dpad,
+body.is-mobile:has(#overlay-start:not(.hidden)) .mobile-fire-wrap {
+  display: none !important;
+}
+body.is-mobile .canvas-wrapper:has(#overlay-start:not(.hidden)) .canvas-glow {
+  display: none;
+}

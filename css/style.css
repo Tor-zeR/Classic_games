@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ============================================================
+   CSS Variables
+   ============================================================ */
+:root {
+  --cyan:    #00ffff;
+  --magenta: #ff00ff;
+  --green:   #00ff44;
+  --yellow:  #ffff00;
+  --orange:  #ff8800;
+  --pink:    #ff0088;
+  --blue:    #0088ff;
+  --red:     #ff0044;
+  --purple:  #aa00ff;
+  --white:   #ffffff;
+  --bg:      #04040c;
+  --font:    'Press Start 2P', 'Courier New', monospace;
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font);
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   CRT Effects
+   ============================================================ */
+
+/* Scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+  animation: crt-flicker 12s infinite;
+}
+
+/* Vignette */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  pointer-events: none;
+  z-index: 9997;
+}
+
+@keyframes crt-flicker {
+  0%,  88%, 90%, 92%, 95%, 100% { opacity: 1; }
+  89% { opacity: 0.96; }
+  91% { opacity: 0.93; }
+  93% { opacity: 0.98; }
+  96% { opacity: 0.91; }
+}
+
+/* ============================================================
+   Neon Text
+   ============================================================ */
+.neon-cyan    { color: var(--cyan);    text-shadow: 0 0 6px var(--cyan),    0 0 14px var(--cyan),    0 0 30px var(--cyan);    }
+.neon-magenta { color: var(--magenta); text-shadow: 0 0 6px var(--magenta), 0 0 14px var(--magenta), 0 0 30px var(--magenta); }
+.neon-green   { color: var(--green);   text-shadow: 0 0 6px var(--green),   0 0 14px var(--green),   0 0 30px var(--green);   }
+.neon-yellow  { color: var(--yellow);  text-shadow: 0 0 6px var(--yellow),  0 0 14px var(--yellow),  0 0 30px var(--yellow);  }
+.neon-pink    { color: var(--pink);    text-shadow: 0 0 6px var(--pink),    0 0 14px var(--pink),    0 0 30px var(--pink);    }
+.neon-orange  { color: var(--orange);  text-shadow: 0 0 6px var(--orange),  0 0 14px var(--orange),  0 0 30px var(--orange);  }
+
+/* ============================================================
+   Neon Borders
+   ============================================================ */
+.neon-border-cyan    { border: 2px solid var(--cyan);    box-shadow: 0 0 8px var(--cyan),    inset 0 0 8px rgba(0,255,255,0.08);    }
+.neon-border-magenta { border: 2px solid var(--magenta); box-shadow: 0 0 8px var(--magenta), inset 0 0 8px rgba(255,0,255,0.08); }
+.neon-border-green   { border: 2px solid var(--green);   box-shadow: 0 0 8px var(--green),   inset 0 0 8px rgba(0,255,68,0.08);   }
+.neon-border-yellow  { border: 2px solid var(--yellow);  box-shadow: 0 0 8px var(--yellow),  inset 0 0 8px rgba(255,255,0,0.08);  }
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+@keyframes neon-flicker {
+  0%, 18%, 20%, 22%, 53%, 55%, 100% { opacity: 1;   }
+  19%, 21%, 54%                      { opacity: 0.3; }
+}
+
+@keyframes float-up {
+  from { transform: translateY(6px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+.pulse   { animation: neon-pulse   2s ease-in-out infinite; }
+.flicker { animation: neon-flicker 5s linear infinite; }
+
+/* ============================================================
+   Shared UI Components
+   ============================================================ */
+
+/* Back link */
+.back-link {
+  font-family: var(--font);
+  font-size: 9px;
+  color: var(--cyan);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: text-shadow 0.2s;
+}
+.back-link:hover { text-shadow: 0 0 12px var(--cyan); }
+
+/* Stat box */
+.stat-box {
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(0,255,255,0.25);
+}
+.stat-label {
+  font-size: 7px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-size: 14px;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+}
+
+/* Button */
+.btn {
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan), inset 0 0 8px rgba(0,255,255,0.05);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.btn:hover {
+  background: rgba(0,255,255,0.12);
+  box-shadow: 0 0 20px var(--cyan), inset 0 0 16px rgba(0,255,255,0.12);
+}
+.btn:active { transform: scale(0.96); }
+
+/* Music controls group (track cycle + mute, right side of topbar) */
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Music mute button (shared across all games) */
+.music-mute-btn {
+  font-family: var(--font);
+  font-size: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,255,0,0.45);
+  color: rgba(0,255,0,0.75);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+.music-mute-btn:hover { border-color: #00ff44; color: #00ff44; }
+.music-mute-btn.off   { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }

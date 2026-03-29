@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>XONIX — NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="xonix.css">
+</head>
+<body>
+  <div style="
+    position:fixed; inset:0; z-index:0;
+    background: radial-gradient(ellipse at 50% 110%, #35003a 0%, #180020 35%, #04000a 100%);
+  "></div>
+
+  <!-- Portrait-mode rotation prompt (hidden in landscape) -->
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">XONIX REQUIRES LANDSCAPE MODE</div>
+  </div>
+
+  <div class="page">
+
+    <!-- Top bar -->
+    <nav class="topbar">
+      <a href="../index.html" class="back-link">◄ HOME</a>
+      <div class="music-controls">
+        <button class="music-btn" id="music-toggle">♪ SYNTH</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <!-- Game area -->
+    <div class="game-area">
+
+      <!-- Left panel -->
+      <aside class="side-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value hi" id="hi-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LIVES</div>
+          <div class="panel-value lives" id="lives-display">♥♥♥</div>
+        </div>
+      </aside>
+
+      <!-- Canvas -->
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <!-- Start overlay -->
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title neon-magenta flicker">XONIX</div>
+          <div class="overlay-sub desktop-hints">
+            ARROW KEYS — MOVE<br>
+            CAPTURE TERRITORY<br>
+            AVOID THE BALLS<br>
+            REACH <span style="color:var(--yellow)">75%</span> TO ADVANCE
+          </div>
+          <div class="overlay-sub mobile-hints">
+            SWIPE — MOVE<br>
+            CAPTURE TERRITORY<br>
+            AVOID THE BALLS<br>
+            REACH <span style="color:var(--yellow)">75%</span> TO ADVANCE
+          </div>
+          <div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <!-- Pause overlay -->
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title neon-yellow pulse">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <!-- Level complete overlay -->
+        <div class="overlay hidden" id="overlay-levelup">
+          <div class="overlay-title neon-green pulse" id="lvl-score">LEVEL CLEAR!</div>
+          <div class="overlay-sub" style="color:var(--green);">PREPARING NEXT LEVEL…</div>
+        </div>
+
+        <!-- Game over overlay -->
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title neon-magenta flicker">GAME OVER</div>
+          <div class="overlay-score" id="go-score"></div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <aside class="side-panel">
+        <div class="panel-box">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value lvl neon-magenta" id="level-display">1</div>
+        </div>
+        <div class="panel-box fill-section">
+          <div class="panel-label">FILL</div>
+          <div class="fill-numbers">
+            <span class="fill-pct"   id="fill-display">0%</span>
+            <span class="fill-target" id="target-display">/ 75%</span>
+          </div>
+          <div class="fill-bar-track">
+            <div class="fill-bar-inner" id="fill-bar-inner" style="width:0%"></div>
+            <div class="fill-bar-marker" id="fill-bar-marker" style="left:100%"></div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Controls hint (desktop) -->
+    <div class="controls-hint">
+      ARROW KEYS — MOVE &nbsp;|&nbsp;
+      DRAW TRAILS TO CAPTURE AREA &nbsp;|&nbsp;
+      DON'T LET ENEMIES TOUCH YOUR TRAIL &nbsp;|&nbsp;
+      P — PAUSE
+    </div>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="xonix.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>LODE RUNNER — NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="lode-runner.css">
+</head>
+<body>
+  <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 110%,#180005 0%,#080002 40%,#000 100%);"></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">LODE RUNNER REQUIRES LANDSCAPE MODE</div>
+  </div>
+
+  <div class="page">
+    <nav class="topbar">
+      <a href="../index.html" class="back-link">◄ HOME</a>
+      <div class="music-controls">
+        <button class="music-btn" id="music-toggle">♪ DUNGEON</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <div class="game-area">
+
+      <aside class="side-panel" id="left-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value hi" id="hi-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LIVES</div>
+          <div class="panel-value lives" id="lives-display">♥♥♥♥♥</div>
+        </div>
+        <div class="mobile-dpad" id="mobile-dpad">
+          <div class="mobile-ctrl-hint">MOVE</div>
+          <div class="dpad-cross" id="dpad-cross">
+            <div class="dpad-cell empty"></div>
+            <div class="dpad-cell" id="dpad-up">▲</div>
+            <div class="dpad-cell empty"></div>
+            <div class="dpad-cell" id="dpad-left">◄</div>
+            <div class="dpad-cell dpad-mid"></div>
+            <div class="dpad-cell" id="dpad-right">►</div>
+            <div class="dpad-cell empty"></div>
+            <div class="dpad-cell" id="dpad-down">▼</div>
+            <div class="dpad-cell empty"></div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title neon-red flicker">LODE RUNNER</div>
+          <div class="overlay-sub desktop-hints">
+            ARROWS / WASD — MOVE &amp; CLIMB<br>
+            Z — DIG LEFT &nbsp;|&nbsp; X — DIG RIGHT<br>
+            COLLECT ALL GOLD → ESCAPE LADDER APPEARS<br>
+            CLIMB TO THE TOP TO ADVANCE<br>
+            P / ESC — PAUSE &nbsp;|&nbsp; R — RESTART LEVEL
+          </div>
+          <div class="overlay-sub mobile-hints">
+            D-PAD — MOVE &amp; CLIMB<br>
+            ◄ DIG / DIG ► — DIG BUTTONS<br>
+            COLLECT ALL GOLD → LADDER APPEARS<br>
+            CLIMB TO THE TOP TO ADVANCE<br>
+            <span style="color:var(--red)">DON'T FALL ON GUARDS!</span>
+          </div>
+          <div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title neon-red pulse">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+          <button class="overlay-btn overlay-btn-sm" id="btn-restart-level">► RESTART LEVEL</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title neon-red flicker">GAME OVER</div>
+          <div class="overlay-score" id="go-score"></div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-victory">
+          <div class="overlay-title" style="color:#ffd700;text-shadow:0 0 18px #ffd700;">YOU WIN!</div>
+          <div class="overlay-sub">ALL LEVELS CLEARED!</div>
+          <div class="overlay-score" id="victory-score"></div>
+          <button class="overlay-btn" id="btn-victory">► PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <aside class="side-panel" id="right-panel">
+        <div class="panel-box">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value level neon-red" id="level-display">1</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">GOLD</div>
+          <div class="panel-value gold" id="gold-display">0/0</div>
+        </div>
+        <div class="mobile-dig-wrap" id="mobile-dig-wrap">
+          <div class="mobile-ctrl-hint">DIG</div>
+          <div class="dig-btns">
+            <button class="dig-btn-touch" id="btn-digl-touch">◄ DIG</button>
+            <button class="dig-btn-touch" id="btn-digr-touch">DIG ►</button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="controls-hint">
+      ARROWS / WASD — MOVE &amp; CLIMB &nbsp;|&nbsp;
+      Z — DIG LEFT &nbsp;|&nbsp; X — DIG RIGHT &nbsp;|&nbsp;
+      P — PAUSE &nbsp;|&nbsp; R — RESTART LEVEL
+    </div>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="lode-runner-levels.js"></script>
+  <script src="lode-runner.js"></script>
+</body>
+</html>

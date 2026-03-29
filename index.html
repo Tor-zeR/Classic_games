@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEON ARCADE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Background canvas ── */
+    #bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* ── Page layout ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 56px 24px 32px;
+      animation: float-up 0.8s ease both;
+    }
+
+    /* Occasional neon-sign flicker — stays lit ~90% of the cycle,
+       then has a brief multi-burst sputter near the end of the period. */
+    @keyframes logo-flicker {
+      0%,  85%           { opacity: 1;    }
+      86%                { opacity: 0.15; }
+      87%                { opacity: 1;    }
+      88%                { opacity: 0.5;  }
+      89%                { opacity: 1;    }
+      90%                { opacity: 0.08; }
+      91%, 93%           { opacity: 1;    }
+      92%                { opacity: 0.35; }
+      94%                { opacity: 0.7;  }
+      95%, 100%          { opacity: 1;    }
+    }
+
+    .logo {
+      font-size: clamp(32px, 7vw, 72px);
+      letter-spacing: 0.22em;
+      line-height: 1.3;
+      display: block;
+    }
+    /* Each word gets a different period + delay → independent flicker */
+    .logo.neon-cyan    { animation: logo-flicker  9s linear 0s      infinite; }
+    .logo.neon-magenta { animation: logo-flicker 11s linear 3.4s    infinite; }
+
+    .logo-sub {
+      font-size: clamp(8px, 1.5vw, 11px);
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.35em;
+      margin-top: 10px;
+    }
+
+    .insert-coin {
+      font-size: clamp(7px, 1.2vw, 10px);
+      color: var(--green);
+      letter-spacing: 0.3em;
+      margin-top: 22px;
+      animation: neon-pulse 1.4s ease-in-out infinite;
+    }
+
+    /* ── Games section ── */
+    .games-section {
+      width: 100%;
+      max-width: 960px;
+      padding: 16px 28px 64px;
+      animation: float-up 0.8s 0.15s ease both;
+    }
+
+    .section-label {
+      font-size: 8px;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.4em;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Game card ── */
+    .game-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: var(--white);
+      background: rgba(0,0,0,0.6);
+      border: 2px solid transparent;
+      padding: 28px 18px 22px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* Shine sweep on hover */
+    .game-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg,
+        transparent 30%,
+        rgba(255,255,255,0.04) 50%,
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .game-card:hover::after { opacity: 1; }
+    .game-card:hover { transform: translateY(-5px); }
+
+    /* Per-card accent colors */
+    .card-tetris      { border-color: var(--cyan);    box-shadow: 0 0 12px rgba(0,255,255,0.25),   inset 0 0 12px rgba(0,255,255,0.04);   }
+    .card-xonix       { border-color: var(--magenta); box-shadow: 0 0 12px rgba(255,0,255,0.25),   inset 0 0 12px rgba(255,0,255,0.04);   }
+    .card-paratrooper { border-color: var(--green);   box-shadow: 0 0 12px rgba(0,255,68,0.25),    inset 0 0 12px rgba(0,255,68,0.04);    }
+    .card-pacman      { border-color: var(--yellow);  box-shadow: 0 0 12px rgba(255,255,0,0.25),   inset 0 0 12px rgba(255,255,0,0.04);   }
+    .card-snake       { border-color: var(--orange);  box-shadow: 0 0 12px rgba(255,136,0,0.25),   inset 0 0 12px rgba(255,136,0,0.04);   }
+    .card-para        { border-color: var(--blue);    box-shadow: 0 0 12px rgba(0,136,255,0.25),   inset 0 0 12px rgba(0,136,255,0.04);   }
+    .card-berzerk     { border-color: var(--purple);  box-shadow: 0 0 12px rgba(170,0,255,0.25),   inset 0 0 12px rgba(170,0,255,0.04);   }
+    .card-loderunner  { border-color: var(--red);     box-shadow: 0 0 12px rgba(255,0,68,0.25),    inset 0 0 12px rgba(255,0,68,0.04);    }
+
+    .card-tetris:hover      { box-shadow: 0 0 28px rgba(0,255,255,0.5),   inset 0 0 20px rgba(0,255,255,0.08);   }
+    .card-xonix:hover       { box-shadow: 0 0 28px rgba(255,0,255,0.5),   inset 0 0 20px rgba(255,0,255,0.08);   }
+    .card-paratrooper:hover { box-shadow: 0 0 28px rgba(0,255,68,0.5),    inset 0 0 20px rgba(0,255,68,0.08);    }
+    .card-pacman:hover      { box-shadow: 0 0 28px rgba(255,255,0,0.5),   inset 0 0 20px rgba(255,255,0,0.08);   }
+    .card-snake:hover       { box-shadow: 0 0 28px rgba(255,136,0,0.5),   inset 0 0 20px rgba(255,136,0,0.08);   }
+    .card-para:hover        { box-shadow: 0 0 28px rgba(0,136,255,0.5),   inset 0 0 20px rgba(0,136,255,0.08);   }
+    .card-berzerk:hover     { box-shadow: 0 0 28px rgba(170,0,255,0.5),   inset 0 0 20px rgba(170,0,255,0.08);   }
+    .card-loderunner:hover  { box-shadow: 0 0 28px rgba(255,0,68,0.5),    inset 0 0 20px rgba(255,0,68,0.08);    }
+
+    /* Hardcore badge */
+    .hardcore-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 6px;
+      letter-spacing: 0.18em;
+      padding: 3px 7px;
+      border: 1px solid #ff2244;
+      color: #ff2244;
+      text-shadow: 0 0 8px rgba(255,34,68,0.8);
+      box-shadow: 0 0 8px rgba(255,34,68,0.35);
+      animation: neon-pulse 1.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* Disabled "coming soon" cards */
+    .card-soon {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .game-icon {
+      font-size: 38px;
+      line-height: 1;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .game-title {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+    }
+    .card-tetris      .game-title { color: var(--cyan);    text-shadow: 0 0 10px var(--cyan);    }
+    .card-xonix       .game-title { color: var(--magenta); text-shadow: 0 0 10px var(--magenta); }
+    .card-paratrooper .game-title { color: var(--green);   text-shadow: 0 0 10px var(--green);   }
+    .card-pacman      .game-title { color: var(--yellow);  text-shadow: 0 0 10px var(--yellow);  }
+    .card-snake       .game-title { color: var(--orange);  text-shadow: 0 0 10px var(--orange);  }
+    .card-para        .game-title { color: var(--blue);    text-shadow: 0 0 10px var(--blue);    }
+    .card-berzerk     .game-title { color: var(--purple);  text-shadow: 0 0 10px var(--purple);  }
+    .card-loderunner  .game-title { color: var(--red);     text-shadow: 0 0 10px var(--red);     }
+
+    .game-desc {
+      font-size: 7px;
+      line-height: 2;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .play-tag {
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      padding: 5px 12px;
+      border: 1px solid;
+    }
+    .card-tetris      .play-tag { color: var(--cyan);    border-color: var(--cyan);    }
+    .card-xonix       .play-tag { color: var(--magenta); border-color: var(--magenta); }
+    .card-paratrooper .play-tag { color: var(--green);   border-color: var(--green);   }
+    .card-pacman      .play-tag { color: var(--yellow);  border-color: var(--yellow);  }
+    .card-snake       .play-tag { color: var(--orange);  border-color: var(--orange);  }
+    .card-para        .play-tag { color: var(--blue);    border-color: var(--blue);    }
+    .card-berzerk     .play-tag { color: var(--purple);  border-color: var(--purple);  }
+    .card-loderunner  .play-tag { color: var(--red);     border-color: var(--red);     }
+
+    .soon-tag {
+      font-size: 7px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.2em;
+    }
+
+    /* ── Music button ── */
+    .music-btn {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 10;
+      font-family: var(--font);
+      font-size: 8px;
+      background: transparent;
+      border: 1px solid rgba(255,0,255,0.35);
+      color: rgba(255,0,255,0.6);
+      padding: 5px 10px;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: all 0.15s;
+    }
+    .music-btn:hover { border-color: var(--magenta); color: var(--magenta); }
+    .music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+
+    /* ── Footer ── */
+    footer {
+      font-size: 7px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.25em;
+      text-align: center;
+      padding: 16px;
+      margin-top: auto;
+    }
+
+    @media (max-width: 560px) {
+      header { padding: 36px 16px 24px; }
+      .games-section { padding: 12px 14px 40px; }
+    }
+
+    /* ── Rotate-device overlay (landscape → ask for portrait) ── */
+    .rotate-prompt {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .rotate-icon {
+      font-size: 64px;
+      color: var(--magenta);
+      text-shadow: 0 0 20px var(--magenta);
+      animation: rotate-hint 1.8s ease-in-out infinite;
+    }
+    .rotate-text {
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--magenta);
+      text-shadow: 0 0 10px var(--magenta);
+      letter-spacing: 0.15em;
+    }
+    .rotate-sub {
+      font-family: var(--font);
+      font-size: 7px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.15em;
+      text-align: center;
+      padding: 0 20px;
+    }
+    @keyframes rotate-hint {
+      0%   { transform: rotate(0deg); }
+      40%  { transform: rotate(-90deg); }
+      60%  { transform: rotate(-90deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @media (orientation: landscape) and (max-height: 640px) {
+      .rotate-prompt { display: flex; }
+      .page          { display: none; }
+      #music-toggle  { display: none; }
+    }
+
+    /* ── Portrait mode: 2 columns on all portrait devices ── */
+    @media (orientation: portrait) {
+      .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    /* ── Portrait phones/phablets: icon + name only ──
+       max-width: 640px covers phones up to ~1280px physical at DPR 2,
+       or ~1920px physical at DPR 3 — well beyond any current phone.
+       orientation: portrait prevents this from firing on landscape tablets. ── */
+    @media (orientation: portrait) and (max-width: 640px) {
+      .games-section { padding: 12px 14px 40px; }
+      .games-grid { gap: 10px; }
+      .game-card { padding: 20px 10px 18px; }
+      .game-icon { font-size: 32px; margin-bottom: 10px; }
+      .game-title { font-size: 11px; margin-bottom: 0; }
+      .game-desc { display: none; }
+      .play-tag { display: none; }
+    }
+
+
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <button class="music-btn muted" id="music-toggle">♪ OFF</button>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">NEON ARCADE IS BEST IN PORTRAIT MODE</div>
+  </div>
+
+  <div class="page">
+    <header>
+      <span class="logo neon-cyan">NEON</span>
+      <span class="logo neon-magenta">ARCADE</span>
+      <p class="logo-sub">EST. 1980 · REMASTERED 2026</p>
+      <p class="insert-coin">► INSERT COIN TO CONTINUE ◄</p>
+    </header>
+
+    <main class="games-section">
+      <p class="section-label">// SELECT YOUR GAME //</p>
+      <div class="games-grid">
+
+        <a href="tetris/index.html" class="game-card card-tetris">
+          <span class="game-icon">▦</span>
+          <h2 class="game-title">TETRIS</h2>
+          <p class="game-desc">Stack the falling<br>tetrominoes.<br>Clear the lines.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="xonix/index.html" class="game-card card-xonix">
+<span class="game-icon">◈</span>
+          <h2 class="game-title">XONIX</h2>
+          <p class="game-desc">Capture territory<br>without getting<br>intercepted.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="space-invaders/index.html" class="game-card card-paratrooper">
+          <span class="game-icon">👾</span>
+          <h2 class="game-title">SPACE INVADERS</h2>
+          <p class="game-desc">Defend Earth from<br>the alien fleet<br>descending above.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="pac-man/index.html" class="game-card card-pacman">
+<span class="game-icon">◕</span>
+          <h2 class="game-title">PAC-MAN</h2>
+          <p class="game-desc">Eat the dots.<br>Dodge the ghosts.<br>4 different mazes.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="snake/index.html" class="game-card card-snake">
+          <span class="game-icon">🐍</span>
+          <h2 class="game-title">SNAKE</h2>
+          <p class="game-desc">Eat. Grow. Don't<br>bite your own tail.<br>How long can you last?</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="lode-runner/index.html" class="game-card card-loderunner">
+          <span class="game-icon">🪜</span>
+          <h2 class="game-title">LODE RUNNER</h2>
+          <p class="game-desc">Collect the gold.<br>Dig traps for guards.<br>Escape every level.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="paratrooper/index.html" class="game-card card-para">
+          <span class="game-icon">🪂</span>
+          <h2 class="game-title">PARATROOPER</h2>
+          <p class="game-desc">Man the turret.<br>Shoot down planes<br>and paratroopers.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+<a href="berzerk/index.html" class="game-card card-berzerk">
+<span class="game-icon">🤖</span>
+          <h2 class="game-title">BERZERK</h2>
+          <p class="game-desc">Blast the robots.<br>Escape each room.<br>Evil Otto won't stop.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+      </div>
+    </main>
+
+    <footer>© 2026 NEON ARCADE · ALL RIGHTS RESERVED</footer>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    NeonArcade.setTrack(0);  // landing page starts silent; first click → CHIP
+    document.getElementById('music-toggle').addEventListener('click', function () {
+      const { track, name } = NeonArcade.cycleTrack();
+      this.textContent = '♪ ' + name;
+      this.classList.toggle('muted', track === 0);
+    });
+  </script>
+
+  <!-- Synthwave background -->
+  <script>
+    (function () {
+      const canvas = document.getElementById('bg');
+      const ctx    = canvas.getContext('2d');
+      let W, H, t = 0;
+
+      // Pre-initialise each star with its own random blink frequency and phase
+      const STARS = Array.from({ length: 90 }, (_, i) => ({
+        fx: Math.abs(Math.sin(i * 127.3)),   // x position fraction (0-1)
+        fy: Math.abs(Math.sin(i * 311.7)),   // y position fraction (0-1)
+        sz: 0.4 + Math.abs(Math.sin(i * 53.1)) * 0.9,
+        freq:  0.4 + Math.random() * 2.8,   // blink speed: some slow, some fast
+        phase: Math.random() * Math.PI * 2, // random start offset
+      }));
+
+      // ── Shooting stars & comets state ────────────────────────
+      let shootingStars = [];
+      let comets        = [];
+      let ssTimer = 1 + Math.random() * 2;   // seconds until next shooting star
+      let cmTimer = 5 + Math.random() * 8;   // seconds until next comet
+
+      function spawnShootingStar() {
+        const spd = 380 + Math.random() * 280;
+        const deg = (72 + Math.random() * 36) * Math.PI / 180; // nearly vertical, slight tilt
+        const dir = Math.random() < 0.5 ? 1 : -1;
+        shootingStars.push({
+          x: Math.random() * W,
+          y: Math.random() * H * 0.5,
+          vx: dir * spd * Math.cos(deg),
+          vy: spd * Math.sin(deg),
+          tailLen: 22 + Math.random() * 28,
+          life: 1,
+          decay: 1 / (0.22 + Math.random() * 0.22),
+          spd,
+        });
+      }
+
+      function spawnComet() {
+        const spd  = 160 + Math.random() * 140;
+        const deg  = (12 + Math.random() * 28) * Math.PI / 180; // shallow diagonal
+        const dir  = Math.random() < 0.6 ? 1 : -1;
+        const rgbs = [[255,255,255],[200,255,255],[255,210,255],[255,255,200]];
+        comets.push({
+          x: dir === 1 ? -80 : W + 80,
+          y: 20 + Math.random() * H * 0.42,
+          vx: dir * spd * Math.cos(deg),
+          vy: spd * Math.sin(deg),
+          tailLen: 90 + Math.random() * 90,
+          life: 1,
+          decay: 1 / (1.0 + Math.random() * 1.0),
+          spd,
+          rgb: rgbs[Math.floor(Math.random() * rgbs.length)],
+          hw: 2.5 + Math.random() * 1.5,
+        });
+      }
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function draw() {
+        // ── Sky ──
+        const sky = ctx.createLinearGradient(0, 0, 0, H * 0.66);
+        sky.addColorStop(0,   '#010010');
+        sky.addColorStop(0.5, '#0c0022');
+        sky.addColorStop(1,   '#1a0035');
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, W, H * 0.66);
+
+        // ── Ground ──
+        const gnd = ctx.createLinearGradient(0, H * 0.66, 0, H);
+        gnd.addColorStop(0, '#0a0018');
+        gnd.addColorStop(1, '#020008');
+        ctx.fillStyle = gnd;
+        ctx.fillRect(0, H * 0.66, W, H * 0.34);
+
+        const hor = H * 0.66;
+        const cx  = W / 2;
+
+        // ── Stars (each blinks at its own random rate) ──
+        for (const s of STARS) {
+          const sx = s.fx * W;
+          const sy = s.fy * hor * 0.88;
+          // Squared sine gives brief bright flashes rather than slow fades
+          const raw = Math.sin(s.phase + t * s.freq);
+          const br  = 0.08 + 0.92 * raw * raw;
+          ctx.fillStyle = `rgba(255,255,255,${br * 0.9})`;
+          ctx.beginPath();
+          ctx.arc(sx, sy, s.sz, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // ── Shooting stars ──
+        for (const s of shootingStars) {
+          const nx = s.vx / s.spd, ny = s.vy / s.spd;
+          const tx = s.x - nx * s.tailLen * s.life;
+          const ty = s.y - ny * s.tailLen * s.life;
+          const a  = s.life * 0.9;
+          const sg = ctx.createLinearGradient(tx, ty, s.x, s.y);
+          sg.addColorStop(0, 'rgba(255,255,255,0)');
+          sg.addColorStop(1, `rgba(255,255,255,${a})`);
+          ctx.strokeStyle = sg;
+          ctx.lineWidth   = 1.5;
+          ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(s.x, s.y); ctx.stroke();
+          ctx.fillStyle = `rgba(255,255,255,${a})`;
+          ctx.beginPath(); ctx.arc(s.x, s.y, 1.5, 0, Math.PI * 2); ctx.fill();
+        }
+
+        // ── Comets ──
+        ctx.lineCap = 'round';
+        for (const c of comets) {
+          const nx = c.vx / c.spd, ny = c.vy / c.spd;
+          const tx = c.x - nx * c.tailLen;
+          const ty = c.y - ny * c.tailLen;
+          const a  = Math.min(1, c.life * 3) * c.life * 0.85;
+          const [r, g, b] = c.rgb;
+          const cg = ctx.createLinearGradient(tx, ty, c.x, c.y);
+          cg.addColorStop(0,   `rgba(${r},${g},${b},0)`);
+          cg.addColorStop(0.5, `rgba(${r},${g},${b},${a * 0.3})`);
+          cg.addColorStop(1,   `rgba(${r},${g},${b},${a})`);
+          ctx.strokeStyle = cg;
+          ctx.lineWidth   = c.hw;
+          ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(c.x, c.y); ctx.stroke();
+          // Glowing head
+          ctx.shadowColor = `rgba(${r},${g},${b},0.9)`;
+          ctx.shadowBlur  = 14;
+          ctx.fillStyle   = `rgba(${r},${g},${b},${a})`;
+          ctx.beginPath(); ctx.arc(c.x, c.y, c.hw + 1.5, 0, Math.PI * 2); ctx.fill();
+          ctx.shadowBlur  = 0;
+        }
+        ctx.lineCap = 'butt';
+
+        // ── Sun glow halo ──
+        const halo = ctx.createRadialGradient(cx, hor, 0, cx, hor, (H > W ? H : W) * 0.55);
+        halo.addColorStop(0,   'rgba(255,0,140,0.45)');
+        halo.addColorStop(0.3, 'rgba(180,0,220,0.18)');
+        halo.addColorStop(1,   'transparent');
+        ctx.fillStyle = halo;
+        ctx.fillRect(0, 0, W, H * 0.66);
+
+        // ── Sun half-circle ──
+        const sunR = (H > W ? H : Math.min(W, H)) * 0.13;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, hor, sunR, Math.PI, 0);
+        ctx.closePath();
+        const sunG = ctx.createRadialGradient(cx, hor - sunR * 0.3, 0, cx, hor, sunR);
+        sunG.addColorStop(0,   '#ffffff');
+        sunG.addColorStop(0.15,'#ffaaff');
+        sunG.addColorStop(0.5, '#ff00aa');
+        sunG.addColorStop(1,   '#8800ff');
+        ctx.fillStyle = sunG;
+        ctx.fill();
+        // Horizontal stripe mask
+        const stripes = 9;
+        for (let i = 0; i < stripes; i++) {
+          const frac = i / stripes;
+          const ly   = hor - sunR * (1 - frac) * 0.92;
+          const hw   = Math.sqrt(Math.max(0, sunR * sunR - (ly - hor) ** 2));
+          ctx.fillStyle = 'rgba(6,0,18,0.6)';
+          ctx.fillRect(cx - hw, ly - 1.8, hw * 2, 3.6);
+        }
+        ctx.restore();
+
+        // ── Perspective grid (ground) ──
+        const speed  = 0.18;
+        const offset = (t * speed) % 1;
+        const VP = hor; // vanishing point y
+        const linesV = 18;
+        const linesH = 16;
+
+        ctx.save();
+
+        // Vertical lines
+        for (let i = -linesV; i <= linesV; i++) {
+          const xf = i / linesV;
+          const xH = cx + xf * W * 0.55;  // at horizon (narrower)
+          const xB = cx + xf * W * 3.5;   // at bottom  (wider)
+          const lg  = ctx.createLinearGradient(0, VP, 0, H);
+          lg.addColorStop(0, 'rgba(0,255,255,0)');
+          lg.addColorStop(0.25, 'rgba(0,255,255,0.45)');
+          lg.addColorStop(1, 'rgba(0,255,255,0.12)');
+          ctx.strokeStyle = lg;
+          ctx.lineWidth   = 1;
+          ctx.beginPath();
+          ctx.moveTo(xH, VP);
+          ctx.lineTo(xB, H);
+          ctx.stroke();
+        }
+
+        // Horizontal lines (scrolling)
+        for (let i = 0; i <= linesH; i++) {
+          const p = (i + offset) / linesH;
+          const y = VP + (H - VP) * p;
+          const tf = (y - VP) / (H - VP);
+          const hw = (W * 0.55 + W * 3 * tf);
+          const alpha = tf * 0.55;
+          ctx.strokeStyle = `rgba(255,0,255,${alpha})`;
+          ctx.lineWidth   = 1;
+          ctx.beginPath();
+          ctx.moveTo(cx - hw, y);
+          ctx.lineTo(cx + hw, y);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function loop() {
+        const dt = 0.016;
+        t += dt;
+
+        // Shooting stars — spawn & update
+        ssTimer -= dt;
+        if (ssTimer <= 0) { spawnShootingStar(); ssTimer = 1.5 + Math.random() * 3; }
+        for (const s of shootingStars) {
+          s.x += s.vx * dt; s.y += s.vy * dt; s.life -= s.decay * dt;
+        }
+        shootingStars = shootingStars.filter(s => s.life > 0 && s.y < H * 0.68);
+
+        // Comets — spawn & update
+        cmTimer -= dt;
+        if (cmTimer <= 0) { spawnComet(); cmTimer = 7 + Math.random() * 10; }
+        for (const c of comets) {
+          c.x += c.vx * dt; c.y += c.vy * dt; c.life -= c.decay * dt;
+        }
+        comets = comets.filter(c => c.life > 0 && c.y < H * 0.68 && c.x > -200 && c.x < W + 200);
+
+        draw();
+        requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      loop();
+    })();
+  </script>
+</body>
+</html>
