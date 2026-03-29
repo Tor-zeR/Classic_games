@@ -18,8 +18,11 @@ Hosted as an Azure Static Web App (free tier). To deploy:
 ```bash
 cd /tmp && swa deploy \
   --app-location /Users/dzmitryalenikau/Classic_games \
-  --deployment-token <token> \
+  --deployment-token f569d2ff2cb21140b1e0f18befb7058344702a588c31284a395c1c702c3b545706-c743d51f-360d-44a6-a631-ff9f2141ff4f00f02140b383230f \
   --env production
+
+# URL: https://blue-field-0b383230f.6.azurestaticapps.net
+# Resource group: classic-arcade-rg (eastus2)
 ```
 
 Git branches: `main` (production) and `dev` (work in progress).
