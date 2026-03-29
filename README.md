@@ -1,0 +1,111 @@
+# NEON ARCADE
+
+A collection of 8 classic arcade games reimagined with a synthwave neon aesthetic. Built with vanilla HTML5/CSS3/JS — no frameworks, no build step, no dependencies.
+
+![Landing page with synthwave background, animated stars, and neon game cards]
+
+## Games
+
+| Game | Theme | Orientation | Music |
+|------|-------|-------------|-------|
+| **TETRIS** | Cyan | Portrait | CHIP |
+| **PAC-MAN** | Yellow | Portrait | 8BIT |
+| **SPACE INVADERS** | Green | Landscape | CHIP |
+| **SNAKE** | Orange | Landscape | CHIP |
+| **XONIX** | Magenta | Landscape | SYNTH |
+| **BERZERK** | Purple | Landscape | 8BIT |
+| **LODE RUNNER** | Red | Landscape | DUNGEON |
+| **PARATROOPER** | Cyan | Landscape | PATRIOT |
+
+### TETRIS
+Stack falling tetrominoes and clear lines to score. Speed increases with level.
+- **Desktop:** `◄ ►` move · `↑` rotate · `↓` soft drop · `Space` hard drop · `Z` rotate CCW · `P` pause
+- **Mobile:** Swipe to move/rotate/drop
+
+### PAC-MAN
+Eat all dots across 4 mazes. Power pellets stun ghosts. Grab ammo crates to unlock shooting.
+- **Desktop:** Arrow keys move · `Space` shoot (after ammo) · `P` pause
+- **Mobile:** Swipe to move
+
+### SPACE INVADERS
+Destroy the alien fleet before they reach Earth. UFOs award bonus points. Survive increasing waves.
+- **Desktop:** `← →` move · `Space` fire · `P` pause
+- **Mobile:** D-pad + fire button
+
+### SNAKE
+Eat food to grow. Random walls appear after length 10. Bonus items at length 15 (auto-shoot or shield). Snowflake power-up slows you down at level 6+.
+- **Desktop:** Arrow keys or `WASD` · `P` pause
+- **Mobile:** Swipe to move
+
+### XONIX
+Draw borders to capture territory without being intercepted by bouncing balls. Reach 75% fill to advance.
+- **Desktop:** Arrow keys · `P` pause
+- **Mobile:** Swipe to move
+
+### BERZERK
+Blast robots in maze rooms and escape through doorways. 8-directional movement. Room 10 has a Master Switch to destroy boss Otto.
+- **Desktop:** Arrows / `WASD` move · `Space` / `Z` fire · `P` pause
+- **Mobile:** 8-direction D-pad + fire button
+
+### LODE RUNNER
+Collect all gold to reveal the escape ladder, then climb to the top. Dig to trap guards or create paths. 5 lives.
+- **Desktop:** Arrows / `WASD` move & climb · `Z` dig left · `X` dig right · `P` pause · `R` restart level
+- **Mobile:** D-pad + dig buttons
+
+### PARATROOPER
+Man a ground turret and shoot down planes and paratroopers. Don't let enemies surround the gun. Survive increasing waves.
+- **Desktop:** `◄ ►` rotate · `Space` fire · `P` pause
+- **Mobile:** D-pad + fire button
+
+---
+
+## Features
+
+- **Procedural audio** — all music and SFX generated via Web Audio API (no audio files)
+- **4 music tracks** — CHIP, SYNTH, 8BIT, DUNGEON — cycle with the ♪ button in any game
+- **CRT aesthetic** — scanlines, vignette, neon glow, and flicker animations
+- **Mobile support** — touch D-pad, swipe gestures, fullscreen, and orientation prompts
+- **High scores** — saved to `localStorage` per game
+- **Synthwave landing page** — animated stars, shooting stars, perspective grid, and sunset glow
+
+---
+
+## Running Locally
+
+No build step required. Open `index.html` directly in a browser, or serve with any static file server:
+
+```bash
+npx serve .
+# visit http://localhost:3000
+```
+
+---
+
+## Project Structure
+
+```
+Classic_games/
+├── index.html              # Landing page
+├── css/style.css           # Global theme, CRT effects, CSS variables
+├── js/common.js            # Shared audio engine (window.NeonArcade)
+├── tetris/
+├── pac-man/
+├── space-invaders/
+├── snake/
+├── xonix/
+├── berzerk/
+├── lode-runner/
+└── paratrooper/
+```
+
+Each game folder contains `index.html`, a game-specific `.css`, and one or more `.js` files. All games share the global stylesheet and audio engine.
+
+---
+
+## Tech Stack
+
+- **HTML5 Canvas** — game rendering
+- **CSS3** — neon themes, animations, responsive layout
+- **Vanilla JS (ES6+)** — game logic, `requestAnimationFrame` game loops
+- **Web Audio API** — procedural music scheduler and SFX
+- **Google Fonts** — Press Start 2P
