@@ -11,6 +11,19 @@ npx serve .
 # then visit http://localhost:3000
 ```
 
+## Deploying
+
+Hosted as an Azure Static Web App (free tier). To deploy:
+
+```bash
+cd /tmp && swa deploy \
+  --app-location /Users/dzmitryalenikau/Classic_games \
+  --deployment-token <token> \
+  --env production
+```
+
+Git branches: `main` (production) and `dev` (work in progress).
+
 ## Architecture
 
 Vanilla HTML5/CSS3/JS — no framework, no bundler, no package manager.
@@ -22,13 +35,14 @@ Classic_games/
 ├── index.html          ← Landing page (synthwave canvas bg, game cards)
 ├── css/style.css       ← Global theme: CSS variables, CRT scanlines, neon glow, animations
 ├── js/common.js        ← Shared audio engine (music scheduler + SFX), exposed as window.NeonArcade
-├── tetris/             ← Cyan theme, CHIP music (track 1)
-├── xonix/              ← Magenta theme, SYNTH music (track 2)
-├── space-invaders/     ← Green theme, CHIP music (track 1)
-├── pac-man/            ← Yellow theme, 8BIT music (track 3)
-├── snake/              ← Orange theme, CHIP music (track 1)
-├── berzerk/            ← Purple theme, 8BIT music (track 3)
-└── lode-runner/        ← Red theme, DUNGEON music (track 4)
+├── tetris/             ← Cyan theme, CHIP music (track 1), portrait orientation
+├── pac-man/            ← Yellow theme, 8BIT music (track 3), portrait orientation
+├── xonix/              ← Magenta theme, SYNTH music (track 2), landscape orientation
+├── space-invaders/     ← Green theme, CHIP music (track 1), landscape orientation
+├── snake/              ← Orange theme, CHIP music (track 1), landscape orientation
+├── berzerk/            ← Purple/green theme, 8BIT music (track 3), landscape orientation
+├── paratrooper/        ← Cyan theme, PATRIOT music, landscape orientation
+└── lode-runner/        ← Red theme, DUNGEON music (track 4), landscape orientation
 ```
 
 Each game folder contains `index.html`, a game-specific `.css`, and one or more `.js` files. Every game page loads `../css/style.css` and `../js/common.js` before its own scripts.
@@ -55,13 +69,64 @@ All games use `requestAnimationFrame` + delta-time. State machine: `start` → `
 - **CSS variables** (defined in `style.css`): `--cyan`, `--magenta`, `--green`, `--yellow`, `--orange`, `--pink`, `--blue`, `--red`, `--purple`, `--white`, `--bg`, `--font`.
 - **CRT effect**: scanlines + vignette via `body::before` / `body::after` in `style.css`.
 - **Per-game accent color**: set via the game's own CSS using the shared variable.
-- **Touch controls**: d-pad HTML is included in every game page and hidden on desktop via CSS media query.
 - **Music button**: every game page has `<button class="music-btn" id="music-toggle">` in the topbar. The JS wires it to `cycleTrack()` and updates the label to `♪ <NAME>`.
+
+### Mobile / Touch Controls
+
+**`body.is-mobile` class** — set by JS early in landscape games when a touch device is detected. Used to conditionally apply CSS rules (show D-pad, adjust layout, hide desktop hints). Portrait games (tetris, pac-man) do not use this class; they use `@media (pointer: coarse)` instead.
+
+**D-pad HTML structure** (landscape games, in left side-panel):
+```html
+<div class="mobile-dpad" id="mobile-dpad">
+  <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
+  <div class="dpad-cross" id="dpad-cross">
+    <!-- 3×3 grid: empty / up / empty / left / mid / right / empty / down / empty -->
+  </div>
+</div>
+```
+Fire button goes in the right panel inside `<div class="mobile-fire-wrap">`.
+
+**Swipe gesture on D-pad**: `touchmove` on `#dpad-cross` with a minimum swipe threshold (`SWIPE_MIN=18px`). Axis with larger delta wins (4-directional). Berzerk uses 8-directional (diagonal cells included).
+
+**Fullscreen**: landscape games request fullscreen on the first user gesture using:
+```js
+const _doFS = () => {
+  if (!document.fullscreenElement)
+    document.documentElement.requestFullscreen?.().catch(() => {});
+};
+document.addEventListener('touchstart', _doFS, { once: true, passive: true });
+document.addEventListener('click',      _doFS, { once: true });
+```
+Always use `.catch(() => {})` — never `try/catch` — because `requestFullscreen` returns a Promise.
+
+**Hide controls on start screen** (CSS `:has()` pattern):
+```css
+body.is-mobile:has(#overlay-start:not(.hidden)) .mobile-dpad,
+body.is-mobile:has(#overlay-start:not(.hidden)) .mobile-fire-wrap { display: none !important; }
+body.is-mobile .canvas-wrapper:has(#overlay-start:not(.hidden)) .canvas-glow { display: none; }
+```
+
+**Desktop / mobile hint split** in overlay-start:
+```html
+<div class="overlay-sub desktop-hints">keyboard instructions</div>
+<div class="overlay-sub mobile-hints">touch instructions</div>
+<div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
+```
+CSS: `.mobile-hints { display: none; }` by default; toggled via `body.is-mobile` (landscape) or `@media (pointer: coarse)` (portrait).
+
+**Lode Runner** has a unique layout: side panels are `position: absolute` with `width: 130px`, and the canvas-wrapper uses `margin: 0 130px` to prevent overlap. The right panel contains dig buttons (`#btn-digl-touch`, `#btn-digr-touch`) instead of a fire button.
+
+### Orientation Prompts
+
+- **Landscape games**: show `.rotate-prompt` via `@media (orientation: portrait)` — hides `.page`.
+- **Portrait games** (tetris, pac-man) and **landing page**: show prompt via `@media (orientation: landscape) and (max-height: 640px)`.
 
 ### Adding a New Game
 
-1. Create `<game>/index.html` — copy topbar/overlay/touch-controls structure from an existing game.
+1. Create `<game>/index.html` — copy topbar/overlay/touch-controls structure from an existing game of the same orientation type.
 2. Load `../css/style.css`, `../js/common.js`, then game-specific files.
 3. Call `NeonArcade.setTrack(n)` in the `load` event handler before wiring the music button.
 4. Call `NeonArcade.startMusic()` on game start (user gesture), `stopMusic()` on pause/gameover.
-5. Add a card to the landing page `index.html` with the appropriate `card-<name>` class.
+5. Add the rotate-prompt HTML and appropriate CSS media query trigger.
+6. For landscape games: set `body.is-mobile` in JS, implement fullscreen with `.catch(() => {})`, add D-pad HTML and `body.is-mobile` CSS rules.
+7. Add a card to the landing page `index.html` with the appropriate `card-<name>` class.
