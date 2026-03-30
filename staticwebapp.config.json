@@ -2,8 +2,27 @@
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
-    "Referrer-Policy": "strict-origin-when-cross-origin"
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Cache-Control": "public, max-age=3600"
   },
+  "routes": [
+    {
+      "route": "/og-image.jpg",
+      "headers": { "Cache-Control": "public, max-age=604800, immutable" }
+    },
+    {
+      "route": "/*/og-image.jpg",
+      "headers": { "Cache-Control": "public, max-age=604800, immutable" }
+    },
+    {
+      "route": "/css/*",
+      "headers": { "Cache-Control": "public, max-age=86400" }
+    },
+    {
+      "route": "/js/*",
+      "headers": { "Cache-Control": "public, max-age=86400" }
+    }
+  ],
   "mimeTypes": {
     ".json": "application/json",
     ".xml": "application/xml"
