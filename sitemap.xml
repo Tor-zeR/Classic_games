@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/</loc>
+    <loc>https://classicarcade.win/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/tetris/</loc>
+    <loc>https://classicarcade.win/tetris/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/pac-man/</loc>
+    <loc>https://classicarcade.win/pac-man/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/space-invaders/</loc>
+    <loc>https://classicarcade.win/space-invaders/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/snake/</loc>
+    <loc>https://classicarcade.win/snake/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/xonix/</loc>
+    <loc>https://classicarcade.win/xonix/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/berzerk/</loc>
+    <loc>https://classicarcade.win/berzerk/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/lode-runner/</loc>
+    <loc>https://classicarcade.win/lode-runner/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blue-field-0b383230f.6.azurestaticapps.net/paratrooper/</loc>
+    <loc>https://classicarcade.win/paratrooper/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

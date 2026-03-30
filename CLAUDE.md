@@ -21,7 +21,7 @@ cd /tmp && swa deploy \
   --deployment-token f569d2ff2cb21140b1e0f18befb7058344702a588c31284a395c1c702c3b545706-c743d51f-360d-44a6-a631-ff9f2141ff4f00f02140b383230f \
   --env production
 
-# URL: https://blue-field-0b383230f.6.azurestaticapps.net
+# URL: https://classicarcade.win
 # Resource group: classic-arcade-rg (eastus2)
 ```
 

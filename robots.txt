@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://blue-field-0b383230f.6.azurestaticapps.net/sitemap.xml
+Sitemap: https://classicarcade.win/sitemap.xml
