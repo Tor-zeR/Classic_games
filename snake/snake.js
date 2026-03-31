@@ -89,6 +89,28 @@ function openNeighborCount(x, y) {
   }).length;
 }
 
+// BFS flood-fill from (sx, sy) treating only wallSet as blockers.
+// Returns a Set of posKey numbers for all reachable cells.
+function reachableFrom(sx, sy) {
+  const visited = new Set();
+  const start = posKey(sx, sy);
+  visited.add(start);
+  const queue = [start];
+  while (queue.length) {
+    const k = queue.shift();
+    const x = k % COLS, y = Math.floor(k / COLS);
+    for (const [dx, dy] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+      const nx = x + dx, ny = y + dy;
+      if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) continue;
+      const nk = posKey(nx, ny);
+      if (visited.has(nk) || wallSet.has(nk)) continue;
+      visited.add(nk);
+      queue.push(nk);
+    }
+  }
+  return visited;
+}
+
 // How many food items should be on the field given current snake length.
 // Starts at 1, adds one extra for every 5 lengths from length 5 onward.
 function targetFoodCount() {
@@ -336,24 +358,23 @@ function generateWalls() {
     placed++;
   }
 
-  // Ensure no food item is completely surrounded by walls
-  for (const f of foods) {
-    const neighbors = [
-      { x: f.x - 1, y: f.y }, { x: f.x + 1, y: f.y },
-      { x: f.x, y: f.y - 1 }, { x: f.x, y: f.y + 1 },
-    ].filter(n => n.x >= 0 && n.x < COLS && n.y >= 0 && n.y < ROWS);
-
-    const allBlocked = neighbors.every(n => wallSet.has(posKey(n.x, n.y)));
-    if (allBlocked) {
-      // Remove the first adjacent wall cell to open a path
-      const { x, y } = neighbors[0];
-      const k = posKey(x, y);
-      wallSet.delete(k);
-      for (const wall of walls) {
-        const idx = wall.cells.findIndex(c => posKey(c.x, c.y) === k);
-        if (idx !== -1) { wall.cells.splice(idx, 1); break; }
-      }
-      walls = walls.filter(w => w.cells.length > 0);
+  // BFS reachability: ensure every food item can be reached from the snake head.
+  // Relocate any trapped food to a random reachable open cell.
+  const reachable = reachableFrom(snake[0].x, snake[0].y);
+  for (let i = 0; i < foods.length; i++) {
+    const f = foods[i];
+    if (reachable.has(posKey(f.x, f.y))) continue;
+    foodSet.delete(posKey(f.x, f.y));
+    const candidates = [];
+    for (const k of reachable) {
+      if (!posSet.has(k) && !wallSet.has(k) && !foodSet.has(k)) candidates.push(k);
+    }
+    if (candidates.length > 0) {
+      const nk = candidates[Math.floor(Math.random() * candidates.length)];
+      foods[i] = { x: nk % COLS, y: Math.floor(nk / COLS) };
+      foodSet.add(nk);
+    } else {
+      foodSet.add(posKey(f.x, f.y)); // no open cell found, restore (edge case)
     }
   }
 }
@@ -486,7 +507,8 @@ function tick() {
     tickMs = Math.max(MIN_MS, tickMs - SPEED_STEP);
 
     // Only replenish food when the entire batch has been eaten
-    if (foods.length === 0) {
+    const batchComplete = foods.length === 0;
+    if (batchComplete) {
       spawnFoods(targetFoodCount());
     }
 
@@ -509,8 +531,8 @@ function tick() {
       spawnSpeedBonus();
     }
 
-    // Walls regenerate on every bite (after food is placed so proximity is valid)
-    if (snake.length >= WALL_THRESHOLD) {
+    // Walls regenerate only when the full food batch has been eaten
+    if (batchComplete && snake.length >= WALL_THRESHOLD) {
       if (!wallsActive) {
         wallsActive = true;
         wallCount   = WALL_START;
