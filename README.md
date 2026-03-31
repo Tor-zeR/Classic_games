@@ -43,7 +43,7 @@ Draw borders to capture territory without being intercepted by bouncing balls. R
 - **Mobile:** Swipe to move
 
 ### ROBO MAZE
-Blast robots in maze rooms and escape through doorways. 8-directional movement. Room 10 has a Master Switch to destroy boss Otto.
+Blast robots in maze rooms and escape through doorways. 8-directional movement. Destroy all robots in room 10 to reveal the Master Switch and stop boss Brotto.
 - **Desktop:** Arrows / `WASD` move · `Space` / `Z` fire · `P` pause
 - **Mobile:** 8-direction D-pad + fire button
 
@@ -69,6 +69,10 @@ Man a ground turret and shoot down planes and paratroopers. Don't let enemies su
 - **Synthwave landing page** — animated stars, shooting stars, perspective grid, and sunset glow
 
 ---
+
+## Play Online
+
+**[classicarcade.win](https://classicarcade.win)** — hosted on Azure Static Web Apps
 
 ## Running Locally
 

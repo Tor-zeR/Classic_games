@@ -25,7 +25,7 @@ cd /tmp && swa deploy \
 # Resource group: classic-arcade-rg (eastus2)
 ```
 
-Git branches: `main` (production) and `dev` (work in progress).
+Git branches: `main` (production) and `dev` (work in progress). **Never push directly to `main`** — a pre-tool hook blocks it. Always push to `dev` and open a PR. Merging to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`) which auto-deploys to Azure SWA.
 
 ## Architecture
 
@@ -133,3 +133,47 @@ CSS: `.mobile-hints { display: none; }` by default; toggled via `body.is-mobile`
 5. Add the rotate-prompt HTML and appropriate CSS media query trigger.
 6. For landscape games: set `body.is-mobile` in JS, implement fullscreen with `.catch(() => {})`, add D-pad HTML and `body.is-mobile` CSS rules.
 7. Add a card to the landing page `index.html` with the appropriate `card-<name>` class.
+8. Add a disclaimer footer: `<p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>`.
+
+### Game Names (Trademark-Safe)
+
+Folder/URL names are unchanged; all player-facing titles are renamed:
+
+| Folder | Display Name |
+|--------|-------------|
+| tetris/ | TETRIX |
+| pac-man/ | CHOMP |
+| xonix/ | TERRITORY |
+| space-invaders/ | ALIEN WAVE |
+| snake/ | NEON SERPENT |
+| berzerk/ | ROBO MAZE |
+| paratrooper/ | AIRBORNE |
+| lode-runner/ | GOLD RUSH |
+
+### Adding SFX (`js/common.js`)
+
+Add new SFX to the `SFX` object inside `common.js`. Two patterns:
+
+**`scheduleNotes(notes)`** — for melodic/rhythmic sequences:
+```js
+berzerkRoomEnter() {
+  scheduleNotes([
+    { freq: 220, start: 0,    dur: 0.07, opts: { type: 'square', vol: 0.18 } },
+    { freq: 440, start: 0.16, dur: 0.12, opts: { type: 'square', vol: 0.22 } },
+  ]);
+},
+```
+
+**Direct Web Audio** — for continuous effects (LFO vibrato, envelopes):
+```js
+berzerkBrotto() {
+  const ctx = getAudioCtx(), bus = getMasterBus();
+  const osc = ctx.createOscillator(), gain = ctx.createGain();
+  // wire osc → gain → bus, set AudioParams, call osc.start/stop
+},
+```
+
+**`playTone(freq, dur, opts)`** — for single quick tones (`opts`: `type`, `vol`).
+
+Call SFX with optional chaining to guard against missing entries: `NeonArcade.SFX.mySound?.()`.
+Internal SFX names do not need to match player-facing game names (e.g. `berzerkOtto` remains the internal name even though the character is called "Brotto" in the UI).
