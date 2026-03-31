@@ -7,6 +7,20 @@
   },
   "routes": [
     {
+      "route": "/sitemap.xml",
+      "headers": {
+        "Content-Type": "text/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/robots.txt",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
       "route": "/*.jpg",
       "headers": { "Cache-Control": "public, max-age=604800, immutable" }
     },
@@ -21,7 +35,7 @@
   ],
   "mimeTypes": {
     ".json": "application/json",
-    ".xml": "application/xml"
+    ".xml": "text/xml"
   },
   "responseOverrides": {
     "404": {
