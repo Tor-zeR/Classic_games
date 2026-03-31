@@ -8,51 +8,51 @@ A collection of 8 classic arcade games reimagined with a synthwave neon aestheti
 
 | Game | Theme | Orientation | Music |
 |------|-------|-------------|-------|
-| **TETRIS** | Cyan | Portrait | CHIP |
-| **PAC-MAN** | Yellow | Portrait | 8BIT |
-| **SPACE INVADERS** | Green | Landscape | CHIP |
-| **SNAKE** | Orange | Landscape | CHIP |
-| **XONIX** | Magenta | Landscape | SYNTH |
-| **BERZERK** | Purple | Landscape | 8BIT |
-| **LODE RUNNER** | Red | Landscape | DUNGEON |
-| **PARATROOPER** | Cyan | Landscape | PATRIOT |
+| **TETRIX** | Cyan | Portrait | CHIP |
+| **CHOMP** | Yellow | Portrait | 8BIT |
+| **ALIEN WAVE** | Green | Landscape | CHIP |
+| **NEON SERPENT** | Orange | Landscape | CHIP |
+| **TERRITORY** | Magenta | Landscape | SYNTH |
+| **ROBO MAZE** | Purple | Landscape | 8BIT |
+| **GOLD RUSH** | Red | Landscape | DUNGEON |
+| **AIRBORNE** | Cyan | Landscape | PATRIOT |
 
-### TETRIS
+### TETRIX
 Stack falling tetrominoes and clear lines to score. Speed increases with level.
 - **Desktop:** `◄ ►` move · `↑` rotate · `↓` soft drop · `Space` hard drop · `Z` rotate CCW · `P` pause
 - **Mobile:** Swipe to move/rotate/drop
 
-### PAC-MAN
+### CHOMP
 Eat all dots across 4 mazes. Power pellets stun ghosts. Grab ammo crates to unlock shooting.
 - **Desktop:** Arrow keys move · `Space` shoot (after ammo) · `P` pause
 - **Mobile:** Swipe to move
 
-### SPACE INVADERS
+### ALIEN WAVE
 Destroy the alien fleet before they reach Earth. UFOs award bonus points. Survive increasing waves.
 - **Desktop:** `← →` move · `Space` fire · `P` pause
 - **Mobile:** D-pad + fire button
 
-### SNAKE
+### NEON SERPENT
 Eat food to grow. Random walls appear after length 10. Bonus items at length 15 (auto-shoot or shield). Snowflake power-up slows you down at level 6+.
 - **Desktop:** Arrow keys or `WASD` · `P` pause
 - **Mobile:** Swipe to move
 
-### XONIX
+### TERRITORY
 Draw borders to capture territory without being intercepted by bouncing balls. Reach 75% fill to advance.
 - **Desktop:** Arrow keys · `P` pause
 - **Mobile:** Swipe to move
 
-### BERZERK
+### ROBO MAZE
 Blast robots in maze rooms and escape through doorways. 8-directional movement. Room 10 has a Master Switch to destroy boss Otto.
 - **Desktop:** Arrows / `WASD` move · `Space` / `Z` fire · `P` pause
 - **Mobile:** 8-direction D-pad + fire button
 
-### LODE RUNNER
+### GOLD RUSH
 Collect all gold to reveal the escape ladder, then climb to the top. Dig to trap guards or create paths. 5 lives.
 - **Desktop:** Arrows / `WASD` move & climb · `Z` dig left · `X` dig right · `P` pause · `R` restart level
 - **Mobile:** D-pad + dig buttons
 
-### PARATROOPER
+### AIRBORNE
 Man a ground turret and shoot down planes and paratroopers. Don't let enemies surround the gun. Survive increasing waves.
 - **Desktop:** `◄ ►` rotate · `Space` fire · `P` pause
 - **Mobile:** D-pad + fire button
