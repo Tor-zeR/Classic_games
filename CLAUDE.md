@@ -13,16 +13,18 @@ npx serve .
 
 ## Deploying
 
-Hosted as an Azure Static Web App (free tier). To deploy:
+Hosted as an Azure Static Web App (free tier). Merging to `main` auto-deploys via GitHub Actions. For manual deploy:
 
 ```bash
 cd /tmp && swa deploy \
   --app-location /Users/dzmitryalenikau/Classic_games \
-  --deployment-token f569d2ff2cb21140b1e0f18befb7058344702a588c31284a395c1c702c3b545706-c743d51f-360d-44a6-a631-ff9f2141ff4f00f02140b383230f \
+  --deployment-token "$AZURE_SWA_TOKEN" \
   --env production
 
 # URL: https://classicarcade.win
 # Resource group: classic-arcade-rg (eastus2)
+# Token: stored in GitHub Actions secrets (AZURE_STATIC_WEB_APPS_API_TOKEN)
+#         and Azure portal → Static Web App → Manage deployment token
 ```
 
 Git branches: `main` (production) and `dev` (work in progress). **Never push directly to `main`** — a pre-tool hook blocks it. Always push to `dev` and open a PR. Merging to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`) which auto-deploys to Azure SWA.
