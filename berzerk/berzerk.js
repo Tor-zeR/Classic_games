@@ -141,10 +141,10 @@ function generateRoom() {
         if (tr <= 0 || tr >= ROWS - 1 || tc <= 0 || tc >= COLS - 1) { ok = false; break; }
         // Protect center spawn area (7×7)
         if (Math.abs(tr - cy) <= 3 && Math.abs(tc - cx) <= 3) { ok = false; break; }
-        // Protect exit corridors (2 cells deep inside room)
-        if (tc >= EXIT_C1 - 1 && tc <= EXIT_C2 + 1 && tr <= 3)        { ok = false; break; }
+        // Protect exit corridors + player spawn areas (extra rows/cols for small CELL on mobile)
+        if (tc >= EXIT_C1 - 1 && tc <= EXIT_C2 + 1 && tr <= 5)        { ok = false; break; }
         if (tc >= EXIT_C1 - 1 && tc <= EXIT_C2 + 1 && tr >= ROWS - 4) { ok = false; break; }
-        if (tr >= EXIT_R1 - 1 && tr <= EXIT_R2 + 1 && tc <= 3)        { ok = false; break; }
+        if (tr >= EXIT_R1 - 1 && tr <= EXIT_R2 + 1 && tc <= 5)        { ok = false; break; }
         if (tr >= EXIT_R1 - 1 && tr <= EXIT_R2 + 1 && tc >= COLS - 4) { ok = false; break; }
         cells.push({ tr, tc });
       }
@@ -165,6 +165,16 @@ function spawnPlayer(entryDir) {
   else if (entryDir === 'bottom') { x = cx; y = (ROWS - 4) * CELL; }
   else if (entryDir === 'left')   { x = 3 * CELL; y = cy; }
   else if (entryDir === 'right')  { x = (COLS - 4) * CELL; y = cy; }
+
+  // Safety nudge: on small screens the player body can be >1 tile and clip a wall.
+  // Push inward (toward room center) until clear.
+  for (let i = 0; i < ROWS && rectHitsWall(x, y, PL_W, PL_H); i++) {
+    if      (entryDir === 'top')    y += CELL;
+    else if (entryDir === 'bottom') y -= CELL;
+    else if (entryDir === 'left')   x += CELL;
+    else if (entryDir === 'right')  x -= CELL;
+    else break;
+  }
 
   player = { x, y, vx: 0, vy: 0, aimX: 1, aimY: 0, alive: true, fireTimer: 0, invTimer: 1.5 };
 }
