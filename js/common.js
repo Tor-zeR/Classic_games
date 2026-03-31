@@ -197,6 +197,12 @@ const SFX = {
     setTimeout(() => playTone(800, 0.04, { type: 'square', vol: 0.12 }), 30);
   },
 
+  // Robot shoot: low blip, quieter and duller than player shot
+  berzerkRobotShoot() {
+    playTone(320, 0.05, { type: 'square', vol: 0.08 });
+    setTimeout(() => playTone(200, 0.04, { type: 'square', vol: 0.05 }), 25);
+  },
+
   // Robot explosion: low thud + noise burst
   berzerkRobotDie() {
     playTone(90, 0.18, { type: 'sawtooth', vol: 0.35 });
@@ -222,6 +228,69 @@ const SFX = {
       { freq: 330, start: 0.13, dur: 0.12, opts: { type: 'square', vol: 0.28 } },
       { freq: 440, start: 0.26, dur: 0.12, opts: { type: 'square', vol: 0.28 } },
       { freq: 330, start: 0.39, dur: 0.12, opts: { type: 'square', vol: 0.28 } },
+    ]);
+  },
+
+  // Brotto appears: slow rising wail with vibrato — eerie and wavy
+  berzerkBrotto() {
+    const ctx = getAudioCtx();
+    const bus = getMasterBus();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(80, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(340, ctx.currentTime + 1.2);
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(5, ctx.currentTime);
+    lfoGain.gain.setValueAtTime(28, ctx.currentTime);
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.28, ctx.currentTime + 0.15);
+    gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.9);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.3);
+    osc.connect(gain);
+    gain.connect(bus);
+    lfo.start(ctx.currentTime);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 1.3);
+    lfo.stop(ctx.currentTime + 1.3);
+  },
+
+  // Brotto moving: short rapid wobble pulse — plays periodically while chasing
+  berzerkBrottoMove() {
+    const ctx = getAudioCtx();
+    const bus = getMasterBus();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(360, ctx.currentTime);
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(18, ctx.currentTime);
+    lfoGain.gain.setValueAtTime(90, ctx.currentTime);
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.04);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.22);
+    osc.connect(gain);
+    gain.connect(bus);
+    lfo.start(ctx.currentTime);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.22);
+    lfo.stop(ctx.currentTime + 0.22);
+  },
+
+  // Room entered: quick 3-note ascending portal sweep
+  berzerkRoomEnter() {
+    scheduleNotes([
+      { freq: 220, start: 0,    dur: 0.07, opts: { type: 'square', vol: 0.18 } },
+      { freq: 330, start: 0.08, dur: 0.07, opts: { type: 'square', vol: 0.20 } },
+      { freq: 440, start: 0.16, dur: 0.12, opts: { type: 'square', vol: 0.22 } },
     ]);
   },
 

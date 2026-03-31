@@ -198,3 +198,13 @@ body::before {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+
+/* Disclaimer */
+.disclaimer {
+  font-family: var(--font);
+  font-size: 6px;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  padding: 8px 16px 16px;
+  letter-spacing: 0.05em;
+}

@@ -20,6 +20,7 @@ const ovPause    = document.getElementById('overlay-pause');
 const ovGameover = document.getElementById('overlay-gameover');
 const goScore    = document.getElementById('go-score');
 const tbFire     = document.getElementById('tb-fire');  // touch btn (may not exist)
+const bonusBarEl = document.getElementById('bonus-bar');
 
 // ── Constants (walls) ────────────────────────────────────────
 const BONUS_THRESHOLD = 15;   // snake length at which the shoot bonus can appear
@@ -771,35 +772,12 @@ function render(dt) {
     ctx.shadowBlur = 0;
   }
 
-  // Shoot-power timer bar (top-left of canvas, shown when ability is active)
-  if (shootTimer > 0) {
-    const pct  = shootTimer / SHOOT_DURATION;
-    const barW = Math.floor(W * 0.28);
-    const barH = Math.max(3, CELL * 0.28);
-    const barX = 8, barY = 8;
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx.fillRect(barX - 1, barY - 1, barW + 2, barH + 2);
-    ctx.shadowColor = 'rgba(255,255,255,0.85)';
-    ctx.shadowBlur  = 5;
-    ctx.fillStyle   = `rgba(255,255,${Math.floor(180 + 75*(1-pct))},0.9)`;
-    ctx.fillRect(barX, barY, Math.floor(barW * pct), barH);
-    ctx.shadowBlur  = 0;
-  }
-
-  // Shield indicator (steady full bar — lasts until next wall hit)
-  if (shieldTimer > 0) {
-    const barW = Math.floor(W * 0.28);
-    const barH = Math.max(3, CELL * 0.28);
-    const barX = 8;
-    const barY = shootTimer > 0 ? (8 + barH + 5) : 8;
-    const pulse = 0.7 + 0.3 * Math.sin(Date.now() / 280);
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx.fillRect(barX - 1, barY - 1, barW + 2, barH + 2);
-    ctx.shadowColor = `rgba(100,180,255,${pulse})`;
-    ctx.shadowBlur  = 6;
-    ctx.fillStyle   = `rgba(100,180,255,${0.75 + 0.25 * pulse})`;
-    ctx.fillRect(barX, barY, barW, barH);
-    ctx.shadowBlur  = 0;
+  // Bonus status bar (DOM element below field — updated each frame)
+  {
+    let html = '';
+    if (shootTimer > 0)  html += `<span class="bonus-shoot">★ AUTO-SHOOT  ${shootTimer.toFixed(1)}s</span>`;
+    if (shieldTimer > 0) html += `<span class="bonus-shield">⬡ SHIELD  ●</span>`;
+    bonusBarEl.innerHTML = html;
   }
 
   // Eat flash — brief full-canvas brightness pulse
@@ -975,7 +953,7 @@ document.getElementById('btn-restart').addEventListener('click', () => { tryFull
 
 // ── Music Toggle ──────────────────────────────────────────────
 document.getElementById('music-toggle').addEventListener('click', function () {
-  const { track, name } = NeonArcade.cycleTrack();
+  const { name } = NeonArcade.cycleTrack();
   this.textContent = '♪ ' + name;
   if (state === 'playing') NeonArcade.startMusic();
 });
