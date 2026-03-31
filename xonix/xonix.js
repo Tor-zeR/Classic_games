@@ -890,6 +890,9 @@ if (navigator.maxTouchPoints > 0) {
 document.getElementById('btn-start').addEventListener('click',   () => { tryFullscreen(); startGame(); });
 document.getElementById('btn-restart').addEventListener('click', () => { tryFullscreen(); startGame(); });
 document.getElementById('btn-resume').addEventListener('click',  () => { if (gameState === 'paused') togglePause(); });
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if (gameState === 'playing' || gameState === 'paused') togglePause();
+});
 document.getElementById('music-toggle').addEventListener('click', function () {
   const { track, name } = NeonArcade.cycleTrack();
   this.textContent = '♪ ' + name;

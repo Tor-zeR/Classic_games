@@ -998,6 +998,9 @@ document.getElementById('btn-restart').addEventListener('click', () => {
 document.getElementById('btn-resume').addEventListener('click', () => {
   if (gameState === 'paused') togglePause();
 });
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if (gameState === 'playing' || gameState === 'paused') togglePause();
+});
 
 // Canvas swipe — minimum 40 px distance, hold to keep moving (spec: Game_Controls_setup.md)
 const gameCanvas = document.getElementById('game-canvas');

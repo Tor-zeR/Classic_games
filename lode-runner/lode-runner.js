@@ -1048,6 +1048,10 @@ function gameLoop(now) {
 // ── Button wiring ────────────────────────────────────────────
 document.getElementById('btn-start')?.addEventListener('click', startGame);
 document.getElementById('btn-resume')?.addEventListener('click', resumeGame);
+document.getElementById('btn-pause')?.addEventListener('click', () => {
+  if (state === 'playing') pauseGame();
+  else if (state === 'paused') resumeGame();
+});
 document.getElementById('btn-restart-level')?.addEventListener('click', restartLevel);
 document.getElementById('btn-restart')?.addEventListener('click', () => {
   levelIndex = 0; score = 0; lives = LIVES_START;
