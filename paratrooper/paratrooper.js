@@ -1094,6 +1094,13 @@ document.getElementById('btn-resume').addEventListener('click', () => {
   if (gameState !== 'paused') return;
   gameState = 'playing'; NeonArcade.startMusic(); hideOverlays();
 });
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if (gameState === 'playing') {
+    gameState = 'paused'; NeonArcade.stopMusic(); showOverlay('overlay-pause');
+  } else if (gameState === 'paused') {
+    gameState = 'playing'; NeonArcade.startMusic(); hideOverlays();
+  }
+});
 
 // ── Music toggle ───────────────────────────────────────────────
 const musicBtn = document.getElementById('music-toggle');

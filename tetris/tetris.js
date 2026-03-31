@@ -638,6 +638,9 @@ document.getElementById('btn-start').addEventListener('click', startGame);
 document.getElementById('btn-resume').addEventListener('click', () => {
   if (state === 'paused') togglePause();
 });
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if (state === 'playing' || state === 'paused') togglePause();
+});
 document.getElementById('btn-restart').addEventListener('click', startGame);
 
 // Music toggle

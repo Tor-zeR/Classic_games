@@ -972,6 +972,10 @@ function resumeGame() {
 document.getElementById('btn-start').addEventListener('click',   startGame);
 document.getElementById('btn-restart').addEventListener('click', startGame);
 document.getElementById('btn-resume').addEventListener('click',  resumeGame);
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if      (gameState === 'playing') { gameState = 'paused'; showOverlay('overlay-pause'); NeonArcade.stopMusic(); }
+  else if (gameState === 'paused')  resumeGame();
+});
 
 // Canvas swipe — minimum 40 px distance (spec: Game_Controls_setup.md)
 let _swipeX = 0, _swipeY = 0;

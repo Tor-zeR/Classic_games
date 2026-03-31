@@ -949,6 +949,9 @@ if (navigator.maxTouchPoints > 0) {
 
 document.getElementById('btn-start').addEventListener('click',   () => { tryFullscreen(); startGame(); });
 document.getElementById('btn-resume').addEventListener('click', togglePause);
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if (state === 'playing' || state === 'paused') togglePause();
+});
 document.getElementById('btn-restart').addEventListener('click', () => { tryFullscreen(); startGame(); });
 
 // ── Music Toggle ──────────────────────────────────────────────

@@ -194,6 +194,24 @@ body::before {
 .music-mute-btn:hover { border-color: #00ff44; color: #00ff44; }
 .music-mute-btn.off   { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
 
+/* Pause button (mobile only, shared across all games) */
+.pause-btn {
+  display: none;
+  font-family: var(--font);
+  font-size: 10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.75);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+.pause-btn:active { background: rgba(255,255,255,0.12); }
+@media (pointer: coarse) {
+  .pause-btn { display: inline-block; }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
