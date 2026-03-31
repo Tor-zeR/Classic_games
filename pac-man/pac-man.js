@@ -955,7 +955,7 @@ document.addEventListener('keydown', e => {
     if (gameState === 'playing' || gameState === 'paused') e.preventDefault();
   }
   if (e.code === 'KeyP') {
-    if      (gameState === 'playing') { gameState = 'paused'; showOverlay('overlay-pause'); }
+    if      (gameState === 'playing') { gameState = 'paused'; showOverlay('overlay-pause'); NeonArcade.stopMusic(); }
     else if (gameState === 'paused')  resumeGame();
   }
   if (e.code === 'Space' && gameState === 'playing') { e.preventDefault(); fireBullet(); }
@@ -966,6 +966,7 @@ function resumeGame() {
   gameState = 'playing';
   hideAllOverlays();
   lastTime = performance.now();
+  NeonArcade.startMusic();
 }
 
 document.getElementById('btn-start').addEventListener('click',   startGame);
