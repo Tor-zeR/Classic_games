@@ -16,8 +16,8 @@ const PL_SPEED    = 92;              // player px/s
 const RB_BASE_SPD = 17;              // robot base speed (increases per room)
 const BL_SPEED    = 200;             // player bullet speed
 const RB_BL_SPEED = 99;              // robot bullet speed
-const OTTO_BASE   = 60;              // Otto base speed
-const OTTO_DELAY  = 12;              // s before Otto appears
+const BROTTO_BASE   = 60;              // Brotto base speed
+const BROTTO_DELAY  = 12;              // s before Otto appears
 const FIRE_RATE   = 0.22;            // min s between player shots
 
 const SCORE_ROBOT      = 50;
@@ -53,10 +53,10 @@ const victoryScoreEl = document.getElementById('victory-score');
 
 // ── State ────────────────────────────────────────────────────
 let TILE = [];        // 2D Uint8Array: 0=floor, 1=wall
-let player, robots, playerBullets, robotBullets, explosions, otto;
+let player, robots, playerBullets, robotBullets, explosions, brotto;
 let state = 'start';  // 'start'|'entering'|'playing'|'dying'|'paused'|'gameover'
 let score, hiScore, lives, roomNum, extraLifeIdx;
-let ottoTimer, roomStartRobots, ottoAge;
+let brottoTimer, roomStartRobots, brottoAge;
 let deathTimer = 0, enterTimer = 0;
 let lastEntryDir = 'center';
 let lastTime = 0;
@@ -120,7 +120,7 @@ function generateRoom() {
   for (let c = 0; c < COLS; c++) { TILE[0][c] = 1; TILE[ROWS - 1][c] = 1; }
   for (let r = 0; r < ROWS; r++) { TILE[r][0] = 1; TILE[r][COLS - 1] = 1; }
 
-  // Exits start CLOSED (wall) — they open when Otto appears
+  // Exits start CLOSED (wall) — they open when Brotto appears
 
   // Random interior wall segments
   const cx = Math.floor(COLS / 2), cy = Math.floor(ROWS / 2);
@@ -243,14 +243,15 @@ function enterRoom(entryDir) {
   speedBonus      = null;
   speedBonusTimer = 6 + Math.random() * 8;  // first spawn in 6–14 s
   openExits       = new Set();
-  ottoTimer       = Math.max(5, OTTO_DELAY - Math.floor(score / 1200));
+  brottoTimer       = Math.max(5, BROTTO_DELAY - Math.floor(score / 1200));
   alertTimer      = 0;
-  otto    = { x: -CELL * 3, y: -CELL * 3, active: false, bouncePhase: 0 };
-  ottoAge = 0;
+  brotto    = { x: -CELL * 3, y: -CELL * 3, active: false, bouncePhase: 0 };
+  brottoAge = 0;
   state      = 'entering';
   enterTimer = 1.5;
   lastTime   = 0;
   updateHUD();
+  NeonArcade.SFX.berzerkRoomEnter?.();
 }
 
 function exitRoom(dir) {
@@ -360,8 +361,8 @@ function updatePlayer(dt) {
     NeonArcade.SFX.berzerkPowerUp?.();
   }
 
-  // Master switch — only activates when Otto is present
-  if (masterSwitch && otto.active &&
+  // Master switch — only activates when Brotto is present
+  if (masterSwitch && brotto.active &&
       rectsOverlap(player.x, player.y, PL_W, PL_H, masterSwitch.x, masterSwitch.y, SW_W, SW_H)) {
     triggerVictory();
   }
@@ -438,6 +439,7 @@ function updateRobots(dt) {
         vy: (d.y / nl) * RB_BL_SPEED,
         shooterId: rb,
       });
+      NeonArcade.SFX.berzerkRobotShoot();
     }
   }
 }
@@ -457,11 +459,11 @@ function updateBullets(dt) {
         return false;
       }
     }
-    // Hit Otto — slow him for 0.5 s
-    if (otto.active) {
+    // Hit Brotto — slow him for 0.5 s
+    if (brotto.active) {
       const otR = CELL * 0.58;
-      if (Math.hypot(bl.x + BL_W / 2 - otto.x, bl.y + BL_H / 2 - otto.y) < otR) {
-        otto.slowTimer = 1.0;
+      if (Math.hypot(bl.x + BL_W / 2 - brotto.x, bl.y + BL_H / 2 - brotto.y) < otR) {
+        brotto.slowTimer = 1.0;
         NeonArcade.SFX.berzerkRobotDie?.();
         return false;
       }
@@ -508,71 +510,76 @@ function updateBullets(dt) {
   }
 }
 
-// ── Otto Update ──────────────────────────────────────────────
-function updateOtto(dt) {
-  if (!otto.active) {
-    ottoTimer -= dt;
-    if (ottoTimer <= 0) activateOtto();
+// ── Brotto Update ──────────────────────────────────────────────
+function updateBrotto(dt) {
+  if (!brotto.active) {
+    brottoTimer -= dt;
+    if (brottoTimer <= 0) activateBrotto();
     return;
   }
 
-  ottoAge += dt;  // seconds Otto has been active this room
+  brottoAge += dt;  // seconds Brotto has been active this room
+  brotto.moveSound = (brotto.moveSound || 0) - dt;
+  if (brotto.moveSound <= 0) {
+    NeonArcade.SFX.berzerkBrottoMove?.();
+    brotto.moveSound = 0.55;
+  }
 
   // Speed: starts at base, grows with score/time, capped at 3× base
-  // While slowTimer > 0 Otto is capped at player speed
-  if (otto.slowTimer > 0) otto.slowTimer -= dt;
-  const rawSpeed = Math.min(OTTO_BASE * 3, OTTO_BASE + score / 200 + ottoAge * 4);
-  const speed = otto.slowTimer > 0 ? Math.min(rawSpeed, PL_SPEED / 2) : rawSpeed;
+  // While slowTimer > 0 Brotto is capped at player speed
+  if (brotto.slowTimer > 0) brotto.slowTimer -= dt;
+  const rawSpeed = Math.min(BROTTO_BASE * 3, BROTTO_BASE + score / 200 + brottoAge * 4);
+  const speed = brotto.slowTimer > 0 ? Math.min(rawSpeed, PL_SPEED / 2) : rawSpeed;
 
-  // Path recalc interval: starts at 0.30s, shrinks to 0.04s over 15 s with Otto
-  const pathInterval = Math.max(0.04, 0.30 - ottoAge * 0.017);
+  // Path recalc interval: starts at 0.30s, shrinks to 0.04s over 15 s with Brotto
+  const pathInterval = Math.max(0.04, 0.30 - brottoAge * 0.017);
 
-  otto.bouncePhase += dt * 5;
-  const ottoR = Math.max(4, CELL * 0.5);
+  brotto.bouncePhase += dt * 5;
+  const brottoR = Math.max(4, CELL * 0.5);
 
   // Recompute BFS waypoint when timer expires or waypoint reached
-  otto.pathTimer = (otto.pathTimer || 0) - dt;
-  const atWaypoint = otto.waypointX === undefined ||
-    Math.hypot(otto.waypointX - otto.x, otto.waypointY - otto.y) < CELL * 0.55;
+  brotto.pathTimer = (brotto.pathTimer || 0) - dt;
+  const atWaypoint = brotto.waypointX === undefined ||
+    Math.hypot(brotto.waypointX - brotto.x, brotto.waypointY - brotto.y) < CELL * 0.55;
 
-  if (otto.pathTimer <= 0 || atWaypoint) {
-    otto.pathTimer = pathInterval;
-    const otTx = Math.floor(otto.x / CELL);
-    const otTy = Math.floor(otto.y / CELL);
+  if (brotto.pathTimer <= 0 || atWaypoint) {
+    brotto.pathTimer = pathInterval;
+    const otTx = Math.floor(brotto.x / CELL);
+    const otTy = Math.floor(brotto.y / CELL);
     const plTx = Math.floor((player.x + PL_W / 2) / CELL);
     const plTy = Math.floor((player.y + PL_H / 2) / CELL);
-    const next = ottoBFS(otTx, otTy, plTx, plTy);
+    const next = brottoBFS(otTx, otTy, plTx, plTy);
     if (next) {
-      otto.waypointX = next.x * CELL + CELL / 2;
-      otto.waypointY = next.y * CELL + CELL / 2;
+      brotto.waypointX = next.x * CELL + CELL / 2;
+      brotto.waypointY = next.y * CELL + CELL / 2;
     } else {
       // Fallback: head directly (open area or same tile)
-      otto.waypointX = player.x + PL_W / 2;
-      otto.waypointY = player.y + PL_H / 2;
+      brotto.waypointX = player.x + PL_W / 2;
+      brotto.waypointY = player.y + PL_H / 2;
     }
   }
 
   // Move toward current waypoint with bounce perpendicular to direction
-  const tdx  = otto.waypointX - otto.x;
-  const tdy  = otto.waypointY - otto.y;
+  const tdx  = brotto.waypointX - brotto.x;
+  const tdy  = brotto.waypointY - brotto.y;
   const dist = Math.hypot(tdx, tdy) || 1;
-  const bounce = Math.sin(otto.bouncePhase) * speed * 0.22;
+  const bounce = Math.sin(brotto.bouncePhase) * speed * 0.22;
   const movX = (tdx / dist) * speed * dt + (-tdy / dist) * bounce * dt;
   const movY = (tdy / dist) * speed * dt + ( tdx / dist) * bounce * dt;
 
-  const nx = otto.x + movX;
-  if (!rectHitsWall(nx - ottoR, otto.y - ottoR, ottoR * 2, ottoR * 2)) otto.x = nx;
-  const ny = otto.y + movY;
-  if (!rectHitsWall(otto.x - ottoR, ny - ottoR, ottoR * 2, ottoR * 2)) otto.y = ny;
+  const nx = brotto.x + movX;
+  if (!rectHitsWall(nx - brottoR, brotto.y - brottoR, brottoR * 2, brottoR * 2)) brotto.x = nx;
+  const ny = brotto.y + movY;
+  if (!rectHitsWall(brotto.x - brottoR, ny - brottoR, brottoR * 2, brottoR * 2)) brotto.y = ny;
 
   if (player.alive && player.invTimer <= 0 && shieldTimer <= 0) {
-    if (Math.hypot(otto.x - (player.x + PL_W / 2), otto.y - (player.y + PL_H / 2)) < CELL * 0.7)
+    if (Math.hypot(brotto.x - (player.x + PL_W / 2), brotto.y - (player.y + PL_H / 2)) < CELL * 0.7)
       killPlayer();
   }
 }
 
 // BFS on tile grid: returns the first step tile toward (toTx, toTy)
-function ottoBFS(fromTx, fromTy, toTx, toTy) {
+function brottoBFS(fromTx, fromTy, toTx, toTy) {
   if (fromTx === toTx && fromTy === toTy) return null;
   const DIRS4  = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
   const visited = new Set();
@@ -604,8 +611,8 @@ function openExit(dir) {
   if (dir === 'right')  for (let r = EXIT_R1; r <= EXIT_R2; r++) TILE[r][COLS - 1] = 0;
 }
 
-function activateOtto() {
-  // Open 1–3 random exits first, then spawn Otto at one of them
+function activateBrotto() {
+  // Open 1–3 random exits first, then spawn Brotto at one of them
   const allDirs = ['top', 'bottom', 'left', 'right'].sort(() => Math.random() - 0.5);
   const count   = 1 + Math.floor(Math.random() * 3);
   for (let i = 0; i < count; i++) openExit(allDirs[i]);
@@ -614,22 +621,21 @@ function activateOtto() {
   const spawnDir = allDirs[Math.floor(Math.random() * count)];
   const midX = ((EXIT_C1 + EXIT_C2) / 2 + 0.5) * CELL;
   const midY = ((EXIT_R1 + EXIT_R2) / 2 + 0.5) * CELL;
-  if      (spawnDir === 'top')    { otto.x = midX; otto.y = -CELL; }
-  else if (spawnDir === 'bottom') { otto.x = midX; otto.y = ROWS * CELL + CELL; }
-  else if (spawnDir === 'left')   { otto.x = -CELL; otto.y = midY; }
-  else                            { otto.x = COLS * CELL + CELL; otto.y = midY; }
+  if      (spawnDir === 'top')    { brotto.x = midX; brotto.y = -CELL; }
+  else if (spawnDir === 'bottom') { brotto.x = midX; brotto.y = ROWS * CELL + CELL; }
+  else if (spawnDir === 'left')   { brotto.x = -CELL; brotto.y = midY; }
+  else                            { brotto.x = COLS * CELL + CELL; brotto.y = midY; }
 
-  otto.active     = true;
-  otto.pathTimer  = 0;
-  otto.waypointX  = undefined;
-  otto.waypointY  = undefined;
-  otto.slowTimer  = 0;
-  ottoAge         = 0;
+  brotto.active     = true;
+  brotto.pathTimer  = 0;
+  brotto.waypointX  = undefined;
+  brotto.waypointY  = undefined;
+  brotto.slowTimer  = 0;
+  brottoAge         = 0;
   alertTimer      = 2.5;
 
-  if (isLastRoom() && !masterSwitch) spawnMasterSwitch();
-
   NeonArcade.SFX.berzerkOtto?.();
+  NeonArcade.SFX.berzerkBrotto?.();
 }
 
 // ── Bonus Chest ──────────────────────────────────────────────
@@ -786,7 +792,7 @@ function drawMasterSwitch(x, y, pulse) {
 }
 
 function triggerVictory() {
-  otto.active = false;
+  brotto.active = false;
   score += 10000;
   checkBest();
   state = 'gameover';  // halts main loop
@@ -821,10 +827,10 @@ function killRobot(rb) {
     if (Math.sqrt(dx * dx + dy * dy) < CELL * 1.9) killRobot(other);
   }
 
-  // Shorten Otto timer when all robots cleared; spawn bonus chest / master switch
+  // Shorten Brotto timer when all robots cleared; spawn bonus chest / master switch
   const remaining = robots.filter(r => r.alive).length;
   if (remaining === 0) {
-    if (!otto.active) ottoTimer = Math.min(ottoTimer, 2.5);
+    if (!brotto.active) brottoTimer = Math.min(brottoTimer, 2.5);
     if (isLastRoom()) {
       if (!masterSwitch) spawnMasterSwitch();
     } else {
@@ -839,7 +845,7 @@ function killRobot(rb) {
 function killPlayer() {
   if (!player.alive) return;
   player.alive = false;
-  if (otto.active) otto.slowTimer = 0;
+  if (brotto.active) brotto.slowTimer = 0;
   explosions.push({
     x: player.x + PL_W / 2, y: player.y + PL_H / 2,
     r: 0, maxR: CELL * 2.2, life: 0.7, isPlayer: true,
@@ -1085,8 +1091,8 @@ function render(dt) {
     ctx.shadowBlur  = 0;
   }
 
-  // Evil Otto
-  if (otto && otto.active) drawOtto(otto.x, otto.y);
+  // Evil Brotto
+  if (brotto && brotto.active) drawBrotto(brotto.x, brotto.y);
 
   // "INTRUDER ALERT" warning text
   if (alertTimer > 0) {
@@ -1155,7 +1161,7 @@ function drawRobot(x, y, color) {
   ctx.fillRect(x + RB_W * 0.58, y + RB_H * 0.07, RB_W * 0.20, RB_H * 0.15);
 }
 
-function drawOtto(cx, cy) {
+function drawBrotto(cx, cy) {
   const r = CELL * 0.58;
   ctx.shadowColor = 'rgba(255,240,0,0.95)';
   ctx.shadowBlur  = 18;
@@ -1329,7 +1335,7 @@ function loop(ts) {
   if (masterSwitch) masterSwitch.pulse += dt * 3;
   updateRobots(dt);
   updateBullets(dt);
-  updateOtto(dt);
+  updateBrotto(dt);
   updateExplosions(dt);
   robots = robots.filter(r => r.alive);
 

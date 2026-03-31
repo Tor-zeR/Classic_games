@@ -154,6 +154,28 @@
 .overlay-btn:hover  { background: rgba(255,136,0,0.1); box-shadow: 0 0 24px rgba(255,136,0,0.6); }
 .overlay-btn:active { transform: scale(0.95); }
 
+/* ── Bonus status bar ── */
+.bonus-bar {
+  font-family: var(--font);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-align: center;
+  padding: 4px 16px 0;
+  min-height: 1.6em;
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  align-items: center;
+}
+.bonus-shoot {
+  color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 20px rgba(255,255,200,0.5);
+}
+.bonus-shield {
+  color: #64b4ff;
+  text-shadow: 0 0 10px #64b4ff, 0 0 20px rgba(100,180,255,0.5);
+}
+
 /* ── Controls hint ── */
 .controls-hint {
   font-size: 9px;
