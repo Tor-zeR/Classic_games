@@ -1346,7 +1346,10 @@ function loop(ts) {
 
 // ── Canvas swipe (fallback for devices without d-pad visibility) ──
 let _swX = 0, _swY = 0;
-canvas.addEventListener('touchstart', e => { _swX = e.touches[0].clientX; _swY = e.touches[0].clientY; }, { passive: true });
+canvas.addEventListener('touchstart', e => { _swX = e.touches[0].clientX; _swY = e.touches[0].clientY; }, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  if (state === 'playing') e.preventDefault();
+}, { passive: false });
 canvas.addEventListener('touchend', e => {
   if (state !== 'playing') return;
   const dx = e.changedTouches[0].clientX - _swX;
@@ -1357,7 +1360,7 @@ canvas.addEventListener('touchend', e => {
   } else {
     player.aimX = 0; player.aimY = dy > 0 ? 1 : -1;
   }
-}, { passive: true });
+}, { passive: false });
 
 // ── Fullscreen (mobile) ───────────────────────────────────────
 function tryFullscreen() {

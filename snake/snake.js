@@ -918,7 +918,10 @@ let touchX = 0, touchY = 0;
 canvas.addEventListener('touchstart', e => {
   touchX = e.touches[0].clientX;
   touchY = e.touches[0].clientY;
-}, { passive: true });
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  if (state === 'playing') e.preventDefault();
+}, { passive: false });
 canvas.addEventListener('touchend', e => {
   if (state !== 'playing') return;
   const dx = e.changedTouches[0].clientX - touchX;
@@ -931,7 +934,7 @@ canvas.addEventListener('touchend', e => {
     d = dy > 0 ? { x: 0, y: 1 } : { x: 0, y:-1 };
   }
   if (!(d.x === -dir.x && d.y === -dir.y)) nextDir = d;
-}, { passive: true });
+}, { passive: false });
 
 // ── Button Handlers ───────────────────────────────────────────
 function tryFullscreen() {

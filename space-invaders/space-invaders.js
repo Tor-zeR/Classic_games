@@ -1007,18 +1007,19 @@ const gameCanvas = document.getElementById('game-canvas');
 let _siSwipeOriginX = 0;
 gameCanvas.addEventListener('touchstart', e => {
   _siSwipeOriginX = e.touches[0].clientX;
-}, { passive: true });
+}, { passive: false });
 gameCanvas.addEventListener('touchmove', e => {
+  e.preventDefault();
   const dx = e.touches[0].clientX - _siSwipeOriginX;
   if (Math.abs(dx) >= 40) {
     keys['ArrowLeft']  = dx < 0;
     keys['ArrowRight'] = dx > 0;
   }
-}, { passive: true });
+}, { passive: false });
 gameCanvas.addEventListener('touchend', () => {
   keys['ArrowLeft'] = false;
   keys['ArrowRight'] = false;
-}, { passive: true });
+}, { passive: false });
 
 window.addEventListener('resize', () => { resizeCanvas(); render(); });
 
