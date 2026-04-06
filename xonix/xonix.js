@@ -857,6 +857,9 @@ canvas.addEventListener('touchstart', e => {
   const t = e.changedTouches[0];
   touchStart = { x: t.clientX, y: t.clientY };
 }, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  if (gameState === 'playing') e.preventDefault();
+}, { passive: false });
 
 canvas.addEventListener('touchend', e => {
   e.preventDefault();
