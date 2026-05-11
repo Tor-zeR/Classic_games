@@ -463,27 +463,27 @@ function showOverlay(id) {
 // ── Rendering ─────────────────────────────────────────────────
 function render() {
   const W = canvas.width, H = canvas.height;
-  ctx.fillStyle = '#030008';
+  ctx.fillStyle = '#050505';
   ctx.fillRect(0, 0, W, H);
 
   // Claimed fill
-  ctx.fillStyle = '#160022';
+  ctx.fillStyle = '#1a1a1a';
   for (let r = 0; r < ROWS; r++)
     for (let c = 0; c < COLS; c++)
       if (grid[gi(r, c)] === CLAIMED)
         ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
 
   // Grid dots on empty
-  ctx.fillStyle = 'rgba(200,0,200,0.09)';
+  ctx.fillStyle = 'rgba(200,200,200,0.09)';
   for (let r = 1; r < ROWS-1; r++)
     for (let c = 1; c < COLS-1; c++)
       if (grid[gi(r, c)] === EMPTY)
         ctx.fillRect(c*CELL + (CELL>>1) - 1, r*CELL + (CELL>>1) - 1, 2, 2);
 
-  // Neon magenta border at claimed/empty edges
+  // Neon white border at claimed/empty edges
   ctx.save();
-  ctx.strokeStyle = '#ff00ff'; ctx.lineWidth = 1.5;
-  ctx.shadowColor = '#ff00ff'; ctx.shadowBlur = 7;
+  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
+  ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 7;
   ctx.beginPath();
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
@@ -504,7 +504,7 @@ function render() {
     const age = now - ts;
     if (age > FLASH_MS) { flashCells.delete(idx); continue; }
     const alpha = (1 - age / FLASH_MS) * 0.78;
-    ctx.fillStyle = `rgba(255,100,255,${alpha})`;
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
     ctx.fillRect((idx % COLS) * CELL, Math.floor(idx / COLS) * CELL, CELL, CELL);
   }
 

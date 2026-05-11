@@ -1,6 +1,8 @@
 /* ============================================================
-   Xonix — Game Page Styles (magenta theme)
+   Xonix — Game Page Styles (white theme)
    ============================================================ */
+
+.neon-white { color: var(--white); text-shadow: 0 0 6px var(--white), 0 0 14px var(--white), 0 0 30px var(--white); }
 
 .page {
   position: relative;
@@ -23,8 +25,8 @@
 
 .game-title-bar {
   font-size: 13px;
-  color: var(--magenta);
-  text-shadow: 0 0 10px var(--magenta);
+  color: var(--white);
+  text-shadow: 0 0 10px var(--white);
   letter-spacing: 0.15em;
 }
 
@@ -32,14 +34,14 @@
   font-family: var(--font);
   font-size: 8px;
   background: transparent;
-  border: 1px solid rgba(255,0,255,0.35);
-  color: rgba(255,0,255,0.65);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.65);
   padding: 5px 10px;
   cursor: pointer;
   letter-spacing: 0.1em;
   transition: all 0.15s;
 }
-.music-btn:hover { border-color: var(--magenta); color: var(--magenta); }
+.music-btn:hover { border-color: var(--white); color: var(--white); }
 .music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
 
 /* ── Main game area ── */
@@ -63,7 +65,7 @@
 
 .panel-box {
   background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,0,255,0.2);
+  border: 1px solid rgba(255,255,255,0.2);
   padding: 9px 11px;
 }
 .panel-label {
@@ -74,8 +76,8 @@
 }
 .panel-value {
   font-size: 15px;
-  color: var(--magenta);
-  text-shadow: 0 0 8px var(--magenta);
+  color: var(--white);
+  text-shadow: 0 0 8px var(--white);
 }
 .panel-value.hi    { font-size: 12px; color: var(--yellow); text-shadow: 0 0 8px var(--yellow); }
 .panel-value.lvl   { font-size: 22px; }
@@ -89,19 +91,19 @@
   font-size: 7px;
   margin-bottom: 4px;
 }
-.fill-pct    { color: var(--magenta); text-shadow: 0 0 6px var(--magenta); }
+.fill-pct    { color: var(--white); text-shadow: 0 0 6px var(--white); }
 .fill-target { color: rgba(255,255,255,0.35); }
 
 .fill-bar-track {
   position: relative;
   height: 5px;
   background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,0,255,0.22);
+  border: 1px solid rgba(255,255,255,0.22);
 }
 .fill-bar-inner {
   height: 100%;
-  background: var(--magenta);
-  box-shadow: 0 0 8px var(--magenta);
+  background: var(--white);
+  box-shadow: 0 0 8px var(--white);
   transition: width 0.25s;
   max-width: 100%;
 }
@@ -129,8 +131,8 @@
 .canvas-glow {
   position: absolute;
   inset: -3px;
-  border: 2px solid var(--magenta);
-  box-shadow: 0 0 14px var(--magenta), 0 0 32px rgba(255,0,255,0.2), inset 0 0 12px rgba(255,0,255,0.06);
+  border: 2px solid var(--white);
+  box-shadow: 0 0 14px var(--white), 0 0 32px rgba(255,255,255,0.2), inset 0 0 12px rgba(255,255,255,0.06);
   pointer-events: none;
 }
 
@@ -168,8 +170,8 @@
 }
 .overlay-big {
   font-size: 14px;
-  color: var(--magenta);
-  text-shadow: 0 0 12px var(--magenta);
+  color: var(--white);
+  text-shadow: 0 0 12px var(--white);
   letter-spacing: 0.1em;
   text-align: center;
 }
@@ -179,14 +181,14 @@
   letter-spacing: 0.2em;
   padding: 10px 22px;
   background: transparent;
-  border: 2px solid var(--magenta);
-  color: var(--magenta);
-  box-shadow: 0 0 10px var(--magenta);
+  border: 2px solid var(--white);
+  color: var(--white);
+  box-shadow: 0 0 10px var(--white);
   cursor: pointer;
   transition: all 0.15s;
   margin-top: 4px;
 }
-.overlay-btn:hover { background: rgba(255,0,255,0.1); box-shadow: 0 0 24px var(--magenta); }
+.overlay-btn:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 24px var(--white); }
 .overlay-btn:active { transform: scale(0.95); }
 
 /* ── Controls hint ── */
@@ -218,8 +220,8 @@
   width: 52px;
   height: 52px;
   background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,0,255,0.35);
-  color: var(--magenta);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: var(--white);
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -230,8 +232,8 @@
   border-radius: 4px;
 }
 .dpad-btn:active, .dpad-btn.pressed {
-  background: rgba(255,0,255,0.15);
-  box-shadow: 0 0 12px var(--magenta);
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 12px var(--white);
 }
 .dpad-center {
   width: 52px;
@@ -254,7 +256,7 @@
 
 .fullscreen-note {
   font-size: 6px;
-  color: rgba(255, 0, 255, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.18em;
   text-align: center;
   margin-top: -4px;
@@ -331,15 +333,15 @@
 }
 .rotate-icon {
   font-size: 64px;
-  color: var(--magenta);
-  text-shadow: 0 0 20px var(--magenta);
+  color: var(--white);
+  text-shadow: 0 0 20px var(--white);
   animation: rotate-hint 1.8s ease-in-out infinite;
 }
 .rotate-text {
   font-family: var(--font);
   font-size: 13px;
-  color: var(--magenta);
-  text-shadow: 0 0 10px var(--magenta);
+  color: var(--white);
+  text-shadow: 0 0 10px var(--white);
   letter-spacing: 0.15em;
 }
 .rotate-sub {
