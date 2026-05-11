@@ -153,8 +153,10 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
-    .game-card:hover::after { opacity: 1; }
-    .game-card:hover { transform: translateY(-5px); }
+    @media (hover: hover) {
+      .game-card:hover::after { opacity: 1; }
+      .game-card:hover { transform: translateY(-5px); }
+    }
 
     /* Per-card accent colors */
     .card-tetris      { border-color: var(--cyan);    box-shadow: 0 0 12px rgba(0,255,255,0.25),   inset 0 0 12px rgba(0,255,255,0.04);   }
