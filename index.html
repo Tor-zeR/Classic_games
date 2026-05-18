@@ -266,7 +266,15 @@
       letter-spacing: 0.1em;
       transition: all 0.15s;
     }
-    .music-btn:hover { border-color: var(--magenta); color: var(--magenta); }
+    @media (hover: hover) {
+      .music-btn:hover { border-color: var(--magenta); color: var(--magenta); }
+    }
+    .music-btn:focus-visible {
+      outline: 2px solid var(--magenta);
+      outline-offset: 2px;
+      border-color: var(--magenta);
+      color: var(--magenta);
+    }
     .music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
 
     /* ── Footer ── */
@@ -384,7 +392,7 @@
         </a>
 
         <a href="xonix/index.html" class="game-card card-xonix">
-<span class="game-icon">◈</span>
+          <span class="game-icon">◈</span>
           <h2 class="game-title">TERRITORY</h2>
           <p class="game-desc">Capture territory<br>without getting<br>intercepted.</p>
           <span class="play-tag">► PLAY</span>
@@ -398,7 +406,7 @@
         </a>
 
         <a href="pac-man/index.html" class="game-card card-pacman">
-<span class="game-icon">◕</span>
+          <span class="game-icon">◕</span>
           <h2 class="game-title">CHOMP</h2>
           <p class="game-desc">Eat the dots.<br>Dodge the ghosts.<br>4 different mazes.</p>
           <span class="play-tag">► PLAY</span>
@@ -425,8 +433,8 @@
           <span class="play-tag">► PLAY</span>
         </a>
 
-<a href="berzerk/index.html" class="game-card card-berzerk">
-<span class="game-icon">🤖</span>
+        <a href="berzerk/index.html" class="game-card card-berzerk">
+          <span class="game-icon">🤖</span>
           <h2 class="game-title">ROBO MAZE</h2>
           <p class="game-desc">Blast the robots.<br>Escape each room.<br>Evil Brotto won't stop.</p>
           <span class="play-tag">► PLAY</span>
@@ -624,17 +632,17 @@
 
         ctx.save();
 
-        // Vertical lines
+        // Vertical lines — gradient is identical for every line, build it once.
+        const vLg = ctx.createLinearGradient(0, VP, 0, H);
+        vLg.addColorStop(0, 'rgba(0,255,255,0)');
+        vLg.addColorStop(0.25, 'rgba(0,255,255,0.45)');
+        vLg.addColorStop(1, 'rgba(0,255,255,0.12)');
+        ctx.strokeStyle = vLg;
+        ctx.lineWidth   = 1;
         for (let i = -linesV; i <= linesV; i++) {
           const xf = i / linesV;
           const xH = cx + xf * W * 0.55;  // at horizon (narrower)
           const xB = cx + xf * W * 3.5;   // at bottom  (wider)
-          const lg  = ctx.createLinearGradient(0, VP, 0, H);
-          lg.addColorStop(0, 'rgba(0,255,255,0)');
-          lg.addColorStop(0.25, 'rgba(0,255,255,0.45)');
-          lg.addColorStop(1, 'rgba(0,255,255,0.12)');
-          ctx.strokeStyle = lg;
-          ctx.lineWidth   = 1;
           ctx.beginPath();
           ctx.moveTo(xH, VP);
           ctx.lineTo(xB, H);
@@ -659,8 +667,11 @@
         ctx.restore();
       }
 
-      function loop() {
-        const dt = 0.016;
+      let lastTime = 0;
+      let rafId    = 0;
+      function loop(now) {
+        const dt = lastTime ? Math.min((now - lastTime) / 1000, 0.05) : 0;
+        lastTime = now;
         t += dt;
 
         // Shooting stars — spawn & update
@@ -680,12 +691,26 @@
         comets = comets.filter(c => c.life > 0 && c.y < H * 0.68 && c.x > -200 && c.x < W + 200);
 
         draw();
-        requestAnimationFrame(loop);
+        rafId = requestAnimationFrame(loop);
       }
+
+      // Live reaction to the OS reduced-motion setting — flipping the toggle
+      // pauses/resumes the synthwave loop without requiring a page reload.
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function applyMotionPreference() {
+        if (reduceMotion.matches) {
+          if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+          draw();   // single static frame
+        } else if (!rafId) {
+          lastTime = 0;
+          rafId = requestAnimationFrame(loop);
+        }
+      }
+      reduceMotion.addEventListener('change', applyMotionPreference);
 
       window.addEventListener('resize', resize);
       resize();
-      loop();
+      applyMotionPreference();
     })();
   </script>
 

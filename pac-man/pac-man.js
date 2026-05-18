@@ -150,6 +150,7 @@ let animTick      = 0;
 let lastTime      = 0;
 let rafId         = null;
 let scorePopups   = [];  // { x, y, val, life }
+let _levelupTimer = 0;   // setTimeout id for level-clear transition (cleared on restart)
 
 // ── Bonus items ───────────────────────────────────────────────
 // kind: 'cherry'=1000pts | 'apple'=2000pts | 'grapefruit'=+life | 'bomb'=bullets 10s
@@ -582,6 +583,7 @@ function checkCollisions() {
 
 // ── Game flow ─────────────────────────────────────────────────
 function startGame() {
+  if (_levelupTimer) { clearTimeout(_levelupTimer); _levelupTimer = 0; }
   score      = 0;
   lives      = 3;
   level      = 1;
@@ -634,7 +636,8 @@ function loop(ts) {
       gameState = 'levelup';
       showOverlay('overlay-levelup');
       document.getElementById('lvl-title').textContent = `LEVEL ${level} CLEAR!`;
-      setTimeout(() => {
+      _levelupTimer = setTimeout(() => {
+        _levelupTimer = 0;
         level++;
         pac.speed  = 5.5 + Math.min(level - 1, 6) * 0.22;
         ghostSpeed = 5.0 + Math.min(level - 1, 6) * 0.22;
@@ -642,7 +645,7 @@ function loop(ts) {
       }, 2500);
     }
 
-    if (score > hiScore) { hiScore = score; localStorage.setItem('pm_hi', hiScore); }
+    if (score > hiScore) { hiScore = score; localStorage.setItem('pm_hi', String(hiScore)); }
     updateHUD();
   }
 
@@ -978,12 +981,15 @@ document.getElementById('btn-pause').addEventListener('click', () => {
 });
 
 // Canvas swipe — minimum 40 px distance (spec: Game_Controls_setup.md)
+// passive: false + preventDefault blocks iOS pull-to-refresh / page scroll on canvas.
 let _swipeX = 0, _swipeY = 0;
 canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
   _swipeX = e.touches[0].clientX;
   _swipeY = e.touches[0].clientY;
-}, { passive: true });
+}, { passive: false });
 canvas.addEventListener('touchend', e => {
+  e.preventDefault();
   if (gameState !== 'playing') return;
   const dx = e.changedTouches[0].clientX - _swipeX;
   const dy = e.changedTouches[0].clientY - _swipeY;
@@ -993,7 +999,7 @@ canvas.addEventListener('touchend', e => {
   } else {
     [pac.nextDx, pac.nextDy] = dy > 0 ? [0, 1] : [0, -1];
   }
-}, { passive: true });
+}, { passive: false });
 
 // ── SFX ───────────────────────────────────────────────────────
 let eatFlip = false;
