@@ -52,10 +52,7 @@
 </head>
 <body>
   <!-- Subtle static background (no animated grid — keep focus on game) -->
-  <div style="
-    position:fixed; inset:0; z-index:0;
-    background: radial-gradient(ellipse at 50% 110%, #1a0035 0%, #0a0018 40%, #020008 100%);
-  "></div>
+  <div class="bg-static"></div>
 
   <div class="rotate-prompt" id="rotate-prompt">
     <div class="rotate-icon">⟳</div>
@@ -67,7 +64,7 @@
 
     <!-- Top bar -->
     <nav class="topbar">
-      <a href="../index.html" class="back-link">◄ HOME</a>
+      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
       <div class="music-controls">
         <button class="pause-btn" id="btn-pause">❚❚</button>
         <button class="music-btn" id="music-toggle" title="Cycle music track">♪ CHIP</button>
@@ -129,7 +126,7 @@
         <div class="overlay hidden" id="overlay-gameover">
           <div class="overlay-title neon-magenta flicker">GAME OVER</div>
           <div class="overlay-score" id="final-score"></div>
-          <div class="overlay-sub" id="new-best-msg" style="display:none; color:var(--yellow);">
+          <div class="overlay-sub new-best hidden" id="new-best-msg">
             ★ NEW HIGH SCORE ★
           </div>
           <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
@@ -154,11 +151,11 @@
       P — PAUSE
     </div>
 
+    <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
+
   </div>
 
   <script src="../js/common.js"></script>
   <script src="tetris.js"></script>
-
-  <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
 </body>
 </html>

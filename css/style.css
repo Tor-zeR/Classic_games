@@ -132,7 +132,14 @@ body::before {
   gap: 8px;
   transition: text-shadow 0.2s;
 }
-.back-link:hover { text-shadow: 0 0 12px var(--cyan); }
+@media (hover: hover) {
+  .back-link:hover { text-shadow: 0 0 12px var(--cyan); }
+}
+.back-link:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  text-shadow: 0 0 12px var(--cyan);
+}
 
 /* Stat box */
 .stat-box {
@@ -166,11 +173,18 @@ body::before {
   transition: all 0.15s;
   text-transform: uppercase;
 }
-.btn:hover {
-  background: rgba(0,255,255,0.12);
-  box-shadow: 0 0 20px var(--cyan), inset 0 0 16px rgba(0,255,255,0.12);
+@media (hover: hover) {
+  .btn:hover {
+    background: rgba(0,255,255,0.12);
+    box-shadow: 0 0 20px var(--cyan), inset 0 0 16px rgba(0,255,255,0.12);
+  }
 }
 .btn:active { transform: scale(0.96); }
+.btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  background: rgba(0,255,255,0.12);
+}
 
 /* Music controls group (track cycle + mute, right side of topbar) */
 .music-controls {
@@ -191,7 +205,15 @@ body::before {
   letter-spacing: 0.1em;
   transition: all 0.15s;
 }
-.music-mute-btn:hover { border-color: #00ff44; color: #00ff44; }
+@media (hover: hover) {
+  .music-mute-btn:hover { border-color: var(--green); color: var(--green); }
+}
+.music-mute-btn:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+  border-color: var(--green);
+  color: var(--green);
+}
 .music-mute-btn.off   { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
 
 /* Pause button (mobile only, shared across all games) */
@@ -208,14 +230,34 @@ body::before {
   transition: all 0.15s;
 }
 .pause-btn:active { background: rgba(255,255,255,0.12); }
+.pause-btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.85);
+  outline-offset: 2px;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,1);
+}
 @media (pointer: coarse) {
   .pause-btn { display: inline-block; }
 }
+
+/* Generic hide utility (the per-game .overlay.hidden rules still work — both
+   apply display:none and the cascade stays predictable). */
+.hidden { display: none !important; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+
+/* Static synthwave background (shared by per-game pages that don't render
+   their own animated background). Used as a sibling of .page. */
+.bg-static {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 110%, #1a0035 0%, #0a0018 40%, #020008 100%);
+  pointer-events: none;
+}
 
 /* Disclaimer */
 .disclaimer {
@@ -226,4 +268,19 @@ body::before {
   padding: 12px 16px 18px;
   letter-spacing: 0.08em;
   line-height: 2;
+}
+
+/* ============================================================
+   Reduced Motion — global kill switch for the persistent CRT
+   flicker, neon pulses, logo flicker, rotate-hint, float-up,
+   etc. Per-game animations inherit this via the universal rule.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

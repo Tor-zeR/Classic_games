@@ -9,6 +9,9 @@ let _noiseBuffer   = null;  // pre-baked white noise for drums
 let _masterBus     = null;  // DynamicsCompressor → destination (all audio routes here)
 let _leadDelayNode = null;  // persistent delay node for lead echo
 
+// Lead echo: 3 × 16th notes at 128 BPM ≈ 0.352 s (dotted-8th Space-Echo feel).
+const _LEAD_ECHO_DELAY = (60 / 128 / 4) * 3;
+
 function getAudioCtx() {
   if (!_audioCtx) {
     _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -31,9 +34,8 @@ function getAudioCtx() {
     _masterBus = comp;
 
     // ── Lead delay: dotted-8th echo at 128 BPM ───────────────
-    // 3 × 16th-note steps ≈ 0.352 s — classic synth-pop Space Echo feel.
     _leadDelayNode = _audioCtx.createDelay(1.0);
-    _leadDelayNode.delayTime.value = SP_STEP * 3;
+    _leadDelayNode.delayTime.value = _LEAD_ECHO_DELAY;
 
     const _fb  = _audioCtx.createGain();   // feedback loop
     _fb.gain.value = 0.36;

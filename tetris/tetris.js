@@ -221,7 +221,7 @@ function addScore(cleared) {
     level = newLevel;
     NeonArcade.SFX.levelUp();
   }
-  if (score > bestScore) { bestScore = score; newBest = true; localStorage.setItem('tetris_hi', bestScore); }
+  if (score > bestScore) { bestScore = score; newBest = true; localStorage.setItem('tetris_hi', String(bestScore)); }
   updateHUD();
 }
 
@@ -314,8 +314,7 @@ function triggerGameOver() {
   NeonArcade.SFX.gameOver();
 
   document.getElementById('final-score').textContent = 'SCORE: ' + score;
-  const newBestEl = document.getElementById('new-best-msg');
-  newBestEl.style.display = newBest ? 'block' : 'none';
+  document.getElementById('new-best-msg').classList.toggle('hidden', !newBest);
   showOverlay('overlay-gameover');
   updateHUD();
 }
@@ -335,6 +334,7 @@ function startGame() {
   showOverlay(null);
   updateHUD();
   NeonArcade.getAudioCtx(); // ensure context created
+  NeonArcade.setTrack(1);   // CHIP — game's default track
   NeonArcade.startMusic();
   lastTs = performance.now();
 }
@@ -646,7 +646,7 @@ document.getElementById('btn-restart').addEventListener('click', startGame);
 // Music toggle
 document.getElementById('music-toggle').addEventListener('click', function () {
   // Cycle:  ♪ CHIP  →  ♪ SYNTH  →  ♪ OFF  →  ♪ CHIP  → …
-  const { track, name } = NeonArcade.cycleTrack();
+  const { name } = NeonArcade.cycleTrack();
   this.textContent = '♪ ' + name;
 });
 document.getElementById('music-mute').addEventListener('click', function () {
