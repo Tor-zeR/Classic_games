@@ -19,8 +19,8 @@ const ovStart    = document.getElementById('overlay-start');
 const ovPause    = document.getElementById('overlay-pause');
 const ovGameover = document.getElementById('overlay-gameover');
 const goScore    = document.getElementById('go-score');
-const tbFire     = document.getElementById('tb-fire');  // touch btn (may not exist)
 const bonusBarEl = document.getElementById('bonus-bar');
+let bonusBarLast = '';
 
 // ── Constants (walls) ────────────────────────────────────────
 const BONUS_THRESHOLD = 15;   // snake length at which the shoot bonus can appear
@@ -569,7 +569,6 @@ function updateHUD() {
   lengthEl.textContent = snake.length;
   foodsEl.textContent  = foodCount;
   levelEl.textContent  = Math.floor(foodCount / 5) + 1;
-  tbFire?.classList.toggle('active', shootTimer > 0);
 }
 
 // ── Overlays ──────────────────────────────────────────────────
@@ -772,12 +771,15 @@ function render(dt) {
     ctx.shadowBlur = 0;
   }
 
-  // Bonus status bar (DOM element below field — updated each frame)
+  // Bonus status bar (DOM element below field — only write when content changes)
   {
     let html = '';
     if (shootTimer > 0)  html += `<span class="bonus-shoot">★ AUTO-SHOOT  ${shootTimer.toFixed(1)}s</span>`;
     if (shieldTimer > 0) html += `<span class="bonus-shield">⬡ SHIELD  ●</span>`;
-    bonusBarEl.innerHTML = html;
+    if (html !== bonusBarLast) {
+      bonusBarEl.innerHTML = html;
+      bonusBarLast = html;
+    }
   }
 
   // Eat flash — brief full-canvas brightness pulse
@@ -861,7 +863,6 @@ function loop(ts) {
     shootTimer -= dt;
     if (shootTimer <= 0) {
       shootTimer = 0; bullets = []; bulletAcc = 0; autoShootAcc = 0;
-      tbFire?.classList.remove('active');
     } else {
       autoShootAcc += dt;
       while (autoShootAcc >= AUTO_SHOOT_INTERVAL) {
@@ -906,9 +907,11 @@ document.addEventListener('keydown', e => {
     togglePause();
     e.preventDefault();
   }
-  if (e.key === ' ' && state === 'playing' && shootTimer > 0) {
-    bullets.push({ x: snake[0].x, y: snake[0].y, dx: dir.x, dy: dir.y });
-    NeonArcade.SFX.snakeShoot();
+  if (e.key === ' ' && state === 'playing') {
+    if (shootTimer > 0) {
+      bullets.push({ x: snake[0].x, y: snake[0].y, dx: dir.x, dy: dir.y });
+      NeonArcade.SFX.snakeShoot();
+    }
     e.preventDefault();
   }
 });
@@ -938,16 +941,8 @@ canvas.addEventListener('touchend', e => {
 
 // ── Button Handlers ───────────────────────────────────────────
 function tryFullscreen() {
-  if (navigator.maxTouchPoints > 0)
+  if (navigator.maxTouchPoints > 0 && !document.fullscreenElement)
     document.documentElement.requestFullscreen?.().catch(() => {});
-}
-if (navigator.maxTouchPoints > 0) {
-  const _doFS = () => {
-    if (!document.fullscreenElement)
-      document.documentElement.requestFullscreen?.().catch(() => {});
-  };
-  document.addEventListener('touchstart', _doFS, { once: true, passive: true });
-  document.addEventListener('click',      _doFS, { once: true });
 }
 
 document.getElementById('btn-start').addEventListener('click',   () => { tryFullscreen(); startGame(); });

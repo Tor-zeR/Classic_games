@@ -147,7 +147,7 @@ const PU_COLOR = { RAPID: C_CYAN, SPREAD: C_ORANGE };
 // ── Game state ────────────────────────────────────────────────
 let gameState = 'start';
 let score = 0;
-let hiScore = parseInt(localStorage.getItem('si-hi') || '0');
+let hiScore = parseInt(localStorage.getItem('si-hi') || '0', 10);
 let lives = 3;
 let level = 1;
 
@@ -765,10 +765,11 @@ function playerHit() {
 
 function triggerGameOver() {
   if (gameState === 'gameover') return;
-  if (score > hiScore) { hiScore = score; localStorage.setItem('si-hi', hiScore); }
+  const beatHi = score > hiScore;
+  if (beatHi) { hiScore = score; localStorage.setItem('si-hi', hiScore); }
   gameState = 'gameover';
   document.getElementById('go-score').textContent = 'SCORE: ' + score;
-  document.getElementById('new-best-msg').style.display = score >= hiScore && score > 0 ? 'block' : 'none';
+  document.getElementById('new-best-msg').classList.toggle('is-hidden', !beatHi);
   showOverlay('overlay-gameover');
   NeonArcade.stopMusic();
   sfxGameOver();
@@ -787,11 +788,20 @@ function showOverlay(id) {
     document.getElementById(oid).classList.toggle('hidden', oid !== id));
 }
 
+const _hudEls = {
+  score: document.getElementById('score-display'),
+  hi:    document.getElementById('hi-display'),
+  lives: document.getElementById('lives-display'),
+  level: document.getElementById('level-display'),
+};
+const _hudLast = { score: -1, hi: -1, lives: -1, level: -1 };
 function updateHUD() {
-  document.getElementById('score-display').textContent = score;
-  document.getElementById('hi-display').textContent    = Math.max(score, hiScore);
-  document.getElementById('lives-display').textContent = '♥'.repeat(Math.max(0, lives));
-  document.getElementById('level-display').textContent = level;
+  if (_hudLast.score !== score) { _hudEls.score.textContent = score; _hudLast.score = score; }
+  const hi = Math.max(score, hiScore);
+  if (_hudLast.hi !== hi)       { _hudEls.hi.textContent    = hi;    _hudLast.hi    = hi; }
+  const livesStr = '♥'.repeat(Math.max(0, lives));
+  if (_hudLast.lives !== lives) { _hudEls.lives.textContent = livesStr; _hudLast.lives = lives; }
+  if (_hudLast.level !== level) { _hudEls.level.textContent = level; _hudLast.level = level; }
 }
 
 // ── Render ────────────────────────────────────────────────────
@@ -977,16 +987,8 @@ document.getElementById('music-mute').addEventListener('click', function () {
   this.classList.toggle('off', !on);
 });
 function tryFullscreen() {
-  if (navigator.maxTouchPoints > 0)
+  if (navigator.maxTouchPoints > 0 && !document.fullscreenElement)
     document.documentElement.requestFullscreen?.().catch(() => {});
-}
-if (navigator.maxTouchPoints > 0) {
-  const _doFS = () => {
-    if (!document.fullscreenElement)
-      document.documentElement.requestFullscreen?.().catch(() => {});
-  };
-  document.addEventListener('touchstart', _doFS, { once: true, passive: true });
-  document.addEventListener('click',      _doFS, { once: true });
 }
 
 document.getElementById('btn-start').addEventListener('click', () => {
@@ -1130,6 +1132,7 @@ window.addEventListener('resize', () => { resizeCanvas(); render(); });
 // ── Init ──────────────────────────────────────────────────────
 resizeCanvas();
 updateHUD();
+NeonArcade.setTrack(1);   // CHIP — set the default track before the first startMusic gesture
 NeonArcade.toggleMusic(); // start with music disabled
 document.getElementById('music-mute').textContent = 'Music: OFF';
 document.getElementById('music-mute').classList.add('off');

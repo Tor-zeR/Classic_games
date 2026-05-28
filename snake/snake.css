@@ -6,9 +6,17 @@
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 110%, #1a0a00 0%, #080400 40%, #000 100%);
 }
 
 /* ── Top nav bar ── */
@@ -40,12 +48,26 @@
   letter-spacing: 0.1em;
   transition: all 0.15s;
 }
-.music-btn:hover { border-color: var(--orange); color: var(--orange); }
-.music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+@media (hover: hover) {
+  .music-btn:hover { border-color: var(--orange); color: var(--orange); }
+}
+.music-btn:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+  border-color: var(--orange);
+  color: var(--orange);
+}
 
 /* Override global back-link color to orange theme */
 .back-link { color: var(--orange); }
-.back-link:hover { text-shadow: 0 0 12px var(--orange); }
+@media (hover: hover) {
+  .back-link:hover { text-shadow: 0 0 12px var(--orange); }
+}
+.back-link:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  text-shadow: 0 0 12px var(--orange);
+}
 
 /* ── Main game area ── */
 .game-area {
@@ -132,6 +154,10 @@
   line-height: 2.4;
   text-align: center;
 }
+.hint-orange { color: var(--orange); }
+.hint-wall   { color: #00d2ff; }
+.hint-bonus  { color: #fff; }
+.hint-snow   { color: #aaddff; }
 .overlay-score {
   font-size: 10px;
   color: var(--orange);
@@ -151,7 +177,15 @@
   transition: all 0.15s;
   margin-top: 4px;
 }
-.overlay-btn:hover  { background: rgba(255,136,0,0.1); box-shadow: 0 0 24px rgba(255,136,0,0.6); }
+@media (hover: hover) {
+  .overlay-btn:hover  { background: rgba(255,136,0,0.1); box-shadow: 0 0 24px rgba(255,136,0,0.6); }
+}
+.overlay-btn:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  background: rgba(255,136,0,0.1);
+  box-shadow: 0 0 24px rgba(255,136,0,0.6);
+}
 .overlay-btn:active { transform: scale(0.95); }
 
 /* ── Bonus status bar ── */
@@ -186,79 +220,6 @@
   line-height: 2.6;
 }
 
-/* ── Touch d-pad ── */
-.touch-controls {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 16px 18px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.dpad-row {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-.dpad-btn {
-  width: 52px;
-  height: 52px;
-  background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,136,0,0.35);
-  color: var(--orange);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s;
-  border-radius: 4px;
-}
-.dpad-btn:active, .dpad-btn.pressed {
-  background: rgba(255,136,0,0.15);
-  box-shadow: 0 0 12px var(--orange);
-}
-.dpad-center {
-  width: 52px;
-  height: 52px;
-}
-.dpad-btn.pause-small {
-  width: 52px;
-  height: 36px;
-  font-size: 8px;
-  font-family: var(--font);
-  letter-spacing: 0.1em;
-  border-color: rgba(255,255,255,0.18);
-  color: rgba(255,255,255,0.35);
-  margin-top: 4px;
-}
-.dpad-btn.fire-btn {
-  width: 80px;
-  height: 36px;
-  font-size: 8px;
-  font-family: var(--font);
-  letter-spacing: 0.1em;
-  border-color: rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.2);
-  margin-top: 4px;
-  margin-left: 8px;
-  pointer-events: none;
-  transition: background 0.1s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
-}
-.dpad-btn.fire-btn.active {
-  border-color: #fff;
-  color: #fff;
-  text-shadow: 0 0 8px #fff, 0 0 16px rgba(255,255,255,0.6);
-  box-shadow: 0 0 14px rgba(255,255,255,0.5);
-  pointer-events: auto;
-}
-.dpad-btn.fire-btn.active:active {
-  background: rgba(255,255,255,0.18);
-  box-shadow: 0 0 24px #fff;
-}
-
 /* ── Mobile/desktop hint visibility ── */
 .mobile-hints  { display: none; }
 .desktop-hints { display: block; }
@@ -277,7 +238,6 @@
   .side-panel      { min-width: 72px; gap: 7px; }
   .panel-value     { font-size: 12px; }
   .panel-box       { padding: 7px 8px; }
-  .touch-controls  { display: flex; }
   .controls-hint   { display: none; }
 
   .mobile-hints  { display: block; }

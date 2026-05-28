@@ -51,10 +51,7 @@
   </script>
 </head>
 <body>
-  <div style="
-    position:fixed; inset:0; z-index:0;
-    background: #000000;
-  "></div>
+  <div class="page-bg"></div>
 
   <div class="rotate-prompt" id="rotate-prompt">
     <div class="rotate-icon">⟳</div>
@@ -88,13 +85,13 @@
           <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
           <div class="dpad-cross" id="dpad-cross">
             <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-up">▲</div>
+            <button type="button" class="dpad-cell" id="dpad-up" tabindex="-1" aria-hidden="true">▲</button>
             <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-left">◄</div>
+            <button type="button" class="dpad-cell" id="dpad-left" aria-label="Rotate turret left">◄</button>
             <div class="dpad-cell dpad-mid"></div>
-            <div class="dpad-cell" id="dpad-right">►</div>
+            <button type="button" class="dpad-cell" id="dpad-right" aria-label="Rotate turret right">►</button>
             <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-down">▼</div>
+            <button type="button" class="dpad-cell" id="dpad-down" tabindex="-1" aria-hidden="true">▼</button>
             <div class="dpad-cell empty"></div>
           </div>
         </div>
@@ -105,7 +102,7 @@
         <div class="canvas-glow"></div>
 
         <div class="overlay" id="overlay-start">
-          <div class="overlay-title flicker" style="color:#55FFFF;">AIRBORNE</div>
+          <div class="overlay-title flicker title-cyan">AIRBORNE</div>
           <div class="overlay-sub desktop-hints">
             ◄ ► — ROTATE TURRET &nbsp;|&nbsp; SPACE — FIRE<br>
             SHOOT PLANES &amp; PARATROOPERS<br>
@@ -122,12 +119,12 @@
         </div>
 
         <div class="overlay hidden" id="overlay-pause">
-          <div class="overlay-title pulse" style="color:#FFFF55;">PAUSED</div>
+          <div class="overlay-title pulse title-yellow">PAUSED</div>
           <button class="overlay-btn" id="btn-resume">► RESUME</button>
         </div>
 
         <div class="overlay hidden" id="overlay-gameover">
-          <div class="overlay-title flicker" style="color:#FF5555;">GUN DESTROYED!</div>
+          <div class="overlay-title flicker title-red">GUN DESTROYED!</div>
           <div class="overlay-score" id="go-score"></div>
           <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
         </div>
