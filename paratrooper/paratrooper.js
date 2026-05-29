@@ -35,6 +35,18 @@ const GUN_X       = LW / 2;
 const GUN_PIVOT_Y = GROUND_Y - 14;
 const BARREL_LEN  = 30;
 
+// ── Starfield (precomputed) ────────────────────────────────────
+const STARS = (() => {
+  const out = [];
+  for (let i = 0; i < 60; i++) {
+    out.push({
+      x: Math.floor(Math.abs(Math.sin(i * 127.31 + 0.47)) * LW),
+      y: Math.floor(Math.abs(Math.sin(i * 311.73 + 0.29)) * GROUND_Y * 0.88),
+    });
+  }
+  return out;
+})();
+
 // ── Gun ────────────────────────────────────────────────────────
 let gunAngle = -Math.PI / 2;
 const GUN_ROT_SPD = 2.2;
@@ -91,7 +103,7 @@ let explosions = [];
 // ── Game state ─────────────────────────────────────────────────
 let gameState  = 'start';
 let score      = 0;
-let hiScore    = parseInt(localStorage.getItem('pt-hi') || '0');
+let hiScore    = parseInt(localStorage.getItem('pt-hi') || '0', 10);
 let wave       = 1;
 let totalKills = 0;
 
@@ -690,12 +702,7 @@ function drawBackground() {
 
   // White pixel stars — fixed positions
   ctx.fillStyle = '#FFFFFF';
-  for (let i = 0; i < 60; i++) {
-    ctx.fillRect(
-      Math.floor(Math.abs(Math.sin(i * 127.31 + 0.47)) * LW),
-      Math.floor(Math.abs(Math.sin(i * 311.73 + 0.29)) * GROUND_Y * 0.88),
-      1, 1);
-  }
+  for (const s of STARS) ctx.fillRect(s.x, s.y, 1, 1);
 
   // Dark green ground fill
   ctx.fillStyle = '#003300';
@@ -1060,13 +1067,19 @@ function loop(ts) {
 // ── Keyboard ───────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   keys[e.key] = true;
-  if (gameState === 'playing' && (e.key === ' ' || e.key === 'Space')) {
+  if (gameState === 'playing' &&
+      (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+    e.preventDefault();
+  }
+  if (gameState === 'playing' && e.key === ' ') {
     fireBullet(); e.preventDefault();
   }
   if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
     if (gameState === 'playing') {
+      e.preventDefault();
       gameState = 'paused'; NeonArcade.stopMusic(); showOverlay('overlay-pause');
     } else if (gameState === 'paused') {
+      e.preventDefault();
       gameState = 'playing'; NeonArcade.startMusic(); hideOverlays();
     }
   }

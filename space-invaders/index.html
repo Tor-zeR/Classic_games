@@ -51,23 +51,20 @@
   </script>
 </head>
 <body>
-  <div style="
-    position:fixed; inset:0; z-index:0;
-    background: radial-gradient(ellipse at 50% 110%, #003300 0%, #000d00 40%, #000200 100%);
-  "></div>
+  <div class="page-bg"></div>
 
   <div class="rotate-prompt" id="rotate-prompt">
     <div class="rotate-icon">⟳</div>
     <div class="rotate-text">ROTATE DEVICE</div>
-    <div class="rotate-sub">SPACE INVADERS REQUIRES LANDSCAPE MODE</div>
+    <div class="rotate-sub">ALIEN WAVE REQUIRES LANDSCAPE MODE</div>
   </div>
 
   <div class="page">
 
     <nav class="topbar">
-      <a href="../index.html" class="back-link">◄ HOME</a>
+      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
       <div class="music-controls">
-        <button class="pause-btn" id="btn-pause">❚❚</button>
+        <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
         <button class="music-btn" id="music-toggle">♪ CHIP</button>
         <button class="music-mute-btn" id="music-mute">Music: ON</button>
       </div>
@@ -91,15 +88,15 @@
         <div class="mobile-dpad" id="mobile-dpad">
           <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
           <div class="dpad-cross" id="dpad-cross">
-            <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-up">▲</div>
-            <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-left">◄</div>
-            <div class="dpad-cell dpad-mid"></div>
-            <div class="dpad-cell" id="dpad-right">►</div>
-            <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-down">▼</div>
-            <div class="dpad-cell empty"></div>
+            <div class="dpad-cell empty" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-up"    tabindex="-1" aria-hidden="true">▲</button>
+            <div class="dpad-cell empty" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-left"  aria-label="Move left">◄</button>
+            <div class="dpad-cell dpad-mid" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-right" aria-label="Move right">►</button>
+            <div class="dpad-cell empty" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-down"  tabindex="-1" aria-hidden="true">▼</button>
+            <div class="dpad-cell empty" aria-hidden="true"></div>
           </div>
         </div>
       </aside>
@@ -113,13 +110,13 @@
           <div class="overlay-sub desktop-hints">
             ← → — MOVE &nbsp;|&nbsp; SPACE — FIRE &nbsp;|&nbsp; P — PAUSE<br>
             DESTROY THE ALIEN FLEET BEFORE THEY REACH EARTH<br>
-            <span style="color:var(--yellow)">UFO = BONUS POINTS</span>
+            <span class="hint-yellow">UFO = BONUS POINTS</span>
           </div>
           <div class="overlay-sub mobile-hints">
             D-PAD ← → — MOVE<br>
             FIRE BUTTON — SHOOT<br>
             DESTROY THE ALIEN FLEET<br>
-            <span style="color:var(--yellow)">UFO = BONUS POINTS</span>
+            <span class="hint-yellow">UFO = BONUS POINTS</span>
           </div>
           <div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
           <button class="overlay-btn" id="btn-start">► START GAME</button>
@@ -132,13 +129,13 @@
 
         <div class="overlay hidden" id="overlay-levelup">
           <div class="overlay-title neon-green pulse">WAVE CLEAR!</div>
-          <div class="overlay-sub" style="color:var(--green)">PREPARING NEXT WAVE…</div>
+          <div class="overlay-sub hint-green">PREPARING NEXT WAVE…</div>
         </div>
 
         <div class="overlay hidden" id="overlay-gameover">
           <div class="overlay-title neon-magenta flicker">GAME OVER</div>
           <div class="overlay-score" id="go-score"></div>
-          <div class="overlay-sub" id="new-best-msg" style="display:none; color:var(--yellow)">★ NEW HIGH SCORE ★</div>
+          <div class="overlay-sub hint-yellow is-hidden" id="new-best-msg">★ NEW HIGH SCORE ★</div>
           <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
         </div>
       </div>

@@ -269,7 +269,10 @@ function exitRoom(dir) {
 const keys = {};
 document.addEventListener('keydown', e => {
   keys[e.code] = true;
-  if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
+  if (state === 'playing' &&
+      ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+    e.preventDefault();
+  }
   if ((e.code === 'KeyP' || e.code === 'Escape') && (state === 'playing' || state === 'paused')) {
     togglePause(); e.preventDefault();
   }
@@ -869,12 +872,14 @@ function updateExplosions(dt) {
 // ── HUD ──────────────────────────────────────────────────────
 function isLastRoom() { return roomNum % TOTAL_ROOMS === TOTAL_ROOMS - 1; }
 
+const _hudLast = { score: -1, hi: -1, lives: -1, room: -1, robots: -1 };
 function updateHUD() {
-  scoreEl.textContent  = score;
-  hiEl.textContent     = hiScore;
-  livesEl.textContent  = lives;
-  roomEl.textContent   = (roomNum % TOTAL_ROOMS) + 1;
-  robotsEl.textContent = robots.filter(r => r.alive).length;
+  if (_hudLast.score !== score)       { scoreEl.textContent  = score;   _hudLast.score = score; }
+  if (_hudLast.hi !== hiScore)        { hiEl.textContent     = hiScore; _hudLast.hi    = hiScore; }
+  if (_hudLast.lives !== lives)       { livesEl.textContent  = lives;   _hudLast.lives = lives; }
+  const room = (roomNum % TOTAL_ROOMS) + 1;
+  if (_hudLast.room !== room)         { roomEl.textContent   = room;    _hudLast.room  = room; }
+  if (_hudLast.robots !== robots.length) { robotsEl.textContent = robots.length; _hudLast.robots = robots.length; }
 }
 
 // ── Overlays ─────────────────────────────────────────────────
@@ -1364,16 +1369,8 @@ canvas.addEventListener('touchend', e => {
 
 // ── Fullscreen (mobile) ───────────────────────────────────────
 function tryFullscreen() {
-  if (navigator.maxTouchPoints > 0)
+  if (navigator.maxTouchPoints > 0 && !document.fullscreenElement)
     document.documentElement.requestFullscreen?.().catch(() => {});
-}
-if (navigator.maxTouchPoints > 0) {
-  const _doFS = () => {
-    if (!document.fullscreenElement)
-      document.documentElement.requestFullscreen?.().catch(() => {});
-  };
-  document.addEventListener('touchstart', _doFS, { once: true, passive: true });
-  document.addEventListener('click',      _doFS, { once: true });
 }
 
 // ── Buttons ──────────────────────────────────────────────────

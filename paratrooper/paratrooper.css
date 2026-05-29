@@ -6,9 +6,17 @@
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #000000;
 }
 
 .topbar {
@@ -37,7 +45,15 @@
   letter-spacing: 0.1em;
   transition: all 0.15s;
 }
-.music-btn:hover { border-color: #55FF55; color: #55FF55; }
+@media (hover: hover) {
+  .music-btn:hover { border-color: #55FF55; color: #55FF55; }
+}
+.music-btn:focus-visible {
+  outline: 2px solid #55FF55;
+  outline-offset: 2px;
+  border-color: #55FF55;
+  color: #55FF55;
+}
 .music-btn.muted { border-color: #333333; color: #333333; }
 
 .game-area {
@@ -100,8 +116,8 @@
 .canvas-glow {
   position: absolute;
   inset: -3px;
-  border: 2px solid #0088ff;
-  box-shadow: 0 0 14px #0088ff, 0 0 32px rgba(0,136,255,0.15), inset 0 0 12px rgba(0,136,255,0.04);
+  border: 2px solid var(--blue);
+  box-shadow: 0 0 14px var(--blue), 0 0 32px rgba(0,136,255,0.15), inset 0 0 12px rgba(0,136,255,0.04);
   pointer-events: none;
 }
 
@@ -159,7 +175,16 @@
   transition: all 0.15s;
   margin-top: 6px;
 }
-.overlay-btn:hover  { background: #001111; border-color: #AAFFFF; color: #AAFFFF; }
+@media (hover: hover) {
+  .overlay-btn:hover  { background: #001111; border-color: #AAFFFF; color: #AAFFFF; }
+}
+.overlay-btn:focus-visible {
+  outline: 2px solid #AAFFFF;
+  outline-offset: 3px;
+  background: #001111;
+  border-color: #AAFFFF;
+  color: #AAFFFF;
+}
 .overlay-btn:active { transform: scale(0.95); }
 
 .controls-hint {
@@ -171,57 +196,9 @@
   line-height: 2.4;
 }
 
-.touch-controls {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 20px 20px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.dpad-row {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.dpad-btn {
-  width: 52px;
-  height: 52px;
-  background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(0,136,255,0.35);
-  color: var(--blue);
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s, box-shadow 0.1s;
-  border-radius: 4px;
-}
-.dpad-btn:active, .dpad-btn.pressed {
-  background: rgba(0,136,255,0.15);
-  box-shadow: 0 0 12px var(--blue);
-}
-.dpad-btn.fire-btn {
-  width: 90px;
-  font-size: 9px;
-  font-family: var(--font);
-  letter-spacing: 0.1em;
-  border-color: rgba(255,255,0,0.4);
-  color: var(--yellow);
-}
-.dpad-btn.fire-btn:active { background: rgba(255,255,0,0.12); box-shadow: 0 0 12px var(--yellow); }
-.dpad-btn.pause-small {
-  width: 80px;
-  height: 40px;
-  font-size: 8px;
-  font-family: var(--font);
-  letter-spacing: 0.1em;
-  border-color: rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.4);
-}
+.title-cyan   { color: #55FFFF; }
+.title-yellow { color: #FFFF55; }
+.title-red    { color: #FF5555; }
 
 @media (max-width: 700px) {
   .game-area { gap: 8px; padding: 4px 10px 8px; }
@@ -229,7 +206,6 @@
   .panel-value { font-size: 13px; }
   .panel-box { padding: 8px 8px; }
   .panel-label { font-size: 5px; }
-  .touch-controls { display: flex; }
   .controls-hint { display: none; }
 }
 @media (max-width: 440px) {
@@ -239,10 +215,6 @@
   .panel-value { font-size: 11px; }
   .panel-value.wave-val { font-size: 16px; }
   .game-area { gap: 6px; padding: 2px 6px 6px; }
-}
-
-@media (orientation: portrait) and (max-width: 640px) {
-  .touch-controls { display: none; }
 }
 
 /* ── Mobile touch controls (shown via JS on touch devices) ── */
@@ -274,6 +246,16 @@
   justify-content: center;
   color: #55FFFF;
   font-size: 18px;
+  font-family: var(--font);
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.dpad-cell:focus-visible {
+  outline: 2px solid #55FFFF;
+  outline-offset: 2px;
 }
 .dpad-cell.empty {
   background: transparent;
