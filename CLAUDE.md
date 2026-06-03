@@ -7,6 +7,8 @@ For task-specific guidance, see the skills under `.claude/skills/`:
 - **add-sfx** — sound-effect patterns in `js/common.js`.
 - **mobile-touch-controls** — D-pad, swipe, fullscreen, `body.is-mobile`, orientation prompts.
 - **deploy-manual** — manual Azure SWA deploy.
+- **pr-description** — composing PR titles and descriptions for this repo.
+- **test-project** — Playwright + static-check sweep on one game or the whole project; outputs a punch list of suggested fixes.
 
 ## Running the Project
 
@@ -39,7 +41,8 @@ Classic_games/
 ├── snake/              ← Orange theme, CHIP music (track 1), landscape orientation
 ├── berzerk/            ← Purple/green theme, 8BIT music (track 3), landscape orientation
 ├── paratrooper/        ← Cyan theme, PATRIOT music, landscape orientation
-└── lode-runner/        ← Red theme, DUNGEON music (track 4), landscape orientation
+├── lode-runner/        ← Red theme, DUNGEON music (track 4), landscape orientation
+└── highway/            ← Magenta theme, SYNTH music (track 2), landscape orientation
 ```
 
 Each game folder contains `index.html`, a game-specific `.css`, and one or more `.js` files. Every game page loads `../css/style.css` and `../js/common.js` before its own scripts.
@@ -52,9 +55,7 @@ Exposes `window.NeonArcade` with:
 - `getAudioCtx()` / `getMasterBus()` — for game-specific SFX that need direct Web Audio access.
 - `SFX` object — shared sound effects callable from any game (e.g. `NeonArcade.SFX.levelUp()`).
 
-The scheduler uses a 25ms poll / 130ms lookahead pattern. Music must be started from a user gesture (browser autoplay policy). Games call `startMusic()` on the start button click, `stopMusic()` on game-over/pause/level-clear, and `startMusic()` again on resume/next-level.
-
-Track data and `_sched*` functions live inside `common.js` alongside the scheduler engine. Drum primitives (`_kick`, `_snare`, `_hihat`, `_bass`, `_lead`, `_pad`) and tone helpers (`_toneAt`, `playTone`) are also in `common.js` and are used by both music tracks and SFX.
+Music must start from a user gesture (browser autoplay policy). Games call `startMusic()` on the start-button click, `stopMusic()` on game-over/pause/level-clear, and `startMusic()` again on resume/next-level. For scheduler internals, drum primitives, and tone helpers, see the `add-sfx` skill or read `common.js` directly.
 
 ### Game Loop Pattern
 
@@ -82,3 +83,4 @@ Folder/URL names are unchanged; all player-facing titles are renamed:
 | berzerk/ | ROBO MAZE |
 | paratrooper/ | AIRBORNE |
 | lode-runner/ | GOLD RUSH |
+| highway/ | HIGHWAY DELIVERY |
