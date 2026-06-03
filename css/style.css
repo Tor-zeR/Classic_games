@@ -78,6 +78,21 @@ body::before {
 }
 
 /* ============================================================
+   Accessibility Utilities
+   ============================================================ */
+
+/* Visually hidden but readable by screen readers and indexable by Googlebot */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
    Neon Text
    ============================================================ */
 .neon-cyan    { color: var(--cyan);    text-shadow: 0 0 6px var(--cyan),    0 0 14px var(--cyan),    0 0 30px var(--cyan);    }
