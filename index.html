@@ -360,9 +360,209 @@
     }
 
 
+    /* ── BIOS boot overlay (landing page only, first visit per session) ── */
+    .bios-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #000;
+      color: #d8d8d8;
+      font-family: 'Press Start 2P', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      letter-spacing: 0.04em;
+      padding: 24px 28px;
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+      pointer-events: auto;
+    }
+    .bios-screen.fading { opacity: 0; }
+    .bios-screen.gone   { display: none; }
+
+    /* Faint CRT scanlines on the BIOS screen */
+    .bios-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.04) 0px,
+        rgba(255,255,255,0.04) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+    }
+
+    .bios-header {
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+    .bios-header .bios-version { color: #d8d8d8; }
+    .bios-copyright { color: #8a8a8a; margin-bottom: 16px; font-size: 11px; }
+    .bios-line     { white-space: pre; }
+    .bios-ok       { color: #2cff5a; }
+    .bios-detect   { color: #d8d8d8; }
+    .bios-game     { color: #b8b8b8; }
+    .bios-cursor {
+      display: inline-block;
+      width: 0.7em;
+      background: #d8d8d8;
+      animation: bios-blink 0.6s steps(1) infinite;
+      color: transparent;
+    }
+    @keyframes bios-blink {
+      50% { background: transparent; }
+    }
+
+    .bios-skip-hint {
+      position: absolute;
+      bottom: 18px;
+      right: 24px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em;
+    }
+    .bios-loading {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #ffffff;
+      letter-spacing: 0.2em;
+      animation: bios-load-pulse 0.6s ease-in-out infinite alternate;
+    }
+    .bios-screen.loading .bios-loading { display: flex; }
+    .bios-screen.loading .bios-body,
+    .bios-screen.loading .bios-skip-hint { opacity: 0; }
+    @keyframes bios-load-pulse {
+      from { opacity: 0.55; }
+      to   { opacity: 1;    }
+    }
+
+    @media (max-width: 640px) {
+      .bios-screen { font-size: 10px; padding: 16px 14px; }
+      .bios-copyright { font-size: 8px; }
+      .bios-skip-hint { font-size: 7px; bottom: 12px; right: 14px; }
+      .bios-loading { font-size: 14px; }
+    }
+
   </style>
 </head>
 <body>
+  <div class="bios-screen" id="bios-screen" aria-hidden="true">
+    <div class="bios-body" id="bios-body">
+      <div class="bios-header">
+        CLASSIS ARCADE BIOS v8.6.86<span class="bios-version"></span>
+      </div>
+      <div class="bios-copyright">(C) 2026 CLASSIC ARCADE SYSTEMS INC.</div>
+      <div id="bios-lines"></div>
+      <div class="bios-line" id="bios-prompt"><span class="bios-cursor">_</span></div>
+    </div>
+    <div class="bios-skip-hint">PRESS ESC OR SPACE TO SKIP</div>
+    <div class="bios-loading" id="bios-loading">LOADING HOME PAGE...</div>
+  </div>
+
+  <script>
+    // ── BIOS boot sequence (landing page only, once per session) ──
+    (function () {
+      const bios = document.getElementById('bios-screen');
+      if (!bios) return;
+
+      // Skip if already shown in this session
+      let alreadyShown = false;
+      try { alreadyShown = sessionStorage.getItem('bios_done') === '1'; } catch (e) {}
+      if (alreadyShown) { bios.classList.add('gone'); return; }
+
+      const linesEl  = document.getElementById('bios-lines');
+      const promptEl = document.getElementById('bios-prompt');
+
+      // POST sequence. Each step: { text, delay (ms before next), cls }
+      // Total runtime ~4.3s before the LOADING flash.
+      const steps = [
+        { text: 'Memory Test: 16K OK',         delay: 80 },
+        { text: 'Memory Test: 256K OK',        delay: 90 },
+        { text: 'Memory Test: 1024K OK',       delay: 110 },
+        { text: 'Memory Test: 8192K OK',       delay: 160 },
+        { text: '',                            delay: 120 },
+        { text: 'Detecting CRT......................[OK]',         delay: 220, cls: 'bios-detect' },
+        { text: 'Synthwave Audio Engine.............[OK]',         delay: 230, cls: 'bios-detect' },
+        { text: 'Input: Keyboard / Touch / Gamepad..[OK]',         delay: 230, cls: 'bios-detect' },
+        { text: 'Coin Slot.........................[INF]',         delay: 230, cls: 'bios-detect' },
+        { text: '',                            delay: 140 },
+        { text: 'Loading Game Cartridges:',     delay: 200 },
+        { text: '  > TETRIX............[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > CHOMP.............[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > ALIEN WAVE........[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > NEON SERPENT......[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > ROBO MAZE.........[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > AIRBORNE..........[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > TERRITORY.........[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > GOLD RUSH.........[OK]',   delay: 200, cls: 'bios-game' },
+        { text: '',                            delay: 140 },
+        { text: '8 CARTRIDGES READY.',          delay: 380 },
+      ];
+
+      let stepIdx = 0;
+      let timers  = [];
+      let done    = false;
+
+      function clearTimers() {
+        for (let i = 0; i < timers.length; i++) clearTimeout(timers[i]);
+        timers = [];
+      }
+
+      function appendLine(text, cls) {
+        const div = document.createElement('div');
+        div.className = 'bios-line' + (cls ? ' ' + cls : '');
+        // Use a non-breaking space so empty lines still take vertical room.
+        div.textContent = text || ' ';
+        linesEl.appendChild(div);
+      }
+
+      function runStep() {
+        if (done) return;
+        if (stepIdx >= steps.length) { finishPOST(); return; }
+        const s = steps[stepIdx++];
+        appendLine(s.text, s.cls);
+        // Keep the cursor pinned to the bottom by moving it past the new line.
+        linesEl.parentNode.insertBefore(promptEl, linesEl.nextSibling);
+        timers.push(setTimeout(runStep, s.delay));
+      }
+
+      function finishPOST() {
+        if (done) return;
+        // Show the LOADING flash for ~500ms, then fade the screen out.
+        bios.classList.add('loading');
+        timers.push(setTimeout(reveal, 600));
+      }
+
+      function reveal() {
+        if (done) return;
+        done = true;
+        clearTimers();
+        try { sessionStorage.setItem('bios_done', '1'); } catch (e) {}
+        bios.classList.add('fading');
+        // Remove from layout after the 0.5s opacity transition finishes.
+        setTimeout(function () { bios.classList.add('gone'); }, 550);
+      }
+
+      function onSkip(e) {
+        const k = e.key;
+        if (k === 'Escape' || k === ' ' || k === 'Spacebar') {
+          e.preventDefault();
+          finishPOST();
+        }
+      }
+
+      document.addEventListener('keydown', onSkip, { once: false });
+      // Kick the sequence off.
+      timers.push(setTimeout(runStep, 180));
+    })();
+  </script>
+
   <canvas id="bg"></canvas>
   <button class="music-btn muted" id="music-toggle">♪ OFF</button>
 
@@ -408,7 +608,7 @@
         <a href="pac-man/index.html" class="game-card card-pacman">
           <span class="game-icon">◕</span>
           <h2 class="game-title">CHOMP</h2>
-          <p class="game-desc">Eat the dots.<br>Dodge the ghosts.<br>4 different mazes.</p>
+          <p class="game-desc">Eat the dots.<br>Dodge the ghosts.<br>3 different mazes.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 

@@ -106,6 +106,7 @@
   display: block;
   background: #000;
   image-rendering: pixelated;
+  touch-action: none;
 }
 
 .canvas-glow {

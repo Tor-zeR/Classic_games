@@ -1069,13 +1069,216 @@ function _schedPatriot(stepIdx, when) {
   if (BASS[i])  _bitNote(when, BASS[i], bDur, 0.18);
 }
 
+// ── Track 6 — OVERDRIVE ──────────────────────────────────────
+// Highway-chase music: E natural minor, 150 BPM, 16th-note steps.
+// AABA structure: sections [0,0,1,0], 4 bars each, 64 steps/section.
+// A sections = Spy-Hunter-style tense driving; B section = F-Zero urgency burst.
+// Em → C → G → D chord loop (classic minor i–VI–III–VII).
+// Bass lives 80–165 Hz — above the engine SFX 500 Hz lowpass cutoff.
+// Lead sits 330–880 Hz (E4–A5), pulse wave with pitch-bend illusion.
+// Full loop: 256 steps × 0.1 s = 25.6 s.
+//
+// Frequency reference (Hz):
+//   E2=82.4  G2=98   C2=65.4 D2=73.4  B2=123.5 A2=110
+//   E3=164.8 G3=196  C3=130.8 D3=146.8 B3=246.9 A3=220
+//   E4=329.6 G4=392  C4=261.6 D4=293.7 B4=493.9 A4=440
+//   E5=659.3 G5=784  C5=523.3 D5=587.3 B5=987.8 A5=880
+
+const OD_STEP     = 60 / 150 / 4;    // 0.1 s per 16th note
+const OD_SEC_LEN  = 64;              // 4 bars × 16 steps
+const OD_SECTIONS = [0, 0, 1, 0];   // A A B A
+const OD_FULL_LEN = OD_SECTIONS.length * OD_SEC_LEN; // 256
+
+// ── Section A — bass (8th-note pulse, root + fifth walk) ─────
+// Bar 1 Em: E2 roots on 8th notes, passing fifth B2 on beat 3
+// Bar 2 C:  C2 roots, G2 fifth
+// Bar 3 G:  G2 roots, D3 fifth
+// Bar 4 D:  D2 roots, A2 fifth — resolves back to E2
+const OD_A_BASS = [
+  // Bar 1  Em
+   82.4, 0,  82.4, 0,  123.5, 0, 123.5, 0,   82.4, 0,  82.4, 0,  123.5, 0,   82.4, 0,
+  // Bar 2  C
+   65.4, 0,  65.4, 0,   98,   0,  98,   0,   65.4, 0,  65.4, 0,   98,   0,  65.4, 0,
+  // Bar 3  G
+   98,   0,  98,   0,  146.8, 0, 146.8, 0,   98,   0,  98,   0,  146.8, 0,   98,  0,
+  // Bar 4  D
+   73.4, 0,  73.4, 0,  110,   0, 110,   0,   73.4, 0,  73.4, 0,  110,   0,  82.4, 0,
+];
+
+// ── Section A — lead melody (surf-rock minor hook) ────────────
+// E4=329.6  B4=493.9  G4=392  A4=440  D5=587.3  C5=523.3  E5=659.3
+// Phrasing: 2-bar arch that peaks then resolves — classic surf-rock shape.
+// Bar 1: rising anticipation  Bar 2: peak + bend down
+// Bar 3: counter-melody answering phrase  Bar 4: cadential descent to hold
+const OD_A_LEAD = [
+  // Bar 1  Em — rising hook
+  329.6, 0,   0,  0,  392,  0, 440,   0,  493.9, 0,   0,   0, 440,   0, 392,   0,
+  // Bar 2  C  — peak, step back
+  523.3, 0,   0,  0,  493.9,0,   0,   0,  440,   0, 392,   0, 329.6, 0,   0,   0,
+  // Bar 3  G  — answer phrase, minor colour
+  392,   0, 440,  0,  493.9,0, 523.3, 0,  493.9, 0, 440,   0, 392,   0,   0,   0,
+  // Bar 4  D  — cadential figure, leave gap for breath
+  587.3, 0,   0,  0,  523.3,0, 493.9, 0,  440,   0, 392,   0,   0,   0,   0,   0,
+];
+
+// ── Section A — counter-arp (off-beat 5ths, adds the surf texture) ─
+// Fires on 16th offbeats. Quiet, adds shimmer without dominating.
+// Em offset: B4/B3  C offset: G4/E4  G offset: D4/B3  D offset: A4/F#4
+const OD_A_ARP = [
+  // Bar 1  Em off-beats
+    0, 246.9, 0, 246.9,  0, 246.9, 0, 246.9,  0, 246.9, 0, 246.9,  0, 246.9, 0, 246.9,
+  // Bar 2  C
+    0, 196,   0, 196,    0, 196,   0, 196,    0, 196,   0, 196,    0, 196,   0, 196,
+  // Bar 3  G
+    0, 293.7, 0, 293.7,  0, 293.7, 0, 293.7,  0, 293.7, 0, 293.7,  0, 293.7, 0, 293.7,
+  // Bar 4  D
+    0, 220,   0, 220,    0, 220,   0, 220,    0, 220,   0, 220,    0, 220,   0, 220,
+];
+
+// ── Section A — drums ─────────────────────────────────────────
+// Straight-rock feel: kick on 1&3, snare on 2&4, 8th hi-hats.
+// Bar 4 gets a snare fill (extra hits) to mark the loop boundary.
+const OD_A_KICK = [
+  1,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,0,0,   // bar 1
+  1,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,0,0,   // bar 2
+  1,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,0,0,   // bar 3
+  1,0,0,0, 0,0,0,0, 1,0,1,0, 0,0,0,0,   // bar 4 (fill kick)
+];
+const OD_A_SNARE = [
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0,
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0,
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0,
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,1,1,   // fill
+];
+const OD_A_HIHAT = [
+  0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0,   // 8th hi-hats (positions 2,6,10,14…)
+  0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0,
+  0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0,
+  0,0,1,0, 0,0,1,0, 0,0,1,1, 0,0,1,0,   // bar 4 extra hats in fill
+];
+
+// ── Section B — bass (F-Zero urgency: every 8th note, chromatic climb) ─
+// All-8th drive on Em pedal with chromatic walk upward in bars 2-3,
+// then crashing back down in bar 4. Maximum propulsion.
+const OD_B_BASS = [
+  // Bar 1  Em — solid pedal 8ths
+   82.4, 0,  82.4, 0,  82.4, 0,  82.4, 0,   82.4, 0,  82.4, 0,  82.4, 0,  82.4, 0,
+  // Bar 2  chromatic climb: E2→F2→F#2→G2 (each two 8ths)
+   82.4, 0,  82.4, 0,  87.3, 0,  87.3, 0,   92.5, 0,  92.5, 0,  98,   0,  98,   0,
+  // Bar 3  continued climb: G2→Ab2→A2→Bb2
+   98,   0,  98,   0, 103.8, 0, 103.8, 0,  110,   0, 110,   0, 116.5, 0, 116.5, 0,
+  // Bar 4  crash back down: Bb2→A2→G2→E2 (resolution to tonic)
+  116.5, 0, 110,   0,  98,   0,  98,   0,   82.4, 0,  82.4, 0,  82.4, 0,  82.4, 0,
+];
+
+// ── Section B — lead (F-Zero urgency: chromatic tension line) ──
+// E5 stabs on every beat, chromatic approach notes in between.
+// Creates that relentless "flooring the accelerator" urgency.
+// E5=659.3  D#5=622.3  D5=587.3  C#5=554.4  G5=784  F#5=740
+const OD_B_LEAD = [
+  // Bar 1  Em — hammered E5 stabs with chromatic descents
+  659.3, 0, 622.3, 0,  587.3, 0, 622.3, 0,  659.3, 0, 622.3, 0,  784,   0,   0,   0,
+  // Bar 2  chromatic tension — ascend then bite
+  659.3, 0, 622.3, 0,  587.3, 0, 554.4, 0,  523.3, 0,   0,   0,  587.3, 0,   0,   0,
+  // Bar 3  G peak — highest energy phrase
+  784,   0,   0,   0,  740,   0, 784,   0,  659.3, 0, 740,   0,  784,   0, 659.3, 0,
+  // Bar 4  descent — crash back home
+  659.3, 0, 622.3, 0,  587.3, 0, 554.4, 0,  493.9, 0, 440,   0,  392,   0,   0,   0,
+];
+
+// ── Section B — drums (relentless: double kick, 16th hi-hats) ──
+const OD_B_KICK = [
+  1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0,   // double time
+  1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0,
+  1,0,1,0, 1,0,0,0, 1,0,1,0, 1,0,0,0,   // extra kicks bar 3
+  1,0,1,0, 1,0,0,0, 1,0,1,0, 1,0,0,0,   // bar 4 maintained
+];
+const OD_B_SNARE = [
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0,
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0,
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0,
+  0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,1,1,
+];
+const OD_B_HIHAT = [
+  1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0,   // 16th hi-hats (B section)
+  1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0,
+  1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0,
+  1,0,1,0, 1,0,1,0, 1,1,1,1, 1,0,1,1,   // full 16th fury bar 4
+];
+
+// ── OVERDRIVE lead voice — pulse wave, quick-attack, short release ─
+// Sharper than _lead (which is lush detuned saw). No echo feed.
+// Bright pulse gives the "chip-surf" guitar sound without being muddy.
+function _odLead(when, freq, dur, vol = 0.13) {
+  try {
+    const ctx  = getAudioCtx();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(_masterBus);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, when);
+    // Tiny pitch-bend up (+4%) then settle — mimics surf-guitar pick attack
+    osc.frequency.linearRampToValueAtTime(freq * 1.04, when + 0.012);
+    osc.frequency.linearRampToValueAtTime(freq,        when + 0.04);
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(vol, when + 0.006);
+    gain.gain.setValueAtTime(vol * 0.72, when + dur * 0.5);
+    gain.gain.exponentialRampToValueAtTime(0.001, when + dur);
+    osc.start(when); osc.stop(when + dur + 0.01);
+  } catch (_) {}
+}
+
+// ── OVERDRIVE arp voice — quieter square, off-beat shimmer ───
+function _odArp(when, freq, dur, vol = 0.055) {
+  try {
+    const ctx  = getAudioCtx();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(_masterBus);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, when);
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(vol, when + 0.004);
+    gain.gain.exponentialRampToValueAtTime(0.001, when + dur);
+    osc.start(when); osc.stop(when + dur + 0.01);
+  } catch (_) {}
+}
+
+function _schedOverdrive(stepIdx, when) {
+  const fullIdx = stepIdx % OD_FULL_LEN;
+  const section = Math.floor(fullIdx / OD_SEC_LEN);
+  const i       = fullIdx % OD_SEC_LEN;
+  const isB     = OD_SECTIONS[section] === 1;
+
+  const BASS  = isB ? OD_B_BASS  : OD_A_BASS;
+  const LEAD  = isB ? OD_B_LEAD  : OD_A_LEAD;
+  const KICK  = isB ? OD_B_KICK  : OD_A_KICK;
+  const SNARE = isB ? OD_B_SNARE : OD_A_SNARE;
+  const HIHAT = isB ? OD_B_HIHAT : OD_A_HIHAT;
+
+  // Bass note duration: dotted-8th feel (sustains across the 8th-note gap)
+  const bDur = OD_STEP * 1.75;
+  // Lead note: slightly detached on A, tight on B
+  const lDur = isB ? OD_STEP * 0.72 : OD_STEP * 0.85;
+  // Arp: very short, just a blip
+  const aDur = OD_STEP * 0.55;
+
+  if (KICK[i])  _kick (when, isB ? 0.52 : 0.40);
+  if (SNARE[i]) _snare(when, isB ? 0.30 : 0.22);
+  if (HIHAT[i]) _hihat(when, false, isB ? 0.10 : 0.07);
+  if (BASS[i])  _bass (when, BASS[i], bDur, 0.22);
+  if (LEAD[i])  _odLead(when, LEAD[i], lDur);
+  // Off-beat arp only in A sections (adds surf texture, omit in B for clarity)
+  if (!isB && OD_A_ARP[i]) _odArp(when, OD_A_ARP[i], aDur);
+}
+
 // ── Lookahead scheduler ───────────────────────────────────────
 // schedules notes up to LOOKAHEAD seconds into the future,
 // called every SCHED_INT ms. This gives accurate, glitch-free timing.
 const LOOKAHEAD  = 0.13;  // seconds
 const SCHED_INT  = 25;    // ms
 
-let _track    = 1;   // 0=off  1=chip  2=synth  3=8bit  4=dungeon  5=patriot
+let _track    = 1;   // 0=off  1=chip  2=synth  3=8bit  4=dungeon  5=patriot  6=overdrive
 let _schedInt = null;
 let _stepIdx  = 0;
 let _stepTime = 0;   // audioCtx time of the next step to schedule
@@ -1087,19 +1290,22 @@ function _schedulerTick() {
               : _track === 2 ? SP_STEP
               : _track === 3 ? BIT_STEP
               : _track === 4 ? LR_STEP
-              : PAT_STEP;
+              : _track === 5 ? PAT_STEP
+              : OD_STEP;
   const loopL = _track === 1 ? CHIP_FULL_LEN
               : _track === 2 ? SP_FULL_LEN
               : _track === 3 ? BIT_FULL_LEN
               : _track === 4 ? LR_FULL_LEN
-              : PAT_FULL_LEN;
+              : _track === 5 ? PAT_FULL_LEN
+              : OD_FULL_LEN;
 
   while (_stepTime < ctx.currentTime + LOOKAHEAD) {
-    if      (_track === 1) _schedChip    (_stepIdx, _stepTime);
-    else if (_track === 2) _schedSynthPop(_stepIdx, _stepTime);
-    else if (_track === 3) _schedBit     (_stepIdx, _stepTime);
-    else if (_track === 4) _schedLR      (_stepIdx, _stepTime);
-    else                   _schedPatriot (_stepIdx, _stepTime);
+    if      (_track === 1) _schedChip      (_stepIdx, _stepTime);
+    else if (_track === 2) _schedSynthPop  (_stepIdx, _stepTime);
+    else if (_track === 3) _schedBit       (_stepIdx, _stepTime);
+    else if (_track === 4) _schedLR        (_stepIdx, _stepTime);
+    else if (_track === 5) _schedPatriot   (_stepIdx, _stepTime);
+    else                   _schedOverdrive (_stepIdx, _stepTime);
     _stepIdx  = (_stepIdx + 1) % loopL;
     _stepTime += stepS;
   }
@@ -1124,14 +1330,26 @@ function stopMusic() {
   // Pre-scheduled notes (within LOOKAHEAD window) will finish naturally
 }
 
+// Tracks reachable via the music-button cycle. Default excludes OVERDRIVE (6)
+// so it stays highway-exclusive; highway opts in via setCycleTracks().
+let _cycleTracks = [1, 2, 3, 4, 5];
+
 // Cycle:  chip (1) → synth (2) → 8bit (3) → dungeon (4) → patriot (5) → chip (1) → …
+// (Highway extends the list to include OVERDRIVE.)
 // Returns { track, name } so the UI can update its label.
 function cycleTrack() {
   stopMusic();
-  _track = (_track % 5) + 1;  // 1→2→3→4→5→1, never 0
+  const i    = _cycleTracks.indexOf(_track);
+  _track     = (i < 0) ? _cycleTracks[0] : _cycleTracks[(i + 1) % _cycleTracks.length];
   if (_musicEnabled) startMusic();
-  const names = ['', 'CHIP', 'SYNTH', '8BIT', 'DUNGEON', 'PATRIOT'];
+  const names = ['', 'CHIP', 'SYNTH', '8BIT', 'DUNGEON', 'PATRIOT', 'OVERDRIVE'];
   return { track: _track, name: names[_track] };
+}
+
+// Override the cycle list (e.g. highway opts in to OVERDRIVE).
+// Pass an array of valid track ids; empty arrays are ignored.
+function setCycleTracks(tracks) {
+  if (Array.isArray(tracks) && tracks.length) _cycleTracks = tracks.slice();
 }
 
 // Toggle music on/off without changing the selected track.
@@ -1149,4 +1367,4 @@ function getTrack() { return _track; }
 function setTrack(n) { _track = n; }
 
 // ── Expose globally ───────────────────────────────────────────
-window.NeonArcade = { SFX, startMusic, stopMusic, cycleTrack, toggleMusic, getTrack, setTrack, getAudioCtx, getMasterBus };
+window.NeonArcade = { SFX, startMusic, stopMusic, cycleTrack, toggleMusic, getTrack, setTrack, setCycleTracks, getAudioCtx, getMasterBus };

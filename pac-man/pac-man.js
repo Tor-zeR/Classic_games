@@ -137,7 +137,7 @@ function resizeCanvas() {
 let grid      = [];
 let dotCount  = 0;
 let score     = 0;
-let hiScore   = parseInt(localStorage.getItem('pm_hi') || '0');
+let hiScore   = parseInt(localStorage.getItem('pm_hi') || '0', 10);
 let lives     = 3;
 let level     = 1;
 let gameState = 'idle'; // idle | ready | playing | dying | levelup | gameover
