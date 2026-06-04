@@ -299,3 +299,44 @@ body::before {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ============================================================
+   Virtual joystick (shared mobile control)
+   Inherits accent color from the surrounding .mobile-dpad via
+   `currentColor`. Use --joystick-size / --joystick-knob to
+   override per-game (e.g. lode-runner's narrow side panel).
+   ============================================================ */
+.joystick {
+  --joystick-size: 132px;
+  --joystick-knob: 56px;
+  position: relative;
+  width: var(--joystick-size);
+  height: var(--joystick-size);
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.08) inset,
+              0 0 12px currentColor;
+  opacity: 0.85;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.joystick-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--joystick-knob);
+  height: var(--joystick-knob);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+              rgba(255,255,255,0.55), currentColor 70%);
+  box-shadow: 0 0 14px currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform 120ms ease-out;
+  pointer-events: none;
+}
+.joystick.dragging .joystick-knob {
+  transition: none;
+}

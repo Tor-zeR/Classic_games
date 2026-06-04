@@ -1,34 +1,70 @@
 ---
 name: mobile-touch-controls
-description: Conventions for mobile/touch controls in Neon Arcade landscape games — `body.is-mobile`, D-pad HTML, swipe gesture, fullscreen request, and overlay-hiding via `:has()`. Use when the user is wiring touch input, adding a D-pad, requesting fullscreen on mobile, or hiding/showing controls based on overlay state.
+description: Conventions for mobile/touch controls in Neon Arcade landscape games — `body.is-mobile`, virtual joystick, fire button, fullscreen request, and overlay-hiding via `:has()`. Use when the user is wiring touch input, adding a joystick, requesting fullscreen on mobile, or hiding/showing controls based on overlay state.
 ---
 
 # Mobile / touch controls
 
 ## `body.is-mobile` class
 
-Landscape games set `body.is-mobile` in JS early when a touch device is detected. CSS rules can then conditionally apply (show D-pad, adjust layout, hide desktop hints).
+Landscape games set `body.is-mobile` in JS early when a touch device is detected. CSS rules can then conditionally apply (show joystick, adjust layout, hide desktop hints).
 
 Portrait games (`tetris/`, `pac-man/`) do **not** use this class — they use `@media (pointer: coarse)` instead.
 
-## D-pad HTML structure (landscape games)
+## Joystick HTML structure (landscape games)
 
 Goes inside the left side-panel:
 
 ```html
 <div class="mobile-dpad" id="mobile-dpad">
-  <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
-  <div class="dpad-cross" id="dpad-cross">
-    <!-- 3×3 grid: empty / up / empty / left / mid / right / empty / down / empty -->
+  <div class="mobile-ctrl-hint">DRAG TO MOVE</div>
+  <div class="joystick" id="joystick" role="presentation" aria-hidden="true">
+    <div class="joystick-knob" id="joystick-knob"></div>
   </div>
 </div>
 ```
 
-Fire button goes in the right panel inside `<div class="mobile-fire-wrap">`.
+The wrapper class is still `.mobile-dpad` for layout continuity. The accent colour is inherited from `currentColor` on `.mobile-dpad` — set it per-game in CSS:
 
-## Swipe gesture on D-pad
+```css
+.mobile-dpad { color: var(--green); }
+```
 
-Wire `touchmove` on `#dpad-cross` with a minimum swipe threshold (`SWIPE_MIN = 18px`). Axis with the larger delta wins (4-directional). Berzerk uses 8-directional (diagonal cells included).
+Fire button (if any) goes in the right panel inside `<div class="mobile-fire-wrap">`.
+
+## Wiring the joystick
+
+Load `js/virtual-joystick.js` after `js/common.js`, then:
+
+```js
+new NeonArcade.VirtualJoystick({
+  base: document.getElementById('joystick'),
+  knob: document.getElementById('joystick-knob'),
+  // optional: maxRadius (default 56), deadzone (default 0.18)
+  onChange: ({ x, y, magnitude, angle }) => {
+    // x, y ∈ [-1, 1]; +y = down. magnitude=0 means the finger is up
+    // or inside the deadzone — clear all direction keys here.
+  }
+});
+```
+
+Each game decides its own snapping from the analog `{x, y}` vector:
+
+- 2-direction (e.g. ALIEN WAVE, AIRBORNE): `keys.ArrowLeft = x < -0.3; keys.ArrowRight = x > 0.3;`
+- 4-direction axis-major (e.g. GOLD RUSH): the axis with the larger absolute value wins.
+- 8-direction (e.g. ROBO MAZE): set each cardinal key independently when its component exceeds a threshold (~0.38).
+- Analog steering (e.g. HIGHWAY DELIVERY): both axes live simultaneously with low thresholds.
+
+## Per-game joystick sizing
+
+Override CSS custom properties on `.joystick` when a game has a narrow side-panel or a small viewport:
+
+```css
+.joystick { --joystick-size: 104px; --joystick-knob: 44px; }
+@media (max-height: 420px) {
+  .joystick { --joystick-size: 92px; --joystick-knob: 40px; }
+}
+```
 
 ## Fullscreen on first user gesture
 

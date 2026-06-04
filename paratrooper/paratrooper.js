@@ -1137,69 +1137,14 @@ musicMuteBtn.addEventListener('click', () => {
   document.getElementById('mobile-dpad').style.display      = 'flex';
   document.getElementById('mobile-fire-wrap').style.display = 'flex';
 
-  const dpadCross = document.getElementById('dpad-cross');
-  const elLeft    = document.getElementById('dpad-left');
-  const elRight   = document.getElementById('dpad-right');
-  const elUp      = document.getElementById('dpad-up');
-  const elDown    = document.getElementById('dpad-down');
-  const SWIPE_MIN = 18;
-  let dpadStartX = 0, dpadStartY = 0;
-
-  function clearDpadKeys() {
-    keys['ArrowLeft']  = false;
-    keys['ArrowRight'] = false;
-    [elLeft, elRight, elUp, elDown].forEach(el => el.classList.remove('active'));
-  }
-
-  function bindCell(el, keyName) {
-    el.addEventListener('touchstart', e => {
-      e.stopPropagation();
-      e.preventDefault();
-      clearDpadKeys();
-      if (keyName) keys[keyName] = true;
-      el.classList.add('active');
-    }, { passive: false });
-    el.addEventListener('touchend', e => {
-      e.stopPropagation();
-      clearDpadKeys();
-    }, { passive: false });
-    el.addEventListener('touchcancel', e => {
-      e.stopPropagation();
-      clearDpadKeys();
-    }, { passive: false });
-  }
-  bindCell(elLeft,  'ArrowLeft');
-  bindCell(elRight, 'ArrowRight');
-  bindCell(elUp,    null);
-  bindCell(elDown,  null);
-
-  dpadCross.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    dpadStartX = t.clientX;
-    dpadStartY = t.clientY;
-    clearDpadKeys();
-  }, { passive: false });
-
-  dpadCross.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const t  = e.touches[0];
-    const dx = t.clientX - dpadStartX;
-    const dy = t.clientY - dpadStartY;
-    const adx = Math.abs(dx), ady = Math.abs(dy);
-    clearDpadKeys();
-    if (adx < SWIPE_MIN && ady < SWIPE_MIN) return;
-    if (adx >= ady) {
-      if (dx < 0) { keys['ArrowLeft']  = true; elLeft.classList.add('active'); }
-      else         { keys['ArrowRight'] = true; elRight.classList.add('active'); }
-    } else {
-      if (dy < 0) elUp.classList.add('active');
-      else        elDown.classList.add('active');
+  new NeonArcade.VirtualJoystick({
+    base: document.getElementById('joystick'),
+    knob: document.getElementById('joystick-knob'),
+    onChange: ({ x }) => {
+      keys['ArrowLeft']  = x < -0.3;
+      keys['ArrowRight'] = x >  0.3;
     }
-  }, { passive: false });
-
-  dpadCross.addEventListener('touchend',    clearDpadKeys, { passive: true });
-  dpadCross.addEventListener('touchcancel', clearDpadKeys, { passive: true });
+  });
 
   // ── Fire button ──────────────────────────────────────────────
   const fireBtn = document.getElementById('btn-fire-touch');

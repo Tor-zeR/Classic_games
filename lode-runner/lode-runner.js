@@ -1091,64 +1091,24 @@ window.addEventListener('load', () => {
 if (navigator.maxTouchPoints > 0) {
   document.body.classList.add('is-mobile');
 
-  // D-pad — swipe gesture on the whole cross (4-directional)
-  const dpadCross = document.getElementById('dpad-cross');
-  const elLeft    = document.getElementById('dpad-left');
-  const elRight   = document.getElementById('dpad-right');
-  const elUp      = document.getElementById('dpad-up');
-  const elDown    = document.getElementById('dpad-down');
-  const allDirs   = ['left', 'right', 'up', 'down'];
-  const SWIPE_MIN = 18;
-  let dpadStartX = 0, dpadStartY = 0;
-
-  function clearDpadBtns() {
-    allDirs.forEach(d => delete touchBtns[d]);
-    [elLeft, elRight, elUp, elDown].forEach(el => el?.classList.remove('active'));
-  }
-
-  function applyDpad(dx, dy) {
-    clearDpadBtns();
-    const adx = Math.abs(dx), ady = Math.abs(dy);
-    if (adx < SWIPE_MIN && ady < SWIPE_MIN) return;
-    if (adx >= ady) {
-      if (dx < 0) { touchBtns.left  = true; elLeft?.classList.add('active'); }
-      else         { touchBtns.right = true; elRight?.classList.add('active'); }
-    } else {
-      if (dy < 0) { touchBtns.up   = true; elUp?.classList.add('active'); }
-      else         { touchBtns.down = true; elDown?.classList.add('active'); }
+  // Virtual joystick — 4-way axis-major (other axis cleared)
+  new NeonArcade.VirtualJoystick({
+    base: document.getElementById('joystick'),
+    knob: document.getElementById('joystick-knob'),
+    maxRadius: 44,
+    onChange: ({ x, y, magnitude }) => {
+      delete touchBtns.left;  delete touchBtns.right;
+      delete touchBtns.up;    delete touchBtns.down;
+      if (magnitude === 0) return;
+      if (Math.abs(x) >= Math.abs(y)) {
+        if (x < -0.3) touchBtns.left  = true;
+        if (x >  0.3) touchBtns.right = true;
+      } else {
+        if (y < -0.3) touchBtns.up   = true;
+        if (y >  0.3) touchBtns.down = true;
+      }
     }
-  }
-
-  // Individual cell tap
-  function bindCell(el, code) {
-    el.addEventListener('touchstart', e => {
-      e.stopPropagation(); e.preventDefault();
-      clearDpadBtns();
-      touchBtns[code] = true;
-      el.classList.add('active');
-    }, { passive: false });
-    el.addEventListener('touchend',    e => { e.stopPropagation(); clearDpadBtns(); }, { passive: false });
-    el.addEventListener('touchcancel', e => { e.stopPropagation(); clearDpadBtns(); }, { passive: false });
-  }
-  bindCell(elLeft,  'left');
-  bindCell(elRight, 'right');
-  bindCell(elUp,    'up');
-  bindCell(elDown,  'down');
-
-  // Swipe on whole cross
-  dpadCross.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    dpadStartX = t.clientX; dpadStartY = t.clientY;
-    clearDpadBtns();
-  }, { passive: false });
-  dpadCross.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    applyDpad(t.clientX - dpadStartX, t.clientY - dpadStartY);
-  }, { passive: false });
-  dpadCross.addEventListener('touchend',    clearDpadBtns, { passive: true });
-  dpadCross.addEventListener('touchcancel', clearDpadBtns, { passive: true });
+  });
 
   // Dig buttons — one-shot per tap via justPressed (cleared each frame)
   const digIds = { 'btn-digl-touch': 'digl', 'btn-digr-touch': 'digr' };

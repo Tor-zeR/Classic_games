@@ -1420,84 +1420,23 @@ document.getElementById('music-mute').addEventListener('click', function () {
   document.getElementById('mobile-dpad').style.display      = 'flex';
   document.getElementById('mobile-fire-wrap').style.display = 'flex';
 
-  const dpadCross = document.getElementById('dpad-cross');
-  const elLeft    = document.getElementById('dpad-left');
-  const elRight   = document.getElementById('dpad-right');
-  const elUp      = document.getElementById('dpad-up');
-  const elDown    = document.getElementById('dpad-down');
-  const elUL      = document.getElementById('dpad-ul');
-  const elUR      = document.getElementById('dpad-ur');
-  const elDL      = document.getElementById('dpad-dl');
-  const elDR      = document.getElementById('dpad-dr');
-  const allCells  = [elLeft, elRight, elUp, elDown, elUL, elUR, elDL, elDR];
-  const SWIPE_MIN = 18;
-  let dpadStartX = 0, dpadStartY = 0;
-
-  function clearDpadDirs() {
-    touchDirs.left = touchDirs.right = touchDirs.up = touchDirs.down = false;
-    allCells.forEach(el => el.classList.remove('active'));
-  }
-
-  function bindCell(el, dirs) {
-    el.addEventListener('touchstart', e => {
-      e.stopPropagation();
-      e.preventDefault();
-      clearDpadDirs();
-      dirs.forEach(d => { touchDirs[d] = true; });
-      el.classList.add('active');
-    }, { passive: false });
-    el.addEventListener('touchend', e => {
-      e.stopPropagation();
-      clearDpadDirs();
-    }, { passive: false });
-    el.addEventListener('touchcancel', e => {
-      e.stopPropagation();
-      clearDpadDirs();
-    }, { passive: false });
-  }
-  bindCell(elLeft,  ['left']);
-  bindCell(elRight, ['right']);
-  bindCell(elUp,    ['up']);
-  bindCell(elDown,  ['down']);
-  bindCell(elUL,    ['up',   'left']);
-  bindCell(elUR,    ['up',   'right']);
-  bindCell(elDL,    ['down', 'left']);
-  bindCell(elDR,    ['down', 'right']);
-
-  dpadCross.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    dpadStartX = t.clientX;
-    dpadStartY = t.clientY;
-    clearDpadDirs();
-  }, { passive: false });
-
-  dpadCross.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const t    = e.touches[0];
-    const dx   = t.clientX - dpadStartX;
-    const dy   = t.clientY - dpadStartY;
-    const adx  = Math.abs(dx), ady = Math.abs(dy);
-    clearDpadDirs();
-    if (adx < SWIPE_MIN && ady < SWIPE_MIN) return;
-    // Diagonal when both axes are active and within 2:1 ratio of each other
-    const isDiag = adx > SWIPE_MIN && ady > SWIPE_MIN && adx < ady * 2 && ady < adx * 2;
-    if (isDiag) {
-      if (dx < 0) touchDirs.left  = true; else touchDirs.right = true;
-      if (dy < 0) touchDirs.up    = true; else touchDirs.down  = true;
-      const diagEl = dy < 0 ? (dx < 0 ? elUL : elUR) : (dx < 0 ? elDL : elDR);
-      diagEl.classList.add('active');
-    } else if (adx >= ady) {
-      if (dx < 0) { touchDirs.left  = true; elLeft.classList.add('active'); }
-      else         { touchDirs.right = true; elRight.classList.add('active'); }
-    } else {
-      if (dy < 0) { touchDirs.up   = true; elUp.classList.add('active'); }
-      else         { touchDirs.down = true; elDown.classList.add('active'); }
+  // 8-way joystick: each axis activates independently above ~0.38 of full
+  // travel, producing the four cardinal directions plus all four diagonals.
+  new NeonArcade.VirtualJoystick({
+    base: document.getElementById('joystick'),
+    knob: document.getElementById('joystick-knob'),
+    onChange: ({ x, y, magnitude }) => {
+      if (magnitude === 0) {
+        touchDirs.left = touchDirs.right = touchDirs.up = touchDirs.down = false;
+        return;
+      }
+      const T = 0.38;
+      touchDirs.left  = x < -T;
+      touchDirs.right = x >  T;
+      touchDirs.up    = y < -T;
+      touchDirs.down  = y >  T;
     }
-  }, { passive: false });
-
-  dpadCross.addEventListener('touchend',    clearDpadDirs, { passive: true });
-  dpadCross.addEventListener('touchcancel', clearDpadDirs, { passive: true });
+  });
 
   // ── Fire button ──────────────────────────────────────────────
   const fireBtn = document.getElementById('btn-fire-touch');

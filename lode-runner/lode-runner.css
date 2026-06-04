@@ -280,38 +280,8 @@
   flex: 1;
 }
 
-.dpad-cross {
-  display: grid;
-  grid-template-columns: repeat(3, 48px);
-  grid-template-rows: repeat(3, 48px);
-  gap: 4px;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.dpad-cell {
-  background: rgba(255, 60, 0, 0.08);
-  border: 1px solid rgba(255, 60, 0, 0.45);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--red);
-  font-size: 18px;
-}
-.dpad-cell.empty {
-  background: transparent;
-  border-color: transparent;
-}
-.dpad-cell.dpad-mid {
-  background: rgba(255, 60, 0, 0.04);
-  border-color: rgba(255, 60, 0, 0.18);
-}
-.dpad-cell.active {
-  background: rgba(255, 60, 0, 0.28);
-  box-shadow: 0 0 10px var(--red);
-}
+.mobile-dpad { color: var(--red); }
+.joystick { --joystick-size: 104px; --joystick-knob: 44px; }
 
 .mobile-ctrl-hint {
   font-family: var(--font);
@@ -377,13 +347,6 @@ body.is-mobile #left-panel  { left: 0;  border-right: 1px solid rgba(255,60,0,0.
 body.is-mobile #right-panel { right: 0; border-left:  1px solid rgba(255,60,0,0.15); }
 /* Canvas wrapper gets matching margins so it never goes under the panels */
 body.is-mobile .canvas-wrapper { margin: 0 130px; }
-/* Smaller dpad cells so they fit inside the panel */
-body.is-mobile .dpad-cross {
-  grid-template-columns: repeat(3, 38px);
-  grid-template-rows: repeat(3, 38px);
-  gap: 3px;
-}
-body.is-mobile .dpad-cell { font-size: 14px; }
 body.is-mobile .dig-btn-touch { width: 74px; }
 body.is-mobile .mobile-dpad,
 body.is-mobile .mobile-dig-wrap {
@@ -422,12 +385,7 @@ body.is-mobile .canvas-wrapper:has(#overlay-start:not(.hidden)) .canvas-glow {
 }
 
 @media (max-height: 420px) {
-  .dpad-cross {
-    grid-template-columns: repeat(3, 40px);
-    grid-template-rows: repeat(3, 40px);
-    gap: 3px;
-  }
-  .dpad-cell { font-size: 15px; }
+  .joystick { --joystick-size: 92px; --joystick-knob: 40px; }
   .dig-btn-touch { width: 66px; height: 46px; }
 }
 
