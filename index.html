@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classic Arcade — Play Classic Games Free Online</title>
-  <meta name="description" content="Play 8 classic arcade games free in your browser. Tetrix, Chomp, Alien Wave, Neon Serpent, Robo Maze, Gold Rush, Territory and Airborne — no download, no login required.">
-  <meta name="keywords" content="classic arcade games, play tetris online, pac-man online, space invaders, snake game, berzerk, lode runner, xonix, free browser games, retro arcade">
+  <meta name="description" content="Play 9 classic arcade games free in your browser. Tetrix, Chomp, Alien Wave, Neon Serpent, Robo Maze, Gold Rush, Territory, Airborne and Highway Delivery — no download, no login.">
+  <meta name="keywords" content="classic arcade games, play tetris online, pac-man online, space invaders, snake game, berzerk, lode runner, xonix, highway game, free browser games, retro arcade">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://classicarcade.win/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Classic Arcade — Play Classic Games Free Online">
-  <meta property="og:description" content="Play 8 classic arcade games free in your browser. No download, no login required.">
+  <meta property="og:description" content="Play 9 classic arcade games free in your browser. No download, no login required.">
   <meta property="og:url" content="https://classicarcade.win/">
   <meta property="og:site_name" content="Classic Arcade">
   <meta property="og:image" content="https://classicarcade.win/og-image.jpg">
@@ -20,14 +20,45 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://classicarcade.win/og-image.jpg">
   <meta name="twitter:title" content="Classic Arcade — Play Classic Games Free Online">
-  <meta name="twitter:description" content="Play 8 classic arcade games free in your browser. Tetrix, Chomp, Alien Wave, Neon Serpent and more.">
+  <meta name="twitter:description" content="Play 9 classic arcade games free in your browser. Tetrix, Chomp, Alien Wave, Neon Serpent, Highway Delivery and more.">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Classic Arcade",
-    "url": "https://classicarcade.win/",
-    "description": "Play 8 classic arcade games free in your browser. No download, no login required."
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://classicarcade.win/#website",
+        "name": "Classic Arcade",
+        "url": "https://classicarcade.win/",
+        "description": "Play 9 classic arcade games free in your browser. No download, no login required.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://classicarcade.win/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://classicarcade.win/#organization",
+        "name": "Classic Arcade",
+        "url": "https://classicarcade.win/"
+      },
+      {
+        "@type": "ItemList",
+        "name": "Classic Arcade Games",
+        "itemListElement": [
+          {"@type":"ListItem","position":1,"name":"Tetrix","url":"https://classicarcade.win/tetris/"},
+          {"@type":"ListItem","position":2,"name":"Territory","url":"https://classicarcade.win/xonix/"},
+          {"@type":"ListItem","position":3,"name":"Alien Wave","url":"https://classicarcade.win/space-invaders/"},
+          {"@type":"ListItem","position":4,"name":"Chomp","url":"https://classicarcade.win/pac-man/"},
+          {"@type":"ListItem","position":5,"name":"Neon Serpent","url":"https://classicarcade.win/snake/"},
+          {"@type":"ListItem","position":6,"name":"Gold Rush","url":"https://classicarcade.win/lode-runner/"},
+          {"@type":"ListItem","position":7,"name":"Airborne","url":"https://classicarcade.win/paratrooper/"},
+          {"@type":"ListItem","position":8,"name":"Robo Maze","url":"https://classicarcade.win/berzerk/"},
+          {"@type":"ListItem","position":9,"name":"Highway Delivery","url":"https://classicarcade.win/highway/"}
+        ]
+      }
+    ]
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,6 +199,7 @@
     .card-para        { border-color: var(--blue);    box-shadow: 0 0 12px rgba(0,136,255,0.25),   inset 0 0 12px rgba(0,136,255,0.04);   }
     .card-berzerk     { border-color: var(--purple);  box-shadow: 0 0 12px rgba(170,0,255,0.25),   inset 0 0 12px rgba(170,0,255,0.04);   }
     .card-loderunner  { border-color: var(--red);     box-shadow: 0 0 12px rgba(255,0,68,0.25),    inset 0 0 12px rgba(255,0,68,0.04);    }
+    .card-highway     { border-color: var(--magenta); box-shadow: 0 0 12px rgba(255,0,255,0.25),   inset 0 0 12px rgba(255,0,255,0.04);   }
 
     .card-tetris:hover      { box-shadow: 0 0 28px rgba(0,255,255,0.5),   inset 0 0 20px rgba(0,255,255,0.08);   }
     .card-xonix:hover       { box-shadow: 0 0 28px rgba(255,255,255,0.5), inset 0 0 20px rgba(255,255,255,0.08); }
@@ -177,6 +209,7 @@
     .card-para:hover        { box-shadow: 0 0 28px rgba(0,136,255,0.5),   inset 0 0 20px rgba(0,136,255,0.08);   }
     .card-berzerk:hover     { box-shadow: 0 0 28px rgba(170,0,255,0.5),   inset 0 0 20px rgba(170,0,255,0.08);   }
     .card-loderunner:hover  { box-shadow: 0 0 28px rgba(255,0,68,0.5),    inset 0 0 20px rgba(255,0,68,0.08);    }
+    .card-highway:hover     { box-shadow: 0 0 28px rgba(255,0,255,0.5),   inset 0 0 20px rgba(255,0,255,0.08);   }
 
     /* Hardcore badge */
     .hardcore-tag {
@@ -220,6 +253,7 @@
     .card-para        .game-title { color: var(--blue);    text-shadow: 0 0 10px var(--blue);    }
     .card-berzerk     .game-title { color: var(--purple);  text-shadow: 0 0 10px var(--purple);  }
     .card-loderunner  .game-title { color: var(--red);     text-shadow: 0 0 10px var(--red);     }
+    .card-highway     .game-title { color: var(--magenta); text-shadow: 0 0 10px var(--magenta); }
 
     .game-desc {
       font-size: 7px;
@@ -243,6 +277,7 @@
     .card-para        .play-tag { color: var(--blue);    border-color: var(--blue);    }
     .card-berzerk     .play-tag { color: var(--purple);  border-color: var(--purple);  }
     .card-loderunner  .play-tag { color: var(--red);     border-color: var(--red);     }
+    .card-highway     .play-tag { color: var(--magenta); border-color: var(--magenta); }
 
     .soon-tag {
       font-size: 7px;
@@ -500,9 +535,10 @@
         { text: '  > ROBO MAZE.........[OK]',   delay: 140, cls: 'bios-game' },
         { text: '  > AIRBORNE..........[OK]',   delay: 140, cls: 'bios-game' },
         { text: '  > TERRITORY.........[OK]',   delay: 140, cls: 'bios-game' },
-        { text: '  > GOLD RUSH.........[OK]',   delay: 200, cls: 'bios-game' },
+        { text: '  > GOLD RUSH.........[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > HIGHWAY DELIVERY..[OK]',   delay: 200, cls: 'bios-game' },
         { text: '',                            delay: 140 },
-        { text: '8 CARTRIDGES READY.',          delay: 380 },
+        { text: '9 CARTRIDGES READY.',          delay: 380 },
       ];
 
       let stepIdx = 0;
@@ -574,8 +610,9 @@
 
   <div class="page">
     <header>
-      <span class="logo neon-cyan">CLASSIC</span>
-      <span class="logo neon-magenta">ARCADE</span>
+      <h1 class="visually-hidden">Classic Arcade — Play Classic Games Free Online</h1>
+      <span class="logo neon-cyan" aria-hidden="true">CLASSIC</span>
+      <span class="logo neon-magenta" aria-hidden="true">ARCADE</span>
       <p class="logo-sub">EST. 1980 · REMASTERED 2026</p>
       <p class="insert-coin">► INSERT COIN TO CONTINUE ◄</p>
     </header>
@@ -637,6 +674,13 @@
           <span class="game-icon">🤖</span>
           <h2 class="game-title">ROBO MAZE</h2>
           <p class="game-desc">Blast the robots.<br>Escape each room.<br>Evil Brotto won't stop.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
+        <a href="highway/index.html" class="game-card card-highway">
+          <span class="game-icon">🏁</span>
+          <h2 class="game-title">HIGHWAY DELIVERY</h2>
+          <p class="game-desc">Outrun the traffic.<br>Deliver the parcel<br>before time runs out.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
