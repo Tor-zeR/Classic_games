@@ -66,6 +66,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    /* Defensive copy of the global .visually-hidden — guards against
+       cache mismatches where new HTML loads before new style.css does. */
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     /* ── Background canvas ── */
     #bg {
       position: fixed;
