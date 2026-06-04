@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Highway Delivery — Play Free Online | Classic Arcade</title>
+  <meta name="description" content="Play Highway Delivery free in your browser. Drive through 5 stages of combat traffic, then match speed with the VIP limo to make each parcel delivery.">
+  <meta name="keywords" content="combat racing game online, spy hunter style game, road fighter clone, highway shooter, classic arcade racer, free browser racing game">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://classicarcade.win/highway/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Highway Delivery — Play Free Online | Classic Arcade">
+  <meta property="og:description" content="Play Highway Delivery free in your browser. Drive through 5 stages of combat traffic, then match speed with the VIP limo to make each parcel delivery.">
+  <meta property="og:url" content="https://classicarcade.win/highway/">
+  <meta property="og:site_name" content="Classic Arcade">
+  <meta property="og:image" content="https://classicarcade.win/highway/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://classicarcade.win/highway/og-image.jpg">
+  <meta name="twitter:title" content="Highway Delivery — Play Free Online | Classic Arcade">
+  <meta name="twitter:description" content="Play Highway Delivery free in your browser. Survive 5 stages of combat traffic and match speed with the VIP limo to deliver each parcel.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Highway Delivery","url":"https://classicarcade.win/highway/","description":"Top-down combat-racer courier — survive 5 stages of hostile traffic, then drive alongside the VIP limo and match its speed to deliver each parcel.","genre":["Racing","Shooter","Arcade"],"playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Web Browser"}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="highway.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://classicarcade.win/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Highway Delivery",
+        "item": "https://classicarcade.win/highway/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">HIGHWAY DELIVERY REQUIRES LANDSCAPE MODE</div>
+  </div>
+
+  <div class="page">
+
+    <nav class="topbar">
+      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+      <div class="music-controls">
+        <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
+        <button class="music-btn" id="music-toggle" aria-label="Cycle music track">♪ OVERDRIVE</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <h1 class="visually-hidden">Highway Delivery — Play Free Online | Classic Arcade</h1>
+
+    <div class="game-area">
+
+      <aside class="side-panel" id="left-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value hi" id="hi-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LIVES</div>
+          <div class="panel-value lives-val" id="lives-display">3</div>
+        </div>
+        <div class="mobile-dpad" id="mobile-dpad">
+          <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
+          <div class="dpad-cross" id="dpad-cross">
+            <div class="dpad-cell empty" tabindex="-1" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-up" aria-label="Accelerate">▲</button>
+            <div class="dpad-cell empty" tabindex="-1" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-left" aria-label="Steer left">◄</button>
+            <div class="dpad-cell dpad-mid" tabindex="-1" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-right" aria-label="Steer right">►</button>
+            <div class="dpad-cell empty" tabindex="-1" aria-hidden="true"></div>
+            <button type="button" class="dpad-cell" id="dpad-down" aria-label="Brake">▼</button>
+            <div class="dpad-cell empty" tabindex="-1" aria-hidden="true"></div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="canvas-wrapper">
+        <div class="stage-progress"><div class="stage-progress-fill" id="stage-progress-fill"></div></div>
+        <canvas id="game-canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title flicker title-magenta">HIGHWAY DELIVERY</div>
+          <div class="overlay-sub desktop-hints">
+            <span class="hint-limo">LIMO</span> — DRIVE ALONGSIDE &amp; MATCH SPEED TO DELIVER<br>
+            ◄ ► — STEER &nbsp;|&nbsp; ▲ ▼ — THROTTLE / BRAKE<br>
+            SPACE — FIRE MACHINE GUN (LIMITED AMMO PER STAGE)<br>
+            OVERTAKE TRAFFIC — ONLY PASSING THE FLOW COUNTS AS PROGRESS<br>
+            HALFWAY TO LIMO — TIMER STARTS, DELIVER BEFORE IT RUNS OUT<br>
+            <span class="hint-enemy">RED CARS</span> — DESTROY FOR POINTS &amp; +1s<br>
+            <span class="hint-civ">CIVILIANS</span> — AVOID! -2s ON CRASH, FUEL LOSS IF SHOT<br>
+            <span class="hint-truck">TRUCKS</span> — IMMOVABLE HAZARD<br>
+            <span class="hint-slick">OIL SLICKS</span> — LOSE GRIP<br>
+            <span class="hint-fuel">★ FUEL CAR</span> — DRAFT BEHIND BUMPER TO REFILL (PAUSES TIMER)
+          </div>
+          <div class="overlay-sub mobile-hints">
+            <span class="hint-limo">LIMO</span> — DRIVE ALONGSIDE &amp; MATCH SPEED TO DELIVER<br>
+            D-PAD — STEER &amp; THROTTLE<br>
+            FIRE BUTTON — MACHINE GUN (LIMITED AMMO PER STAGE)<br>
+            OVERTAKE TRAFFIC — ONLY PASSING THE FLOW COUNTS AS PROGRESS<br>
+            HALFWAY TO LIMO — TIMER STARTS, DELIVER BEFORE IT RUNS OUT<br>
+            <span class="hint-enemy">RED CARS</span> — DESTROY FOR POINTS &amp; +1s<br>
+            <span class="hint-civ">CIVILIANS</span> — AVOID! -2s ON CRASH, FUEL LOSS IF SHOT<br>
+            <span class="hint-truck">TRUCKS</span> — IMMOVABLE HAZARD<br>
+            <span class="hint-slick">OIL SLICKS</span> — LOSE GRIP<br>
+            <span class="hint-fuel">★ FUEL CAR</span> — DRAFT BEHIND BUMPER TO REFILL (PAUSES TIMER)
+          </div>
+          <div class="fullscreen-note mobile-hints">⛶ GAME RUNS IN FULL SCREEN</div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title pulse title-yellow">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-victory">
+          <div class="overlay-title flicker title-magenta">ALL 5 PARCELS DELIVERED</div>
+          <div class="overlay-score" id="victory-score"></div>
+          <button class="overlay-btn" id="btn-play-again">► PLAY AGAIN</button>
+        </div>
+
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title flicker title-red">GAME OVER</div>
+          <div class="overlay-score" id="gameover-score"></div>
+          <button class="overlay-btn" id="btn-gameover-restart">► RETRY FROM STAGE 1</button>
+        </div>
+      </div>
+
+      <aside class="side-panel" id="right-panel">
+        <div class="panel-box">
+          <div class="panel-label">STAGE</div>
+          <div class="panel-value wave-val" id="stage-display">1</div>
+          <div class="stage-of">/ 5</div>
+        </div>
+        <div class="panel-box parcel-box">
+          <div class="panel-label">PARCEL</div>
+          <div class="parcel-indicator parcel-holding" id="parcel-indicator" aria-label="Parcel status">●</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">FUEL</div>
+          <div class="fuel-bar">
+            <div class="fuel-bar-fill" id="fuel-fill"></div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">TIME</div>
+          <div class="panel-value time-val" id="time-display">00:45</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">KILLS</div>
+          <div class="panel-value kills-val" id="kill-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">AMMO</div>
+          <div class="panel-value ammo-val" id="ammo-display">0</div>
+        </div>
+        <div class="mobile-fire-wrap" id="mobile-fire-wrap">
+          <div class="mobile-ctrl-hint">TOUCH / HOLD TO FIRE</div>
+          <button class="fire-btn-touch" id="btn-fire-touch" aria-label="Fire">FIRE</button>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="controls-hint">
+      ◄ ► — STEER &nbsp;|&nbsp; ▲ ▼ — THROTTLE / BRAKE &nbsp;|&nbsp; SPACE — FIRE &nbsp;|&nbsp; P — PAUSE &nbsp;|&nbsp; MATCH LIMO SPEED TO DELIVER
+    </div>
+
+    <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="highway.js"></script>
+</body>
+</html>
