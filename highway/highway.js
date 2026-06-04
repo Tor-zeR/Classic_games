@@ -3307,83 +3307,24 @@ musicMuteBtn.addEventListener('click', () => {
   document.getElementById('mobile-dpad').style.display      = 'flex';
   document.getElementById('mobile-fire-wrap').style.display = 'flex';
 
-  const dpadCross = document.getElementById('dpad-cross');
-  const elLeft    = document.getElementById('dpad-left');
-  const elRight   = document.getElementById('dpad-right');
-  const elUp      = document.getElementById('dpad-up');
-  const elDown    = document.getElementById('dpad-down');
-  const SWIPE_MIN = 14;
-  let dpadStartX = 0, dpadStartY = 0;
-
-  function clearDpadKeys() {
-    keys['ArrowLeft']  = false;
-    keys['ArrowRight'] = false;
-    keys['ArrowUp']    = false;
-    keys['ArrowDown']  = false;
-    elLeft.classList.remove('active');
-    elRight.classList.remove('active');
-    elUp.classList.remove('active');
-    elDown.classList.remove('active');
-  }
-
-  function bindCell(el, keyName) {
-    el.addEventListener('touchstart', e => {
-      e.stopPropagation(); e.preventDefault();
-      // For up/down/left/right tap-and-hold: set the corresponding key
-      // (leave any other held direction live so up+left works)
-      if (keyName) keys[keyName] = true;
-      el.classList.add('active');
-    }, { passive: false });
-    el.addEventListener('touchend', e => {
-      e.stopPropagation();
-      if (keyName) keys[keyName] = false;
-      el.classList.remove('active');
-    }, { passive: false });
-    el.addEventListener('touchcancel', e => {
-      e.stopPropagation();
-      if (keyName) keys[keyName] = false;
-      el.classList.remove('active');
-    }, { passive: false });
-  }
-  bindCell(elLeft,  'ArrowLeft');
-  bindCell(elRight, 'ArrowRight');
-  bindCell(elUp,    'ArrowUp');
-  bindCell(elDown,  'ArrowDown');
-
-  // Swipe-anywhere on the dpad cross — useful for continuous steering
-  dpadCross.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    dpadStartX = t.clientX;
-    dpadStartY = t.clientY;
-  }, { passive: false });
-
-  dpadCross.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const t  = e.touches[0];
-    const dx = t.clientX - dpadStartX;
-    const dy = t.clientY - dpadStartY;
-    const adx = Math.abs(dx), ady = Math.abs(dy);
-    keys['ArrowLeft']  = false;
-    keys['ArrowRight'] = false;
-    keys['ArrowUp']    = false;
-    keys['ArrowDown']  = false;
-    elLeft.classList.remove('active');
-    elRight.classList.remove('active');
-    elUp.classList.remove('active');
-    elDown.classList.remove('active');
-    if (adx >= SWIPE_MIN) {
-      if (dx < 0) { keys['ArrowLeft']  = true; elLeft.classList.add('active');  }
-      else        { keys['ArrowRight'] = true; elRight.classList.add('active'); }
+  // Virtual joystick — both axes live simultaneously (steering + throttle).
+  // Low threshold so subtle leans register, matching the old SWIPE_MIN=14 feel.
+  new NeonArcade.VirtualJoystick({
+    base: document.getElementById('joystick'),
+    knob: document.getElementById('joystick-knob'),
+    deadzone: 0.12,
+    onChange: ({ x, y, magnitude }) => {
+      if (magnitude === 0) {
+        keys['ArrowLeft'] = keys['ArrowRight'] = false;
+        keys['ArrowUp']   = keys['ArrowDown']  = false;
+        return;
+      }
+      keys['ArrowLeft']  = x < -0.18;
+      keys['ArrowRight'] = x >  0.18;
+      keys['ArrowUp']    = y < -0.25;
+      keys['ArrowDown']  = y >  0.25;
     }
-    if (ady >= SWIPE_MIN) {
-      if (dy < 0) { keys['ArrowUp']    = true; elUp.classList.add('active');   }
-      else        { keys['ArrowDown']  = true; elDown.classList.add('active'); }
-    }
-  }, { passive: false });
-
-  dpadCross.addEventListener('touchend',    clearDpadKeys, { passive: true });
-  dpadCross.addEventListener('touchcancel', clearDpadKeys, { passive: true });
+  });
 
   // ── Fire button (hold to fire continuously via fireCooldown gating) ──
   const fireBtn = document.getElementById('btn-fire-touch');

@@ -88,16 +88,8 @@
         </div>
         <div class="mobile-dpad" id="mobile-dpad">
           <div class="mobile-ctrl-hint">MOVE</div>
-          <div class="dpad-cross" id="dpad-cross">
-            <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-up">▲</div>
-            <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-left">◄</div>
-            <div class="dpad-cell dpad-mid"></div>
-            <div class="dpad-cell" id="dpad-right">►</div>
-            <div class="dpad-cell empty"></div>
-            <div class="dpad-cell" id="dpad-down">▼</div>
-            <div class="dpad-cell empty"></div>
+          <div class="joystick" id="joystick" role="presentation" aria-hidden="true">
+            <div class="joystick-knob" id="joystick-knob"></div>
           </div>
         </div>
       </aside>
@@ -175,6 +167,7 @@
   </div>
 
   <script src="../js/common.js"></script>
+  <script src="../js/virtual-joystick.js"></script>
   <script src="lode-runner-levels.js"></script>
   <script src="lode-runner.js"></script>
 

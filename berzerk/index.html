@@ -87,17 +87,9 @@
           <div class="panel-value lives" id="lives-display">3</div>
         </div>
         <div class="mobile-dpad" id="mobile-dpad">
-          <div class="mobile-ctrl-hint">TOUCH &amp; SWIPE</div>
-          <div class="dpad-cross" id="dpad-cross">
-            <button type="button" class="dpad-cell dpad-diag" id="dpad-ul" aria-label="Move up-left">◤</button>
-            <button type="button" class="dpad-cell"           id="dpad-up" aria-label="Move up">▲</button>
-            <button type="button" class="dpad-cell dpad-diag" id="dpad-ur" aria-label="Move up-right">◥</button>
-            <button type="button" class="dpad-cell"           id="dpad-left" aria-label="Move left">◄</button>
-            <div    class="dpad-cell dpad-mid" aria-hidden="true"></div>
-            <button type="button" class="dpad-cell"           id="dpad-right" aria-label="Move right">►</button>
-            <button type="button" class="dpad-cell dpad-diag" id="dpad-dl" aria-label="Move down-left">◣</button>
-            <button type="button" class="dpad-cell"           id="dpad-down" aria-label="Move down">▼</button>
-            <button type="button" class="dpad-cell dpad-diag" id="dpad-dr" aria-label="Move down-right">◢</button>
+          <div class="mobile-ctrl-hint">DRAG TO MOVE</div>
+          <div class="joystick" id="joystick" role="presentation" aria-hidden="true">
+            <div class="joystick-knob" id="joystick-knob"></div>
           </div>
         </div>
       </aside>
@@ -173,6 +165,7 @@
   </div>
 
   <script src="../js/common.js"></script>
+  <script src="../js/virtual-joystick.js"></script>
   <script src="berzerk.js"></script>
 
   <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
