@@ -3,7 +3,7 @@
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
     "Referrer-Policy": "strict-origin-when-cross-origin",
-    "Cache-Control": "public, max-age=3600"
+    "Cache-Control": "no-cache, must-revalidate"
   },
   "routes": [
     {
@@ -25,12 +25,8 @@
       "headers": { "Cache-Control": "public, max-age=604800, immutable" }
     },
     {
-      "route": "/css/*.css",
-      "headers": { "Cache-Control": "public, max-age=86400" }
-    },
-    {
-      "route": "/js/*.js",
-      "headers": { "Cache-Control": "public, max-age=86400" }
+      "route": "/*.png",
+      "headers": { "Cache-Control": "public, max-age=604800, immutable" }
     }
   ],
   "mimeTypes": {
