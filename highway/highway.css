@@ -430,16 +430,21 @@ body.is-mobile .side-panel {
   align-self: stretch;
   justify-content: flex-start;
   align-items: center;
+  position: relative;
+  padding-bottom: 120px;
+  overflow: hidden;
 }
 body.is-mobile .mobile-dpad,
 body.is-mobile .mobile-fire-wrap {
-  order: 0;
-  flex: 1;
-  justify-content: flex-end;
-  padding-bottom: 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  flex: 0 0 auto;
+  padding-bottom: 0;
+  width: 100%;
 }
 body.is-mobile .side-panel .panel-box {
-  order: 1;
   margin-top: 0 !important;
   background: transparent;
   border: none;
