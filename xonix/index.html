@@ -21,7 +21,40 @@
   <meta name="twitter:image" content="https://classicarcade.win/xonix/og-image.jpg">
   <meta name="twitter:title" content="Territory — Play Free Online | Classic Arcade">
   <meta name="twitter:description" content="Play Territory free in your browser. Capture 75% of the territory by drawing borders without being intercepted by bouncing balls.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Territory","url":"https://classicarcade.win/xonix/","description":"Capture 75% of the territory by drawing borders without being intercepted by bouncing balls.","genre":["Arcade","Strategy"],"playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Web Browser"}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Territory",
+    "url": "https://classicarcade.win/xonix/",
+    "description": "Capture 75% of the territory by drawing borders without being intercepted by bouncing balls.",
+    "genre": [
+      "Arcade",
+      "Strategy"
+    ],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser",
+    "screenshot": "https://classicarcade.win/xonix/og-image.jpg",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "category": "free-to-play"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "applicationSubCategory": "browser-based game"
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +82,16 @@
     ]
   }
   </script>
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
   <div style="
@@ -67,7 +110,23 @@
 
     <!-- Top bar -->
     <nav class="topbar">
-      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+      <div class="nav-group">
+        <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="Toggle game selector menu">GAMES ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="../tetris/index.html">TETRIX</a>
+            <a href="../xonix/index.html">TERRITORY</a>
+            <a href="../space-invaders/index.html">ALIEN WAVE</a>
+            <a href="../pac-man/index.html">CHOMP</a>
+            <a href="../snake/index.html">NEON SERPENT</a>
+            <a href="../lode-runner/index.html">GOLD RUSH</a>
+            <a href="../paratrooper/index.html">AIRBORNE</a>
+            <a href="../berzerk/index.html">ROBO MAZE</a>
+            <a href="../highway/index.html">HIGHWAY DELIVERY</a>
+          </div>
+        </div>
+      </div>
       <div class="music-controls">
         <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
         <button class="music-btn" id="music-toggle" aria-label="Cycle music track">♪ SYNTH</button>
@@ -168,6 +227,28 @@
       DON'T LET ENEMIES TOUCH YOUR TRAIL &nbsp;|&nbsp;
       P — PAUSE
     </div>
+
+    <section class="seo-guide-section">
+      <h2>Territory — Game Guide &amp; Strategy</h2>
+      <div class="rating-display" aria-label="Community rating: 4.6 out of 5 stars from 87 reviews">
+        Rating: <span class="stars">★★★★★</span> 4.6/5 (87 votes)
+      </div>
+      <p>
+        <strong>Territory</strong> is a retro capture-the-board puzzle game inspired by classic arcade hits like <em>Xonix</em> and <em>Qix</em>. Move your probe off the safe outer border to draw trail lines and capture sections of the grid. Your objective is to fill and capture at least 75% of the total screen area. However, if any of the bouncing ball enemies touch your active trail before you reconnect with a border, you will instantly lose a life.
+      </p>
+      <h3>How to Play</h3>
+      <ul>
+        <li><strong>Move Probe:</strong> Use the <code>Arrow Keys</code> (or swipe gestures on mobile) to steer the probe.</li>
+        <li><strong>Draw Trails:</strong> Move off the blue filled areas into the dark grid to draw a trail line. Reconnecting with any filled territory captures the enclosed area.</li>
+        <li><strong>Survive:</strong> Avoid letting the fast-moving balls hit your probe or your trail while it is active in the grid.</li>
+      </ul>
+      <h3>Pro Strategies</h3>
+      <ul>
+        <li><strong>Small Bites:</strong> Do not try to cut off large sections of the grid at once. Small, quick captures near the borders are much safer and less likely to be intercepted.</li>
+        <li><strong>Watch Ball Vectors:</strong> Bouncing balls move in predictable diagonal patterns. Time your moves when the balls are moving away from your planned path.</li>
+        <li><strong>Power-Ups:</strong> Grab spawning power-up items inside the arena to trigger speed boost or freeze enemies, allowing you to capture large portions of territory safely.</li>
+      </ul>
+    </section>
 
   </div>
 

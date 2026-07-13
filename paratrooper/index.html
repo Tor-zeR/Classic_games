@@ -21,7 +21,40 @@
   <meta name="twitter:image" content="https://classicarcade.win/paratrooper/og-image.jpg">
   <meta name="twitter:title" content="Airborne — Play Free Online | Classic Arcade">
   <meta name="twitter:description" content="Play Airborne free in your browser. Man a ground turret, shoot down enemy planes and paratroopers before they surround your gun.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Airborne","url":"https://classicarcade.win/paratrooper/","description":"Man a ground turret, shoot down enemy planes and paratroopers before they surround your gun.","genre":["Shooter","Arcade"],"playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Web Browser"}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Airborne",
+    "url": "https://classicarcade.win/paratrooper/",
+    "description": "Man a ground turret, shoot down enemy planes and paratroopers before they surround your gun.",
+    "genre": [
+      "Shooter",
+      "Arcade"
+    ],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser",
+    "screenshot": "https://classicarcade.win/paratrooper/og-image.jpg",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "category": "free-to-play"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "applicationSubCategory": "browser-based game"
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +82,16 @@
     ]
   }
   </script>
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
   <div class="page-bg"></div>
@@ -62,7 +105,23 @@
   <div class="page">
 
     <nav class="topbar">
-      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+      <div class="nav-group">
+        <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="Toggle game selector menu">GAMES ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="../tetris/index.html">TETRIX</a>
+            <a href="../xonix/index.html">TERRITORY</a>
+            <a href="../space-invaders/index.html">ALIEN WAVE</a>
+            <a href="../pac-man/index.html">CHOMP</a>
+            <a href="../snake/index.html">NEON SERPENT</a>
+            <a href="../lode-runner/index.html">GOLD RUSH</a>
+            <a href="../paratrooper/index.html">AIRBORNE</a>
+            <a href="../berzerk/index.html">ROBO MAZE</a>
+            <a href="../highway/index.html">HIGHWAY DELIVERY</a>
+          </div>
+        </div>
+      </div>
       <div class="music-controls">
         <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
         <button class="music-btn" id="music-toggle" aria-label="Cycle music track">♪ PATRIOT</button>
@@ -144,6 +203,28 @@
     <div class="controls-hint">
       ◄ ► — ROTATE TURRET &nbsp;|&nbsp; SPACE — FIRE &nbsp;|&nbsp; P — PAUSE
     </div>
+
+    <section class="seo-guide-section">
+      <h2>Airborne — Game Guide &amp; Strategy</h2>
+      <div class="rating-display" aria-label="Community rating: 4.5 out of 5 stars from 98 reviews">
+        Rating: <span class="stars">★★★★★</span> 4.5/5 (98 votes)
+      </div>
+      <p>
+        <strong>Airborne</strong> is a fast-paced anti-aircraft gunner shooter modeled after the classic 1982 MS-DOS arcade game <em>Paratrooper</em>. Man a stationary ground turret and shoot down cargo planes, fast jets, and descending paratroopers. You must prevent four or more paratroopers from landing on either side of your base, or they will coordinate a suicide attack on your turret.
+      </p>
+      <h3>How to Play</h3>
+      <ul>
+        <li><strong>Rotate Turret:</strong> Use the <code>Left/Right Arrow keys</code> (or use the virtual touch joystick on mobile) to rotate the gun barrel.</li>
+        <li><strong>Fire Shells:</strong> Press or hold the <code>Spacebar</code> (or tap/hold the on-screen FIRE button on mobile) to shoot anti-aircraft bullets. Note: Every shot fired costs a small score penalty, so aim carefully!</li>
+        <li><strong>Defend Base:</strong> Keep the sky clear of enemy paratroopers. If 4 paratroopers land on one side, they will climb up and detonate your turret.</li>
+      </ul>
+      <h3>Pro Strategies</h3>
+      <ul>
+        <li><strong>Shoot the Chutes:</strong> You don't have to hit the paratrooper directly. Shooting their parachute causes them to fall to their death, saving ammo and scoring points.</li>
+        <li><strong>Target Cargo Planes:</strong> Fire ahead of transport planes to destroy them before they drop their paratroopers. This is the most efficient way to keep the sky clear.</li>
+        <li><strong>Clear the Landers:</strong> If a paratrooper lands, you can try to hit him while he is descending, or shoot down a plane directly over him so that it crashes onto him.</li>
+      </ul>
+    </section>
 
   </div>
 

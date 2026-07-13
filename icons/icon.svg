@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#04040c" rx="64"/>
+  <!-- Glowing synthwave perspective grid lines in background -->
+  <path d="M 0,440 L 512,440 M 0,480 L 512,480" stroke="#ff00ff" stroke-width="2" opacity="0.3"/>
+  <path d="M 256,380 L 0,512 M 256,380 L 128,512 M 256,380 L 256,512 M 256,380 L 384,512 M 256,380 L 512,512" stroke="#ff00ff" stroke-width="2" opacity="0.3"/>
+  <!-- Sunset glow in background -->
+  <circle cx="256" cy="220" r="120" fill="none" stroke="#ff0088" stroke-width="4" opacity="0.25"/>
+  <!-- Arcade Cabinet Outline -->
+  <!-- Top marquee -->
+  <path d="M 140,80 L 372,80 L 392,130 L 120,130 Z" fill="#0a0a1a" stroke="#00ffff" stroke-width="8" stroke-linejoin="round" filter="drop-shadow(0px 0px 10px #00ffff)"/>
+  <!-- Side Panels -->
+  <path d="M 120,130 L 100,280 L 80,420 L 432,420 L 412,280 L 392,130" fill="none" stroke="#ff00ff" stroke-width="8" stroke-linejoin="round" filter="drop-shadow(0px 0px 10px #ff00ff)"/>
+  <!-- Screen Area -->
+  <rect x="140" y="150" width="232" height="130" fill="#020208" rx="8" stroke="#00ffff" stroke-width="4" filter="drop-shadow(0px 0px 6px #00ffff)"/>
+  <!-- Screen details (alien wave raster style) -->
+  <path d="M 236,190 L 276,190 M 216,215 M 256,230 L 256,260" stroke="#00ff44" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
+  <circle cx="200" cy="180" r="6" fill="#ffff00" opacity="0.8"/>
+  <circle cx="312" cy="180" r="6" fill="#ff00ff" opacity="0.8"/>
+  <!-- Control Panel -->
+  <path d="M 100,280 L 412,280 L 424,320 L 88,320 Z" fill="#0a0a20" stroke="#ffff00" stroke-width="6" stroke-linejoin="round" filter="drop-shadow(0px 0px 8px #ffff00)"/>
+  <!-- Joystick -->
+  <line x1="200" y1="305" x2="190" y2="290" stroke="#ff0044" stroke-width="6" stroke-linecap="round" filter="drop-shadow(0px 0px 6px #ff0044)"/>
+  <circle cx="185" cy="285" r="10" fill="#ff0044" filter="drop-shadow(0px 0px 6px #ff0044)"/>
+  <!-- Buttons -->
+  <circle cx="280" cy="300" r="8" fill="#00ffff" filter="drop-shadow(0px 0px 4px #00ffff)"/>
+  <circle cx="310" cy="300" r="8" fill="#ff00ff" filter="drop-shadow(0px 0px 4px #ff00ff)"/>
+  <circle cx="340" cy="300" r="8" fill="#00ff44" filter="drop-shadow(0px 0px 4px #00ff44)"/>
+  <!-- Cabinet Base -->
+  <path d="M 108,320 L 120,420 L 392,420 L 404,320" fill="#060614" stroke="#ff00ff" stroke-width="6" stroke-linejoin="round"/>
+</svg>

@@ -290,6 +290,84 @@
   line-height: 2.4;
 }
 
+/* ── Instructions Tabs ── */
+.instructions-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.tab-btn {
+  font-family: var(--font);
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid rgba(255, 0, 255, 0.35);
+  color: rgba(255, 0, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .tab-btn:hover {
+    color: var(--magenta);
+    border-color: var(--magenta);
+    text-shadow: 0 0 4px var(--magenta);
+  }
+}
+.tab-btn:focus-visible {
+  outline: 2px solid var(--magenta);
+  outline-offset: 2px;
+  color: var(--magenta);
+  border-color: var(--magenta);
+}
+.tab-btn.active {
+  color: var(--magenta);
+  border-color: var(--magenta);
+  text-shadow: 0 0 6px var(--magenta);
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.4), inset 0 0 8px rgba(255, 0, 255, 0.15);
+}
+
+.instructions-content {
+  width: 100%;
+  max-width: 500px;
+  min-height: 80px; /* prevent height jump */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tab-pane {
+  display: none;
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.18em;
+  text-align: center;
+  line-height: 2.4;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Adjust layout on small height viewports (mobile landscape) */
+@media (max-height: 480px) {
+  .tab-btn {
+    font-size: 6px;
+    padding: 4px 10px;
+  }
+  .tab-pane {
+    line-height: 2.0;
+  }
+  .instructions-content {
+    min-height: 60px;
+  }
+  .overlay {
+    gap: 8px;
+    padding: 8px;
+  }
+}
+
 .hint-enemy { color: var(--red);     }
 .hint-civ   { color: var(--cyan);    }
 .hint-truck { color: var(--yellow);  }
