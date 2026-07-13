@@ -340,3 +340,151 @@ body::before {
 .joystick.dragging .joystick-knob {
   transition: none;
 }
+
+/* ============================================================
+   SEO Game Guides & Strategy Section
+   ============================================================ */
+.seo-guide-section {
+  width: 100%;
+  max-width: 720px;
+  margin: 40px auto 20px;
+  padding: 24px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(4, 4, 12, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.02);
+}
+.seo-guide-section h2 {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+  margin-top: 10px;
+  margin-bottom: 16px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 1px dashed rgba(0, 255, 255, 0.3);
+  padding-bottom: 8px;
+}
+.seo-guide-section h3 {
+  font-family: var(--font);
+  font-size: 8px;
+  color: var(--magenta);
+  text-shadow: 0 0 6px var(--magenta);
+  margin-top: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.seo-guide-section p {
+  margin-bottom: 14px;
+  text-align: justify;
+}
+.seo-guide-section ul {
+  margin-bottom: 14px;
+  padding-left: 18px;
+  list-style-type: square;
+}
+.seo-guide-section li {
+  margin-bottom: 6px;
+}
+.seo-guide-section strong {
+  color: var(--white);
+  font-weight: bold;
+}
+@media (max-width: 768px) {
+  .seo-guide-section {
+    margin: 20px 10px;
+    padding: 16px;
+    font-size: 11px;
+  }
+}
+
+/* ── Navigation Dropdown Menu ── */
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--cyan);
+}
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.nav-dropbtn {
+  font-family: var(--font);
+  font-size: 8px;
+  background: transparent;
+  border: 1px solid rgba(0, 255, 255, 0.45);
+  color: var(--cyan);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s ease;
+  text-shadow: 0 0 4px var(--cyan);
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.1);
+}
+.nav-dropbtn:hover,
+.nav-dropbtn:focus-visible {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan), inset 0 0 8px rgba(0, 255, 255, 0.1);
+  text-shadow: 0 0 8px var(--cyan);
+  outline: none;
+}
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: rgba(4, 4, 12, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), 0 0 10px rgba(0, 0, 0, 0.8);
+  min-width: 170px;
+  z-index: 10000;
+  padding: 4px 0;
+}
+.nav-dropdown-content a {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  font-family: var(--font);
+  font-size: 7px;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
+}
+.nav-dropdown-content a:hover {
+  background: rgba(0, 255, 255, 0.15);
+  color: var(--cyan);
+  text-shadow: 0 0 6px var(--cyan);
+  padding-left: 16px;
+}
+.nav-dropdown:hover .nav-dropdown-content,
+.nav-dropdown:focus-within .nav-dropdown-content {
+  display: block;
+}
+
+/* ── Rating Display UI Widget ── */
+.rating-display {
+  font-family: var(--font);
+  font-size: 8px;
+  color: var(--yellow);
+  text-shadow: 0 0 6px var(--yellow);
+  margin-top: 4px;
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rating-display .stars {
+  color: var(--yellow);
+  text-shadow: 0 0 6px var(--yellow);
+  letter-spacing: 0.1em;
+}
+
+
+

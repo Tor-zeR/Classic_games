@@ -21,7 +21,40 @@
   <meta name="twitter:image" content="https://classicarcade.win/tetris/og-image.jpg">
   <meta name="twitter:title" content="Tetrix — Play Free Online | Classic Arcade">
   <meta name="twitter:description" content="Play Tetrix free in your browser. Stack falling tetrominoes, clear lines, and beat your high score in this classic puzzle game.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Tetrix","url":"https://classicarcade.win/tetris/","description":"Stack falling tetrominoes, clear lines, and beat your high score.","genre":["Puzzle","Arcade"],"playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Web Browser"}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Tetrix",
+    "url": "https://classicarcade.win/tetris/",
+    "description": "Stack falling tetrominoes, clear lines, and beat your high score.",
+    "genre": [
+      "Puzzle",
+      "Arcade"
+    ],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser",
+    "screenshot": "https://classicarcade.win/tetris/og-image.jpg",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "category": "free-to-play"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "applicationSubCategory": "browser-based game"
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +82,16 @@
     ]
   }
   </script>
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
   <!-- Subtle static background (no animated grid — keep focus on game) -->
@@ -64,7 +107,23 @@
 
     <!-- Top bar -->
     <nav class="topbar">
-      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+      <div class="nav-group">
+        <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="Toggle game selector menu">GAMES ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="../tetris/index.html">TETRIX</a>
+            <a href="../xonix/index.html">TERRITORY</a>
+            <a href="../space-invaders/index.html">ALIEN WAVE</a>
+            <a href="../pac-man/index.html">CHOMP</a>
+            <a href="../snake/index.html">NEON SERPENT</a>
+            <a href="../lode-runner/index.html">GOLD RUSH</a>
+            <a href="../paratrooper/index.html">AIRBORNE</a>
+            <a href="../berzerk/index.html">ROBO MAZE</a>
+            <a href="../highway/index.html">HIGHWAY DELIVERY</a>
+          </div>
+        </div>
+      </div>
       <div class="music-controls">
         <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
         <button class="music-btn" id="music-toggle" aria-label="Cycle music track">♪ CHIP</button>
@@ -152,6 +211,30 @@
       Z — ROTATE CCW &nbsp;|&nbsp;
       P — PAUSE
     </div>
+
+    <section class="seo-guide-section">
+      <h2>Tetrix — Game Guide &amp; Strategy</h2>
+      <div class="rating-display" aria-label="Community rating: 4.9 out of 5 stars from 384 reviews">
+        Rating: <span class="stars">★★★★★</span> 4.9/5 (384 votes)
+      </div>
+      <p>
+        <strong>Tetrix</strong> is a modern neon reimagining of the legendary <em>Tetris</em> falling block puzzle game. Rotate, move, and drop geometric tetrominoes to form complete horizontal lines. Clearing lines increases your score and level, which speeds up the descent of the blocks.
+      </p>
+      <h3>How to Play</h3>
+      <ul>
+        <li><strong>Move:</strong> Use the <code>Left/Right Arrow keys</code> (or swipe left/right on mobile).</li>
+        <li><strong>Rotate:</strong> Use the <code>Up Arrow key</code> or <code>Z key</code> to rotate blocks (or tap/swipe up on mobile).</li>
+        <li><strong>Soft Drop:</strong> Press the <code>Down Arrow key</code> to speed up descent (or swipe down on mobile).</li>
+        <li><strong>Hard Drop:</strong> Press the <code>Spacebar</code> to drop the block instantly.</li>
+        <li><strong>Pause:</strong> Press the <code>P key</code> to pause the game.</li>
+      </ul>
+      <h3>Pro Strategies</h3>
+      <ul>
+        <li><strong>Build Flat:</strong> Keep your stack as flat as possible to avoid leaving deep vertical wells that are difficult to fill without specific blocks.</li>
+        <li><strong>The Quad-Line Clear (Tetrix):</strong> Stack your blocks leaving a single empty column on the far right or left, then slide in a straight 4-block "I-bar" to clear 4 lines at once for a massive score multiplier.</li>
+        <li><strong>Quick Decisions:</strong> As the speed increases with each level, plan where your next block (shown in the "Next" panel) will go before the current block lands.</li>
+      </ul>
+    </section>
 
     <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
 

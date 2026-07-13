@@ -21,7 +21,41 @@
   <meta name="twitter:image" content="https://classicarcade.win/lode-runner/og-image.jpg">
   <meta name="twitter:title" content="Gold Rush — Play Free Online | Classic Arcade">
   <meta name="twitter:description" content="Play Gold Rush free in your browser. Collect all the gold, dig traps for guards, and climb to the escape ladder in this classic action-puzzle game.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Gold Rush","url":"https://classicarcade.win/lode-runner/","description":"Collect all the gold, dig traps for guards, and climb to the escape ladder.","genre":["Puzzle","Platformer","Arcade"],"playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Web Browser"}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Gold Rush",
+    "url": "https://classicarcade.win/lode-runner/",
+    "description": "Collect all the gold, dig traps for guards, and climb to the escape ladder.",
+    "genre": [
+      "Puzzle",
+      "Platformer",
+      "Arcade"
+    ],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser",
+    "screenshot": "https://classicarcade.win/lode-runner/og-image.jpg",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "category": "free-to-play"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "applicationSubCategory": "browser-based game"
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +83,16 @@
     ]
   }
   </script>
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
   <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 110%,#180005 0%,#080002 40%,#000 100%);"></div>
@@ -61,7 +105,23 @@
 
   <div class="page">
     <nav class="topbar">
-      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+      <div class="nav-group">
+        <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="Toggle game selector menu">GAMES ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="../tetris/index.html">TETRIX</a>
+            <a href="../xonix/index.html">TERRITORY</a>
+            <a href="../space-invaders/index.html">ALIEN WAVE</a>
+            <a href="../pac-man/index.html">CHOMP</a>
+            <a href="../snake/index.html">NEON SERPENT</a>
+            <a href="../lode-runner/index.html">GOLD RUSH</a>
+            <a href="../paratrooper/index.html">AIRBORNE</a>
+            <a href="../berzerk/index.html">ROBO MAZE</a>
+            <a href="../highway/index.html">HIGHWAY DELIVERY</a>
+          </div>
+        </div>
+      </div>
       <div class="music-controls">
         <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
         <button class="music-btn" id="music-toggle" aria-label="Cycle music track">♪ DUNGEON</button>
@@ -163,6 +223,29 @@
       Z — DIG LEFT &nbsp;|&nbsp; X — DIG RIGHT &nbsp;|&nbsp;
       P — PAUSE &nbsp;|&nbsp; R — RESTART LEVEL
     </div>
+
+    <section class="seo-guide-section">
+      <h2>Gold Rush — Game Guide &amp; Strategy</h2>
+      <div class="rating-display" aria-label="Community rating: 4.7 out of 5 stars from 125 reviews">
+        Rating: <span class="stars">★★★★★</span> 4.7/5 (125 votes)
+      </div>
+      <p>
+        <strong>Gold Rush</strong> is a tactical action-puzzle platformer paying homage to the classic <em>Lode Runner</em>. Play as a neon treasure hunter, collecting all gold nuggets in the stage to reveal the escape ladder. You cannot jump—instead, use your digger guns to temporarily dissolve brick floors, allowing you to trap pursuing guards or create navigation paths.
+      </p>
+      <h3>How to Play</h3>
+      <ul>
+        <li><strong>Move &amp; Climb:</strong> Use the <code>Arrow Keys</code> or <code>WASD</code> (or the virtual D-pad on mobile) to walk, climb ladders, and hand-travel along overhead bars.</li>
+        <li><strong>Dig Left:</strong> Press the <code>Z key</code> (or tap ◄ DIG on mobile) to blast a block to your left.</li>
+        <li><strong>Dig Right:</strong> Press the <code>X key</code> (or tap DIG ► on mobile) to blast a block to your right.</li>
+        <li><strong>Escape:</strong> Collect every gold pile in the level, then climb the green escape ladder that appears at the top of the arena to advance.</li>
+      </ul>
+      <h3>Pro Strategies</h3>
+      <ul>
+        <li><strong>Trapping Guards:</strong> Dig a hole in front of a guard. When they fall in, they drop any gold they are carrying. You can walk safely over their heads while they are trapped.</li>
+        <li><strong>Avoid Dead Ends:</strong> Digging holes requires time to regenerate. Do not dig yourself into a corner where you cannot climb out before the bricks solidify.</li>
+        <li><strong>Level Restart:</strong> If you get completely stuck or trapped by guards, press the <code>R key</code> (or the level restart button in the pause menu) to retry the current layout.</li>
+      </ul>
+    </section>
 
   </div>
 

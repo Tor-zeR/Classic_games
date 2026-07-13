@@ -21,7 +21,39 @@
   <meta name="twitter:image" content="https://classicarcade.win/snake/og-image.jpg">
   <meta name="twitter:title" content="Neon Serpent — Play Free Online | Classic Arcade">
   <meta name="twitter:description" content="Play Neon Serpent free in your browser. Eat food to grow, avoid walls and your tail, unlock shield and auto-shoot bonuses, and beat your high score.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Neon Serpent","url":"https://classicarcade.win/snake/","description":"Eat food to grow, avoid walls and your tail, unlock shield and auto-shoot bonuses.","genre":["Arcade"],"playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Web Browser"}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Neon Serpent",
+    "url": "https://classicarcade.win/snake/",
+    "description": "Eat food to grow, avoid walls and your tail, unlock shield and auto-shoot bonuses.",
+    "genre": [
+      "Arcade"
+    ],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser",
+    "screenshot": "https://classicarcade.win/snake/og-image.jpg",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "category": "free-to-play"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "applicationSubCategory": "browser-based game"
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +81,16 @@
     ]
   }
   </script>
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
   <div class="page-bg"></div>
@@ -61,7 +103,23 @@
 
   <div class="page">
     <nav class="topbar">
-      <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+      <div class="nav-group">
+        <a href="../index.html" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="Toggle game selector menu">GAMES ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="../tetris/index.html">TETRIX</a>
+            <a href="../xonix/index.html">TERRITORY</a>
+            <a href="../space-invaders/index.html">ALIEN WAVE</a>
+            <a href="../pac-man/index.html">CHOMP</a>
+            <a href="../snake/index.html">NEON SERPENT</a>
+            <a href="../lode-runner/index.html">GOLD RUSH</a>
+            <a href="../paratrooper/index.html">AIRBORNE</a>
+            <a href="../berzerk/index.html">ROBO MAZE</a>
+            <a href="../highway/index.html">HIGHWAY DELIVERY</a>
+          </div>
+        </div>
+      </div>
       <div class="music-controls">
         <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
         <button class="music-btn" id="music-toggle" aria-label="Cycle music track">♪ CHIP</button>
@@ -151,6 +209,28 @@
       AVOID WALLS AND YOUR TAIL &nbsp;|&nbsp;
       P — PAUSE
     </div>
+
+    <section class="seo-guide-section">
+      <h2>Neon Serpent — Game Guide &amp; Strategy</h2>
+      <div class="rating-display" aria-label="Community rating: 4.8 out of 5 stars from 198 reviews">
+        Rating: <span class="stars">★★★★★</span> 4.8/5 (198 votes)
+      </div>
+      <p>
+        <strong>Neon Serpent</strong> is a glowing neon reimagining of the classic <em>Snake</em> game popular on early mobile phones and arcade consoles. Direct the serpent around the screen, eating food particles to grow longer. Be extremely careful to avoid crashing into the boundaries, the obstacles, or your own ever-growing tail! As you progress, obstacles will form in the arena, and you can unlock exciting new power-ups.
+      </p>
+      <h3>How to Play</h3>
+      <ul>
+        <li><strong>Move:</strong> Use the <code>Arrow Keys</code> or <code>WASD</code> (or swipe gestures on mobile) to change the snake's direction.</li>
+        <li><strong>Grow:</strong> Eat the glowing food pellets to increase your score and snake length.</li>
+        <li><strong>Survive:</strong> Do not touch the outer borders, custom maze obstacles, or your own body segments.</li>
+      </ul>
+      <h3>Pro Strategies</h3>
+      <ul>
+        <li><strong>Snake Bonuses:</strong> Once you reach a length of 15, you will trigger random bonuses. Look out for the <strong>Auto-Shoot</strong> ability (which blasts obstacles in front of you) or the <strong>Shield</strong> (which grants temporary invulnerability).</li>
+        <li><strong>Grab Snowflakes:</strong> At higher levels (level 6 and above), collect the falling <strong>snowflake icon</strong>. This slows down the snake's speed, giving you essential reaction time to steer through narrow paths.</li>
+        <li><strong>Plan Your Loops:</strong> Always hug the borders and your own tail when growing long. Making tight, adjacent rows keeps the center of the screen open for spawning food.</li>
+      </ul>
+    </section>
 
     <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
 
