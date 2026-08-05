@@ -910,6 +910,12 @@ function triggerGameOver() {
   goScore.textContent = 'SCORE: ' + score;
   ovGameover.classList.remove('hidden');
   NeonArcade.SFX.berzerkGameOver?.();
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('berzerk', score, () => {
+      hiScore = NeonArcade.HighScore.getTopScore('berzerk');
+      updateHUD();
+    });
+  }
 }
 
 // ── Rendering ────────────────────────────────────────────────

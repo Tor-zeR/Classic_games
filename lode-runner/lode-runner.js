@@ -330,6 +330,12 @@ function loseLife() {
     if (score > hiScore) { hiScore = score; localStorage.setItem('lr_hi', hiScore); }
     document.getElementById('go-score').textContent = 'SCORE: ' + score;
     document.getElementById('overlay-gameover').classList.remove('hidden');
+    if (window.NeonArcade) {
+      NeonArcade.HighScore.checkAndPrompt('lode-runner', score, () => {
+        hiScore = NeonArcade.HighScore.getTopScore('lode-runner');
+        updateHUD();
+      });
+    }
     return;
   }
   // Respawn player

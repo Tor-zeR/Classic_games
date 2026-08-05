@@ -317,6 +317,13 @@ function triggerGameOver() {
   document.getElementById('new-best-msg').classList.toggle('hidden', !newBest);
   showOverlay('overlay-gameover');
   updateHUD();
+
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('tetris', score, () => {
+      bestScore = NeonArcade.HighScore.getTopScore('tetris');
+      updateHUD();
+    });
+  }
 }
 
 // ── Start / Restart ───────────────────────────────────────────

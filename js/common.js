@@ -375,6 +375,19 @@ const SFX = {
     } catch (_) {}
     playTone(120, 0.10, { type: 'sawtooth', vol: 0.18 });
   },
+
+  highScoreFanfare() {
+    scheduleNotes([
+      { freq: 523, start: 0,    dur: 0.10, opts: { type: 'square', vol: 0.25 } },
+      { freq: 659, start: 0.10, dur: 0.10, opts: { type: 'square', vol: 0.25 } },
+      { freq: 784, start: 0.20, dur: 0.10, opts: { type: 'square', vol: 0.28 } },
+      { freq: 1047,start: 0.30, dur: 0.35, opts: { type: 'square', vol: 0.35 } },
+    ]);
+  },
+
+  highScoreClick() {
+    playTone(880, 0.04, { type: 'square', vol: 0.12 });
+  },
 };
 
 // ── Drum synthesis (scheduled) ────────────────────────────────
@@ -1366,5 +1379,477 @@ function getTrack() { return _track; }
 // 0 = off, 1 = chip, 2 = synth-pop, 3 = 8-bit arcade
 function setTrack(n) { _track = n; }
 
+// ── Local High Score System ───────────────────────────────────
+const HighScore = (function() {
+  const GAMES = {
+    'tetris':         { name: 'TETRIX',            legacyKey: 'tetris_hi',  defaults: [10000, 8000, 6000, 4000, 2000] },
+    'pacman':         { name: 'CHOMP',             legacyKey: 'pm_hi',      defaults: [15000, 11000, 8000, 5000, 2500] },
+    'xonix':          { name: 'TERRITORY',         legacyKey: 'xonix_hi',   defaults: [18000, 14000, 10000, 6000, 3000] },
+    'space-invaders': { name: 'ALIEN WAVE',        legacyKey: 'si-hi',      defaults: [8500, 6500, 4500, 3000, 1500] },
+    'snake':          { name: 'NEON SERPENT',      legacyKey: 'snake_hi',   defaults: [450, 350, 250, 150, 80] },
+    'berzerk':        { name: 'ROBO MAZE',         legacyKey: 'berzerk_hi', defaults: [9900, 7500, 5200, 3100, 1500] },
+    'paratrooper':    { name: 'AIRBORNE',          legacyKey: 'pt-hi',      defaults: [620, 480, 340, 220, 120] },
+    'lode-runner':    { name: 'GOLD RUSH',         legacyKey: 'lr_hi',      defaults: [14000, 10500, 7800, 4500, 2000] },
+    'highway':        { name: 'HIGHWAY DELIVERY',  legacyKey: 'hh_hi',      defaults: [16000, 12500, 9000, 6000, 3000] }
+  };
+
+  const DEFAULT_BOTS = ['ACE', 'NEO', 'CYB', 'ARC', 'BOT'];
+
+  function normalizeKey(key) {
+    if (!key) return 'tetris';
+    const k = key.toLowerCase().replace(/_/g, '-');
+    if (GAMES[k]) return k;
+    if (k === 'chomp') return 'pacman';
+    if (k === 'territory') return 'xonix';
+    if (k === 'alienwave') return 'space-invaders';
+    if (k === 'neon-serpent' || k === 'serpent') return 'snake';
+    if (k === 'robomaze') return 'berzerk';
+    if (k === 'airborne') return 'paratrooper';
+    if (k === 'goldrush') return 'lode-runner';
+    if (k === 'highway-delivery') return 'highway';
+    return 'tetris';
+  }
+
+  function getStorageKey(gameKey) {
+    return 'neon_scores_' + normalizeKey(gameKey);
+  }
+
+  function getScores(gameKey) {
+    const k = normalizeKey(gameKey);
+    const g = GAMES[k];
+    const sKey = getStorageKey(k);
+    let list = null;
+
+    try {
+      const raw = localStorage.getItem(sKey);
+      if (raw) list = JSON.parse(raw);
+    } catch (_) {}
+
+    if (!Array.isArray(list) || list.length === 0) {
+      list = [];
+      let legacyHi = 0;
+      try {
+        if (g.legacyKey) legacyHi = parseInt(localStorage.getItem(g.legacyKey) || '0', 10);
+      } catch (_) {}
+
+      for (let i = 0; i < 5; i++) {
+        const botScore = g.defaults[i] || (5000 - i * 1000);
+        list.push({
+          name: DEFAULT_BOTS[i] || 'BOT',
+          score: botScore,
+          date: 'RETRO'
+        });
+      }
+
+      if (legacyHi > 0) {
+        list.unshift({ name: getSavedInitials() || 'PLAYER', score: legacyHi, date: 'BEST' });
+        list.sort((a, b) => b.score - a.score);
+        list = list.slice(0, 5);
+      }
+
+      saveScores(k, list);
+    }
+
+    return list;
+  }
+
+  function saveScores(gameKey, list) {
+    const k = normalizeKey(gameKey);
+    try {
+      localStorage.setItem(getStorageKey(k), JSON.stringify(list));
+      const topScore = list.length > 0 ? list[0].score : 0;
+      const legacyKey = GAMES[k]?.legacyKey;
+      if (legacyKey) {
+        localStorage.setItem(legacyKey, String(topScore));
+      }
+    } catch (_) {}
+  }
+
+  function getTopScore(gameKey) {
+    const scores = getScores(gameKey);
+    return scores.length > 0 ? scores[0].score : 0;
+  }
+
+  function isHighScore(gameKey, score) {
+    if (!score || score <= 0) return false;
+    const list = getScores(gameKey);
+    if (list.length < 5) return true;
+    return score > list[list.length - 1].score;
+  }
+
+  function getRank(gameKey, score) {
+    if (!score || score <= 0) return -1;
+    const list = getScores(gameKey);
+    for (let i = 0; i < list.length; i++) {
+      if (score > list[i].score) return i + 1;
+    }
+    if (list.length < 5) return list.length + 1;
+    return -1;
+  }
+
+  function getSavedInitials() {
+    try {
+      return (localStorage.getItem('neon_arcade_player_initials') || 'AAA').toUpperCase().slice(0, 3);
+    } catch (_) {
+      return 'AAA';
+    }
+  }
+
+  function setSavedInitials(name) {
+    try {
+      localStorage.setItem('neon_arcade_player_initials', (name || 'AAA').toUpperCase().slice(0, 3));
+    } catch (_) {}
+  }
+
+  function addScore(gameKey, name, score) {
+    const k = normalizeKey(gameKey);
+    const cleanName = (name || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g, 'A').padEnd(3, 'A').slice(0, 3);
+    setSavedInitials(cleanName);
+
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const list = getScores(k);
+    
+    list.push({ name: cleanName, score: score, date: dateStr });
+    list.sort((a, b) => b.score - a.score);
+    const trimmed = list.slice(0, 5);
+    
+    saveScores(k, trimmed);
+    const rank = trimmed.findIndex(item => item.name === cleanName && item.score === score && item.date === dateStr) + 1;
+    return rank;
+  }
+
+  let _entryModal = null;
+  let _boardModal = null;
+  let _currentActiveSlot = 0;
+  let _charBoxes = ['A', 'A', 'A'];
+
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  function ensureModalsCreated() {
+    if (_entryModal && _boardModal) return;
+
+    if (!_entryModal) {
+      const el = document.createElement('div');
+      el.className = 'neon-modal-overlay hidden';
+      el.id = 'neon-hs-entry-modal';
+      el.innerHTML = `
+        <div class="neon-modal">
+          <div class="neon-modal-header neon-yellow pulse">★ NEW HIGH SCORE! ★</div>
+          <div class="neon-modal-subtitle">RANK <span id="neon-hs-rank" class="neon-cyan">#1</span> IN <span id="neon-hs-gamename" class="neon-magenta">TETRIX</span></div>
+          <div class="hs-score-box">
+            <span class="hs-score-label">SCORE:</span>
+            <span class="hs-score-val neon-cyan" id="neon-hs-scoreval">0</span>
+          </div>
+          <div class="hs-initials-title">ENTER INITIALS:</div>
+          
+          <div class="hs-initials-picker">
+            <div class="hs-char-col" data-idx="0">
+              <button type="button" class="hs-arrow-btn hs-up" data-idx="0">▲</button>
+              <div class="hs-char-box neon-cyan" id="hs-char-0">A</div>
+              <button type="button" class="hs-arrow-btn hs-dn" data-idx="0">▼</button>
+            </div>
+            <div class="hs-char-col" data-idx="1">
+              <button type="button" class="hs-arrow-btn hs-up" data-idx="1">▲</button>
+              <div class="hs-char-box neon-cyan" id="hs-char-1">A</div>
+              <button type="button" class="hs-arrow-btn hs-dn" data-idx="1">▼</button>
+            </div>
+            <div class="hs-char-col" data-idx="2">
+              <button type="button" class="hs-arrow-btn hs-up" data-idx="2">▲</button>
+              <div class="hs-char-box neon-cyan" id="hs-char-2">A</div>
+              <button type="button" class="hs-arrow-btn hs-dn" data-idx="2">▼</button>
+            </div>
+          </div>
+
+          <div class="hs-actions">
+            <button type="button" class="hs-btn hs-submit-btn" id="neon-hs-submit">► SAVE RECORD</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(el);
+      _entryModal = el;
+      bindEntryModalEvents();
+    }
+
+    if (!_boardModal) {
+      const el = document.createElement('div');
+      el.className = 'neon-modal-overlay hidden';
+      el.id = 'neon-hs-board-modal';
+      let optionsHtml = '';
+      for (const [k, v] of Object.entries(GAMES)) {
+        optionsHtml += `<option value="${k}">${v.name}</option>`;
+      }
+
+      el.innerHTML = `
+        <div class="neon-modal leaderboard-modal">
+          <div class="neon-modal-header neon-cyan">★ HIGH SCORES ★</div>
+          
+          <div class="hs-game-selector">
+            <select id="neon-hs-select" class="hs-select">
+              ${optionsHtml}
+            </select>
+          </div>
+
+          <div class="hs-table-wrapper">
+            <table class="hs-table">
+              <thead>
+                <tr>
+                  <th>RANK</th>
+                  <th>NAME</th>
+                  <th>SCORE</th>
+                  <th>DATE</th>
+                </tr>
+              </thead>
+              <tbody id="neon-hs-tbody">
+              </tbody>
+            </table>
+          </div>
+
+          <div class="hs-actions">
+            <button type="button" class="hs-btn hs-close-btn" id="neon-hs-close">✖ CLOSE</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(el);
+      _boardModal = el;
+      bindBoardModalEvents();
+    }
+  }
+
+  function cycleChar(slotIdx, delta) {
+    let cur = _charBoxes[slotIdx] || 'A';
+    let idx = CHARS.indexOf(cur);
+    if (idx === -1) idx = 0;
+    idx = (idx + delta + CHARS.length) % CHARS.length;
+    _charBoxes[slotIdx] = CHARS[idx];
+    updateCharDisplay();
+    if (SFX.highScoreClick) SFX.highScoreClick();
+  }
+
+  function updateCharDisplay() {
+    for (let i = 0; i < 3; i++) {
+      const box = document.getElementById(`hs-char-${i}`);
+      if (box) {
+        box.textContent = _charBoxes[i];
+        if (i === _currentActiveSlot) {
+          box.classList.add('active-slot');
+        } else {
+          box.classList.remove('active-slot');
+        }
+      }
+    }
+  }
+
+  let _entryCallback = null;
+  let _activeGameKey = 'tetris';
+  let _activeScore = 0;
+
+  function bindEntryModalEvents() {
+    _entryModal.querySelectorAll('.hs-up').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(e.currentTarget.getAttribute('data-idx'), 10);
+        _currentActiveSlot = idx;
+        cycleChar(idx, 1);
+      });
+    });
+    _entryModal.querySelectorAll('.hs-dn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(e.currentTarget.getAttribute('data-idx'), 10);
+        _currentActiveSlot = idx;
+        cycleChar(idx, -1);
+      });
+    });
+
+    for (let i = 0; i < 3; i++) {
+      const box = document.getElementById(`hs-char-${i}`);
+      if (box) {
+        box.addEventListener('click', () => {
+          _currentActiveSlot = i;
+          updateCharDisplay();
+        });
+      }
+    }
+
+    const submitBtn = document.getElementById('neon-hs-submit');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        submitHighRecord();
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (_entryModal && !_entryModal.classList.contains('hidden')) {
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          cycleChar(_currentActiveSlot, 1);
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          cycleChar(_currentActiveSlot, -1);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          _currentActiveSlot = (_currentActiveSlot - 1 + 3) % 3;
+          updateCharDisplay();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          _currentActiveSlot = (_currentActiveSlot + 1) % 3;
+          updateCharDisplay();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          submitHighRecord();
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          _charBoxes[_currentActiveSlot] = 'A';
+          _currentActiveSlot = (_currentActiveSlot - 1 + 3) % 3;
+          updateCharDisplay();
+        } else if (/^[a-zA-Z0-9]$/.test(e.key)) {
+          e.preventDefault();
+          _charBoxes[_currentActiveSlot] = e.key.toUpperCase();
+          if (SFX.highScoreClick) SFX.highScoreClick();
+          _currentActiveSlot = (_currentActiveSlot + 1) % 3;
+          updateCharDisplay();
+        }
+      }
+    });
+  }
+
+  function submitHighRecord() {
+    const initials = _charBoxes.join('');
+    const rank = addScore(_activeGameKey, initials, _activeScore);
+    _entryModal.classList.add('hidden');
+    if (typeof _entryCallback === 'function') {
+      _entryCallback(rank, true);
+    }
+    showLeaderboard(_activeGameKey);
+  }
+
+  function bindBoardModalEvents() {
+    const closeBtn = document.getElementById('neon-hs-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        _boardModal.classList.add('hidden');
+      });
+    }
+
+    const select = document.getElementById('neon-hs-select');
+    if (select) {
+      select.addEventListener('change', (e) => {
+        renderBoardTable(e.target.value);
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (_boardModal && !_boardModal.classList.contains('hidden')) {
+        if (e.key === 'Escape') {
+          _boardModal.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  function renderBoardTable(gameKey) {
+    const k = normalizeKey(gameKey);
+    const select = document.getElementById('neon-hs-select');
+    if (select) select.value = k;
+
+    const tbody = document.getElementById('neon-hs-tbody');
+    if (!tbody) return;
+
+    const scores = getScores(k);
+    let html = '';
+    const lastSaved = getSavedInitials();
+
+    scores.forEach((entry, idx) => {
+      const rankNum = idx + 1;
+      const isGold = rankNum === 1;
+      const isSilver = rankNum === 2;
+      const isBronze = rankNum === 3;
+      const rankClass = isGold ? 'rank-1' : isSilver ? 'rank-2' : isBronze ? 'rank-3' : '';
+      const isPlayer = entry.name === lastSaved;
+      
+      html += `
+        <tr class="${rankClass} ${isPlayer ? 'player-row' : ''}">
+          <td class="col-rank">#${rankNum}</td>
+          <td class="col-name">${entry.name}</td>
+          <td class="col-score">${entry.score.toLocaleString()}</td>
+          <td class="col-date">${entry.date}</td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  function checkAndPrompt(gameKey, score, callback) {
+    ensureModalsCreated();
+    _activeGameKey = normalizeKey(gameKey);
+    _activeScore = score;
+    _entryCallback = callback;
+
+    const rank = getRank(_activeGameKey, score);
+    if (rank > 0 && rank <= 5) {
+      if (SFX.highScoreFanfare) SFX.highScoreFanfare();
+      
+      const saved = getSavedInitials();
+      _charBoxes = (saved.padEnd(3, 'A')).split('').slice(0, 3);
+      _currentActiveSlot = 0;
+
+      const rankEl = document.getElementById('neon-hs-rank');
+      const gameEl = document.getElementById('neon-hs-gamename');
+      const scoreEl = document.getElementById('neon-hs-scoreval');
+
+      if (rankEl) rankEl.textContent = `#${rank}`;
+      if (gameEl) gameEl.textContent = GAMES[_activeGameKey]?.name || 'GAME';
+      if (scoreEl) scoreEl.textContent = score.toLocaleString();
+
+      updateCharDisplay();
+      _entryModal.classList.remove('hidden');
+      return true;
+    } else {
+      if (typeof callback === 'function') callback(-1, false);
+      return false;
+    }
+  }
+
+  function showLeaderboard(gameKey) {
+    ensureModalsCreated();
+    const k = gameKey ? normalizeKey(gameKey) : 'tetris';
+    renderBoardTable(k);
+    _boardModal.classList.remove('hidden');
+  }
+
+  function initScoreButtons() {
+    ensureModalsCreated();
+    document.querySelectorAll('.scores-btn, #btn-scores').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const path = window.location.pathname;
+        let gk = 'tetris';
+        for (const key of Object.keys(GAMES)) {
+          if (path.includes('/' + key + '/')) {
+            gk = key;
+            break;
+          }
+        }
+        showLeaderboard(gk);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScoreButtons);
+  } else {
+    initScoreButtons();
+  }
+
+  return {
+    getScores,
+    getTopScore,
+    isHighScore,
+    addScore,
+    checkAndPrompt,
+    showLeaderboard,
+    GAMES
+  };
+})();
+
 // ── Expose globally ───────────────────────────────────────────
-window.NeonArcade = { SFX, startMusic, stopMusic, cycleTrack, toggleMusic, getTrack, setTrack, setCycleTracks, getAudioCtx, getMasterBus };
+window.NeonArcade = { SFX, startMusic, stopMusic, cycleTrack, toggleMusic, getTrack, setTrack, setCycleTracks, getAudioCtx, getMasterBus, HighScore };

@@ -657,6 +657,12 @@ function loop(ts) {
         gameState = 'gameover';
         document.getElementById('go-score').textContent = 'SCORE: ' + score;
         showOverlay('overlay-gameover');
+        if (window.NeonArcade) {
+          NeonArcade.HighScore.checkAndPrompt('pacman', score, () => {
+            hiScore = NeonArcade.HighScore.getTopScore('pacman');
+            updateHUD();
+          });
+        }
       } else {
         resetPac();
         resetGhosts();

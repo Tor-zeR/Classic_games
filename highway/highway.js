@@ -1541,6 +1541,12 @@ function triggerGameOver() {
   stopCountdownSfx();
   if (gameoverScoreEl) gameoverScoreEl.textContent = 'FINAL SCORE  ' + score;
   showOverlay('overlay-gameover');
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('highway', score, () => {
+      hiScore = NeonArcade.HighScore.getTopScore('highway');
+      updateHUD();
+    });
+  }
 }
 
 // ── Game lifecycle ─────────────────────────────────────────────

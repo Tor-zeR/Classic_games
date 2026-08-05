@@ -560,6 +560,12 @@ function triggerGameOver() {
   ovGameover.classList.remove('hidden');
   NeonArcade.stopMusic();
   NeonArcade.SFX.snakeDie();
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('snake', score, () => {
+      hiScore = NeonArcade.HighScore.getTopScore('snake');
+      updateHUD();
+    });
+  }
 }
 
 // ── HUD ───────────────────────────────────────────────────────
