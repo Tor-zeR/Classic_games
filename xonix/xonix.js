@@ -409,6 +409,12 @@ function triggerGameOver() {
   document.getElementById('go-score').textContent = 'SCORE: ' + score;
   showOverlay('overlay-gameover');
   updateHUD();
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('xonix', score, () => {
+      hiScore = NeonArcade.HighScore.getTopScore('xonix');
+      updateHUD();
+    });
+  }
 }
 
 function startLevel() {

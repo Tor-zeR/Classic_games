@@ -773,6 +773,12 @@ function triggerGameOver() {
   showOverlay('overlay-gameover');
   NeonArcade.stopMusic();
   sfxGameOver();
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('space-invaders', score, () => {
+      hiScore = NeonArcade.HighScore.getTopScore('space-invaders');
+      updateHUD();
+    });
+  }
 }
 
 function togglePause() {

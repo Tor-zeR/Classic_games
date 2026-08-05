@@ -438,6 +438,12 @@ function triggerGameOver() {
   sfxCapture();
   document.getElementById('go-score').textContent = 'SCORE  ' + score;
   showOverlay('overlay-gameover');
+  if (window.NeonArcade) {
+    NeonArcade.HighScore.checkAndPrompt('paratrooper', score, () => {
+      hiScore = NeonArcade.HighScore.getTopScore('paratrooper');
+      updateHUD();
+    });
+  }
 }
 
 function startGame() {
