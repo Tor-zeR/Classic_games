@@ -14,6 +14,7 @@ The shared audio engine lives in `js/common.js` and is exposed as `window.NeonAr
 | 8BIT | `3` | 8-bit style |
 | DUNGEON | `4` | Dungeon / adventure style |
 | PATRIOT | `5` | Military march style |
+| OVERDRIVE | `6` | High-speed synthwave racing style |
 
 ---
 
@@ -44,6 +45,8 @@ All SFX live in the `NeonArcade.SFX` object. Call with optional chaining to guar
 ```js
 NeonArcade.SFX.levelUp?.()
 NeonArcade.SFX.snakeEat?.()
+NeonArcade.SFX.highScoreFanfare?.()    // celebratory 4-note chime for Top 5 scores
+NeonArcade.SFX.highScoreClick?.()      // crisp click when cycling initials
 NeonArcade.SFX.berzerkRobotShoot?.()   // quiet blip when a robot fires
 NeonArcade.SFX.berzerkOtto?.()         // alarm warble when Brotto activates
 NeonArcade.SFX.berzerkBrotto?.()       // rising wavy wail as Brotto appears

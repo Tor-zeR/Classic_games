@@ -16,9 +16,11 @@
 ```
 Classic_games/
 ├── index.html              ← Landing page
-├── css/style.css           ← Global theme (CSS variables, CRT scanlines, neon glow)
-├── js/common.js            ← Shared audio engine (window.NeonArcade)
+├── about/                  ← Dedicated About / Mission page
+├── css/style.css           ← Global theme (CSS variables, CRT scanlines, neon glow, high scores modal)
+├── js/common.js            ← Shared audio engine & high scores system (window.NeonArcade)
 ├── staticwebapp.config.json← Azure SWA config (headers, MIME types, cache)
+├── sw.js                   ← PWA Service Worker (offline asset caching)
 ├── sitemap.xml
 ├── robots.txt
 ├── og-image.jpg            ← Landing page OG preview image (1200×630)
@@ -29,10 +31,19 @@ Classic_games/
 ├── snake/
 ├── berzerk/
 ├── paratrooper/
-└── lode-runner/
+├── lode-runner/
+└── highway/
 ```
 
 Each game folder contains `index.html`, a game-specific `.css`, one or more `.js` files, and `og-image.jpg`.
+
+---
+
+## Shared Libraries (`js/common.js`)
+
+Exposes `window.NeonArcade` containing:
+- **Audio Sequencer & SFX Engine**: Web Audio music scheduler (CHIP, SYNTH, 8BIT, DUNGEON, PATRIOT, OVERDRIVE) + sound effects.
+- **Local High Score System (`NeonArcade.HighScore`)**: Manages Top 5 local leaderboards, 3-letter initials arcade prompt modal, pre-filled retro bot scores, legacy scalar migration, and score board UI.
 
 ---
 

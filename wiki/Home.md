@@ -1,6 +1,6 @@
 # Classic Arcade — Wiki
 
-Welcome to the **Classic Arcade** project wiki. This site hosts 8 classic arcade games playable free in any browser — no download, no login required.
+Welcome to the **Classic Arcade** project wiki. This site hosts 9 classic arcade games playable free in any browser — no download, no login required.
 
 🌐 **Live site:** [classicarcade.win](https://classicarcade.win)
 📦 **Repository:** [Tor-zeR/Classic_games](https://github.com/Tor-zeR/Classic_games)
@@ -12,8 +12,10 @@ Welcome to the **Classic Arcade** project wiki. This site hosts 8 classic arcade
 | Page | Description |
 |------|-------------|
 | [Architecture](Architecture) | Tech stack, file layout, audio system, game loop |
-| [Games](Games) | Overview of all 8 games and their features |
+| [Games](Games) | Overview of all 9 games and their features |
 | [Controls](Controls) | Keyboard and touch controls for every game |
+| [High Scores](High-Scores) | Local leaderboard system, 3-letter initials modal |
+| [About Page](About) | Mission, tech stack, audio engine, offline PWA features |
 | [Mobile Support](Mobile-Support) | Touch controls, D-pad, fullscreen, orientation |
 | [Audio System](Audio-System) | Music tracks, SFX, NeonArcade API |
 | [SEO](SEO) | Meta tags, OG images, sitemap, structured data |
