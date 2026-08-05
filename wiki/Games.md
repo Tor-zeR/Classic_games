@@ -1,6 +1,6 @@
 # Games
 
-All 8 games are playable at [classicarcade.win](https://classicarcade.win). No download or login required.
+All 9 games are playable at [classicarcade.win](https://classicarcade.win). No download or login required.
 
 > Folder/URL paths use original names for SEO; display titles are trademark-safe originals.
 
@@ -93,7 +93,7 @@ Claim territory by drawing lines. Fill 75% of the field to advance.
 ---
 
 ## Airborne
-**Folder:** `paratrooper/` · **Theme:** Cyan/Green · **Music:** PATRIOT · **Orientation:** Landscape
+**Folder:** `paratrooper/` · **Theme:** Cyan/Green · **Music:** PATRIOT (track 5) · **Orientation:** Landscape
 
 Defend your base from paratroopers dropped by helicopters. Shoot everything before they land and assemble.
 
@@ -101,3 +101,15 @@ Defend your base from paratroopers dropped by helicopters. Shoot everything befo
 - Paratroopers parachute down and walk toward the gun
 - Auto-fire + manual fire modes
 - Base is lost if enough paratroopers assemble
+
+---
+
+## Highway Delivery
+**Folder:** `highway/` · **Theme:** Magenta/Cyan · **Music:** SYNTH (track 2) / OVERDRIVE (track 6) · **Orientation:** Landscape
+
+Navigate your delivery truck through high-speed multi-lane traffic, dodging vehicles, utilizing turbo boost, and delivering parcels before time runs out.
+
+- Multi-stage highway course with dynamic traffic generation
+- Nitro boost and brake controls
+- Parcel delivery objective timer
+- Laser ammo for clearing road obstacles

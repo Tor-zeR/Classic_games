@@ -91,7 +91,7 @@
 
 | Action | Keys |
 |--------|------|
-| Rotate cannon left | `← ` |
+| Rotate cannon left | `←` |
 | Rotate cannon right | `→` |
 | Shoot | `Space` |
 | Pause | `P` |
@@ -100,9 +100,27 @@
 
 ---
 
-## Global
+## Highway Delivery
 
 | Action | Keys |
 |--------|------|
-| Cycle music track | Click the `♪` button in the top bar |
+| Steer Left / Right | `← →` or `A D` |
+| Accelerate / Nitro Boost | `↑` or `W` |
+| Brake | `↓` or `S` |
+| Shoot Laser (when armed) | `Space` |
+| Pause | `P` or `Esc` |
+
+**Mobile:** D-pad steer left/right, touch boost/brake, fire button.
+
+---
+
+## Global & UI Controls
+
+| Action | Control |
+|--------|---------|
+| Open Leaderboard | Click `🏆 SCORES` button in topbar |
+| Enter Initials (High Score) | Type letters (`A-Z`, `0-9`), `▲`/`▼` keys to cycle, `Enter` to save |
+| Cycle music track | Click `♪` button in topbar |
+| Mute music | Click `Music: ON/OFF` button in topbar |
 | Fullscreen (mobile) | Automatic on first touch |
+
