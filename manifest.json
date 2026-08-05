@@ -1,8 +1,8 @@
 {
   "name": "Classic Arcade",
-  "short_name": "NeonArcade",
+  "short_name": "Classic Arcade",
   "description": "Play 9 classic arcade games free in your browser with a retro synthwave aesthetic. Fully playable offline.",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#04040c",
   "theme_color": "#00ffff",

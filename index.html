@@ -21,6 +21,10 @@
   <meta name="twitter:image" content="https://classicarcade.win/og-image.jpg">
   <meta name="twitter:title" content="Classic Arcade — Play Classic Games Free Online">
   <meta name="twitter:description" content="Play 9 classic arcade games free in your browser. Tetrix, Chomp, Alien Wave, Neon Serpent, Highway Delivery and more.">
+  <meta name="theme-color" content="#04040c">
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <link rel="manifest" href="/manifest.json">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -31,17 +35,18 @@
         "name": "Classic Arcade",
         "url": "https://classicarcade.win/",
         "description": "Play 9 classic arcade games free in your browser. No download, no login required.",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://classicarcade.win/?q={search_term_string}",
-          "query-input": "required name=search_term_string"
+        "publisher": {
+          "@type": "Organization",
+          "name": "Classic Arcade",
+          "url": "https://classicarcade.win/"
         }
       },
       {
         "@type": "Organization",
         "@id": "https://classicarcade.win/#organization",
         "name": "Classic Arcade",
-        "url": "https://classicarcade.win/"
+        "url": "https://classicarcade.win/",
+        "logo": "https://classicarcade.win/icons/icon.svg"
       },
       {
         "@type": "ItemList",
@@ -63,6 +68,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
@@ -509,7 +515,7 @@
   </script>
 </head>
 <body>
-  <div class="bios-screen" id="bios-screen" aria-hidden="true">
+  <div class="bios-screen gone" id="bios-screen" aria-hidden="true">
     <div class="bios-body" id="bios-body">
       <div class="bios-header">
         CLASSIS ARCADE BIOS v8.6.86<span class="bios-version"></span>
@@ -528,10 +534,13 @@
       const bios = document.getElementById('bios-screen');
       if (!bios) return;
 
-      // Skip if already shown in this session
+      // Skip if already shown in this session — element stays hidden
       let alreadyShown = false;
       try { alreadyShown = sessionStorage.getItem('bios_done') === '1'; } catch (e) {}
-      if (alreadyShown) { bios.classList.add('gone'); return; }
+      if (alreadyShown) { return; } // Already hidden by default, nothing to do
+
+      // Show the BIOS screen for this session
+      bios.classList.remove('gone');
 
       const linesEl  = document.getElementById('bios-lines');
       const promptEl = document.getElementById('bios-prompt');
@@ -643,63 +652,63 @@
       <p class="section-label">// SELECT YOUR GAME //</p>
       <div class="games-grid">
 
-        <a href="tetris/index.html" class="game-card card-tetris">
+        <a href="tetris/" class="game-card card-tetris">
           <span class="game-icon">▦</span>
           <h2 class="game-title">TETRIX</h2>
           <p class="game-desc">Stack the falling<br>tetrominoes.<br>Clear the lines.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="xonix/index.html" class="game-card card-xonix">
+        <a href="xonix/" class="game-card card-xonix">
           <span class="game-icon">◈</span>
           <h2 class="game-title">TERRITORY</h2>
           <p class="game-desc">Capture territory<br>without getting<br>intercepted.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="space-invaders/index.html" class="game-card card-paratrooper">
+        <a href="space-invaders/" class="game-card card-paratrooper">
           <span class="game-icon">👾</span>
           <h2 class="game-title">ALIEN WAVE</h2>
           <p class="game-desc">Defend Earth from<br>the alien fleet<br>descending above.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="pac-man/index.html" class="game-card card-pacman">
+        <a href="pac-man/" class="game-card card-pacman">
           <span class="game-icon">◕</span>
           <h2 class="game-title">CHOMP</h2>
           <p class="game-desc">Eat the dots.<br>Dodge the ghosts.<br>3 different mazes.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="snake/index.html" class="game-card card-snake">
+        <a href="snake/" class="game-card card-snake">
           <span class="game-icon">🐍</span>
           <h2 class="game-title">NEON SERPENT</h2>
           <p class="game-desc">Eat. Grow. Don't<br>bite your own tail.<br>How long can you last?</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="lode-runner/index.html" class="game-card card-loderunner">
+        <a href="lode-runner/" class="game-card card-loderunner">
           <span class="game-icon">🏆</span>
           <h2 class="game-title">GOLD RUSH</h2>
           <p class="game-desc">Collect the gold.<br>Dig traps for guards.<br>Escape every level.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="paratrooper/index.html" class="game-card card-para">
+        <a href="paratrooper/" class="game-card card-para">
           <span class="game-icon">🪂</span>
           <h2 class="game-title">AIRBORNE</h2>
           <p class="game-desc">Man the turret.<br>Shoot down planes<br>and paratroopers.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="berzerk/index.html" class="game-card card-berzerk">
+        <a href="berzerk/" class="game-card card-berzerk">
           <span class="game-icon">🤖</span>
           <h2 class="game-title">ROBO MAZE</h2>
           <p class="game-desc">Blast the robots.<br>Escape each room.<br>Evil Brotto won't stop.</p>
           <span class="play-tag">► PLAY</span>
         </a>
 
-        <a href="highway/index.html" class="game-card card-highway">
+        <a href="highway/" class="game-card card-highway">
           <span class="game-icon">🏁</span>
           <h2 class="game-title">HIGHWAY DELIVERY</h2>
           <p class="game-desc">Outrun the traffic.<br>Deliver the parcel<br>before time runs out.</p>
@@ -709,7 +718,50 @@
       </div>
     </main>
 
-    <footer>© 2026 CLASSIC ARCADE · VIBECODED BY Bažin_z_Jožin</footer>
+    <section class="seo-about-section" id="about">
+      <h2>Play Classic Arcade Games Free Online — No Download Required</h2>
+      <p>
+        Welcome to <strong>Classic Arcade</strong> — a free, browser-based collection of 9 legendary retro arcade games, playable instantly with no download, no installation, and no login. Whether you remember pumping quarters into a cabinet in the 1980s or you are discovering these timeless titles for the first time, every game here runs directly in your browser on desktop, tablet, and mobile.
+      </p>
+
+      <h3>Our Free Classic Games Collection</h3>
+      <ul>
+        <li><strong>Tetrix</strong> — The iconic falling-block puzzle game. Rotate tetrominoes, clear lines, and race against an accelerating clock. Ideal for fans of strategy and quick thinking.</li>
+        <li><strong>Chomp</strong> — A tribute to the maze-chase classic. Eat every dot, avoid the ghosts, grab power pellets to turn the tables, and work through 4 unique mazes.</li>
+        <li><strong>Alien Wave</strong> — Defend Earth from descending formations of alien invaders. Shoot UFOs for bonus points, maintain your shields, and survive every wave.</li>
+        <li><strong>Neon Serpent</strong> — A synthwave reimagining of the Snake game. Grow your serpent by collecting food, avoid the walls and your own tail, and chase the leaderboard.</li>
+        <li><strong>Robo Maze</strong> — Inspired by the 1980 arcade shooter Berzerk. Blast robots in procedurally generated maze rooms and outrun Evil Brotto before he catches you.</li>
+        <li><strong>Gold Rush</strong> — Based on the classic Lode Runner. Collect all the gold bars, dig traps for pursuing guards, and climb to the escape ladder before time runs out.</li>
+        <li><strong>Territory</strong> — Capture 75% of the play field by drawing borders without being intercepted by bouncing enemies. A deceptively addictive strategy game.</li>
+        <li><strong>Airborne</strong> — Man a ground-based anti-aircraft turret. Shoot down enemy planes and paratroopers before they land and surround your position.</li>
+        <li><strong>Highway Delivery</strong> — Navigate your delivery vehicle through high-speed traffic on a multi-lane highway. Dodge cars, avoid crashes, and beat the clock.</li>
+      </ul>
+
+      <h3>Why Play Here?</h3>
+      <p>
+        All 9 classic arcade games are completely <strong>free to play</strong> with no account required. Each game is built with pure JavaScript and HTML5 Canvas, runs at 60fps, and is fully optimised for both keyboard and touch controls. A built-in <strong>synthwave audio engine</strong> adds a retro-futuristic soundtrack, and a service worker enables <strong>offline play</strong> once you have loaded the page.
+      </p>
+
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <p class="faq-q">Q: Are these arcade games free to play?</p>
+        <p class="faq-a">Yes — every game on Classic Arcade is completely free. No payment, no subscription, and no account is needed.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q: Do I need to download anything?</p>
+        <p class="faq-a">No download is required. All games run directly inside your web browser using HTML5 Canvas and JavaScript. Simply click a game card and start playing instantly.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q: Do the games work on mobile?</p>
+        <p class="faq-a">Yes. Every game includes a full touch-control overlay with on-screen buttons and swipe gestures, optimised for smartphones and tablets in portrait mode.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q: Can I play offline?</p>
+        <p class="faq-a">Yes. Classic Arcade is a Progressive Web App (PWA). After your first visit, the service worker caches all game assets so you can play even without an internet connection.</p>
+      </div>
+    </section>
+
+    <footer>© 2026 CLASSIC ARCADE · VIBECODED BY Bažin_z_Jožin · <a href="/about/" style="color:rgba(255,255,255,0.3);text-decoration:none;">About</a></footer>
     <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
   </div>
 
