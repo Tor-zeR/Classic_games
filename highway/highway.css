@@ -105,10 +105,6 @@
   color: var(--yellow);
   text-shadow: 0 0 8px var(--yellow);
 }
-.panel-value.wave-val {
-  font-size: 20px;
-  color: var(--magenta);
-}
 .panel-value.lives-val {
   font-size: 14px;
   color: var(--red);
@@ -212,36 +208,6 @@
   background: var(--magenta);
   box-shadow: 0 0 8px var(--magenta);
   transition: width 0.15s linear;
-}
-
-/* ── Stage panel ── */
-.stage-of {
-  font-size: 7px;
-  color: rgba(255, 0, 255, 0.5);
-  letter-spacing: 0.18em;
-  margin-top: 2px;
-}
-
-/* ── Parcel indicator ── */
-.parcel-indicator {
-  font-size: 22px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: 1;
-  padding-top: 2px;
-}
-.parcel-indicator.parcel-holding {
-  color: var(--magenta);
-  text-shadow: 0 0 8px var(--magenta), 0 0 14px var(--magenta);
-  animation: parcel-pulse 1.2s ease-in-out infinite;
-}
-.parcel-indicator.parcel-delivered {
-  color: var(--cyan);
-  text-shadow: 0 0 8px var(--cyan), 0 0 14px var(--cyan);
-}
-@keyframes parcel-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.55; }
 }
 
 /* ── Limo hint span (gold) ── */
@@ -443,7 +409,6 @@
   .topbar { padding: 10px 12px 4px; }
   .side-panel { min-width: 64px; gap: 8px; }
   .panel-value { font-size: 11px; }
-  .panel-value.wave-val { font-size: 15px; }
   .game-area { gap: 6px; padding: 2px 6px 6px; }
 }
 
@@ -508,19 +473,13 @@ body.is-mobile .side-panel {
   align-self: stretch;
   justify-content: flex-start;
   align-items: center;
-  position: relative;
-  padding-bottom: 120px;
-  overflow: hidden;
 }
 body.is-mobile .mobile-dpad,
 body.is-mobile .mobile-fire-wrap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 6px;
   flex: 0 0 auto;
-  padding-bottom: 0;
   width: 100%;
+  margin-top: 16px;
+  padding: 0;
 }
 body.is-mobile .side-panel .panel-box {
   margin-top: 0 !important;
@@ -537,7 +496,6 @@ body.is-mobile .side-panel .panel-label {
 }
 body.is-mobile .side-panel .panel-value      { font-size: 11px; }
 body.is-mobile .side-panel .panel-value.hi   { font-size: 11px; }
-body.is-mobile .side-panel .panel-value.wave-val  { font-size: 13px; }
 body.is-mobile .controls-hint { display: none; }
 body.is-mobile .mobile-hints  { display: block; }
 body.is-mobile .desktop-hints { display: none; }

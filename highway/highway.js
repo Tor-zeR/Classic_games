@@ -608,7 +608,6 @@ let stageStartLives        = 3;        // lives snapshot at the start of the cur
 // ── Cached HUD strings (avoid per-frame writes) ────────────────
 let _lastScoreStr   = '';
 let _lastHiStr      = '';
-let _lastStageStr   = '';
 let _lastLivesStr   = '';
 let _lastKillStr    = '';
 let _lastAmmoStr    = '';
@@ -617,7 +616,6 @@ let _lastTimeStr    = '';
 let _lastTimeCls    = '';
 let _lastFuelPct    = -1;
 let _lastFuelCls    = '';
-let _lastParcelCls  = '';
 let _lastStageBarPct = -1;
 
 // ── Input ──────────────────────────────────────────────────────
@@ -677,13 +675,11 @@ let criticalRescueTimer = 0;         // counts up while fuel < FUEL_CRITICAL and
 // ── DOM refs ───────────────────────────────────────────────────
 const scoreEl     = document.getElementById('score-display');
 const hiEl        = document.getElementById('hi-display');
-const stageEl     = document.getElementById('stage-display');
 const killEl      = document.getElementById('kill-display');
 const ammoEl      = document.getElementById('ammo-display');
 const timeEl      = document.getElementById('time-display');
 const livesEl     = document.getElementById('lives-display');
 const fuelEl      = document.getElementById('fuel-fill');
-const parcelEl    = document.getElementById('parcel-indicator');
 const stageBarEl  = document.getElementById('stage-progress-fill');
 const victoryScoreEl  = document.getElementById('victory-score');
 const gameoverScoreEl = document.getElementById('gameover-score');
@@ -693,8 +689,6 @@ function updateHUD() {
   if (sStr !== _lastScoreStr) { scoreEl.textContent = sStr; _lastScoreStr = sStr; }
   const hStr = String(hiScore);
   if (hStr !== _lastHiStr)    { hiEl.textContent    = hStr; _lastHiStr    = hStr; }
-  const stStr = String(stageIndex + 1);
-  if (stStr !== _lastStageStr) { stageEl.textContent = stStr; _lastStageStr = stStr; }
   const kStr = String(kills);
   if (kStr !== _lastKillStr)  { killEl.textContent  = kStr; _lastKillStr  = kStr; }
   const aStr = String(ammo);
@@ -744,14 +738,6 @@ function updateHUD() {
     fuelEl.classList.remove('warn', 'danger');
     if (cls) fuelEl.classList.add(cls);
     _lastFuelCls = cls;
-  }
-
-  // Parcel indicator class
-  const parcelCls = parcelState === 'DELIVERED' ? 'parcel-delivered' : 'parcel-holding';
-  if (parcelCls !== _lastParcelCls) {
-    parcelEl.classList.remove('parcel-holding', 'parcel-delivered');
-    parcelEl.classList.add(parcelCls);
-    _lastParcelCls = parcelCls;
   }
 
   // Stage progress bar — distance toward the limo (stageDistance → STAGE_LIMO_AT_DIST).
