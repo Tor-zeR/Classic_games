@@ -35,8 +35,8 @@
   },
   "responseOverrides": {
     "404": {
-      "redirect": "/",
-      "statusCode": 302
+      "rewrite": "/404.html",
+      "statusCode": 404
     }
   }
 }

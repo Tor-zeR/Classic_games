@@ -342,8 +342,26 @@ body::before {
 }
 
 /* ============================================================
-   SEO Game Guides & Strategy Section
-   ============================================================ */
+/* Breadcrumb navigation */
+.breadcrumb-nav {
+  font-family: var(--font);
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+}
+.breadcrumb-nav a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+.breadcrumb-nav a:hover {
+  text-decoration: underline;
+}
+.breadcrumb-nav .separator {
+  margin: 0 4px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
 .seo-guide-section {
   width: 100%;
   max-width: 720px;
@@ -485,6 +503,167 @@ body::before {
   text-shadow: 0 0 6px var(--yellow);
   letter-spacing: 0.1em;
 }
+
+/* ============================================================
+   Homepage SEO About Section
+   ============================================================ */
+.seo-about-section {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto 48px;
+  padding: 32px 28px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(4, 4, 12, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.12);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.02);
+}
+.seo-about-section h2 {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan);
+  margin-bottom: 20px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 1px dashed rgba(0, 255, 255, 0.25);
+  padding-bottom: 12px;
+}
+.seo-about-section h3 {
+  font-family: var(--font);
+  font-size: 9px;
+  color: var(--magenta);
+  text-shadow: 0 0 6px var(--magenta);
+  margin: 24px 0 10px;
+  text-transform: uppercase;
+}
+.seo-about-section p {
+  margin-bottom: 14px;
+}
+.seo-about-section ul {
+  padding-left: 20px;
+  margin-bottom: 14px;
+  list-style-type: square;
+}
+.seo-about-section li {
+  margin-bottom: 6px;
+}
+.seo-about-section strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+.seo-about-section .faq-item {
+  margin-bottom: 16px;
+}
+.seo-about-section .faq-q {
+  font-family: var(--font);
+  font-size: 8px;
+  color: var(--yellow);
+  margin-bottom: 6px;
+}
+.seo-about-section .faq-a {
+  margin: 0;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 255, 0, 0.2);
+}
+@media (max-width: 768px) {
+  .seo-about-section {
+    margin: 0 10px 32px;
+    padding: 20px 16px;
+    font-size: 12px;
+  }
+  .seo-about-section h2 { font-size: 10px; }
+}
+
+/* ============================================================
+   Controls Reference Table (game pages)
+   ============================================================ */
+.controls-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-size: 12px;
+}
+.controls-table th {
+  font-family: var(--font);
+  font-size: 7px;
+  color: var(--cyan);
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+  letter-spacing: 0.1em;
+}
+.controls-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: top;
+}
+.controls-table td:first-child {
+  color: var(--yellow);
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  width: 40%;
+}
+.controls-table tr:last-child td {
+  border-bottom: none;
+}
+@media (max-width: 500px) {
+  .controls-table td { padding: 6px 6px; font-size: 11px; }
+}
+
+/* ============================================================
+   Related Games Section (game pages)
+   ============================================================ */
+.related-games-section {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+.related-games-section h3 {
+  font-family: var(--font);
+  font-size: 8px;
+  color: var(--cyan);
+  text-shadow: 0 0 6px var(--cyan);
+  margin-bottom: 16px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.related-games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.related-game-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 14px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font);
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+.related-game-link:hover {
+  background: rgba(0, 255, 255, 0.08);
+  border-color: rgba(0, 255, 255, 0.3);
+  color: var(--cyan);
+}
+.related-game-link .rel-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+@media (max-width: 500px) {
+  .related-games-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .related-game-link { padding: 10px 4px; font-size: 6px; }
+  .related-game-link .rel-icon { font-size: 20px; }
+}
+
 
 
 

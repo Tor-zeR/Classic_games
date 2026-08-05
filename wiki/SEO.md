@@ -1,8 +1,8 @@
-# SEO
+# SEO Architecture & Strategy
 
 ## Game Naming Strategy
 
-All 8 games use **trademark-safe display names** while keeping original folder/URL paths unchanged (to preserve search discovery):
+All 9 games use **trademark-safe display names** while keeping original folder/URL paths unchanged (to preserve search discovery):
 
 | Folder / URL | Display Name |
 |--------------|-------------|
@@ -14,12 +14,13 @@ All 8 games use **trademark-safe display names** while keeping original folder/U
 | `/berzerk/` | Robo Maze |
 | `/paratrooper/` | Airborne |
 | `/lode-runner/` | Gold Rush |
+| `/highway/` | Highway Delivery |
 
-The `keywords` meta tag retains original game names (e.g. `"pac-man online"`) for search discovery. All other visible fields (title, descriptions, JSON-LD) use the display name.
+The `keywords` meta tag retains original game names (e.g. `"pac-man online"`) for search discovery. All visible fields (title, descriptions, JSON-LD, breadcrumbs) use the display name.
 
 ---
 
-## Meta Tags
+## Meta & Branding Tags
 
 Every page includes:
 
@@ -29,9 +30,17 @@ Every page includes:
 <meta name="keywords" content="original game name online, ...">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://classicarcade.win/folder/">
+<meta name="theme-color" content="#04040c">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="apple-touch-icon" href="/icons/icon.svg">
+<link rel="manifest" href="/manifest.json">
 ```
 
-## Open Graph
+---
+
+## Open Graph & Social Sharing
+
+All pages configure standard Open Graph (`og:type="website"`) and Twitter Card (`summary_large_image`) tags:
 
 ```html
 <meta property="og:type" content="website">
@@ -45,8 +54,6 @@ Every page includes:
 <meta property="og:locale" content="en_US">
 ```
 
-## Twitter Card
-
 ```html
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="...">
@@ -54,56 +61,78 @@ Every page includes:
 <meta name="twitter:image" content="https://classicarcade.win/folder/og-image.jpg">
 ```
 
-## OG Images
-
-Each page has a `og-image.jpg` (1200×630 JPEG) generated with Pillow. Images use the game's accent color on a dark background with the game title and `classicarcade.win` branding.
+---
 
 ## Structured Data (JSON-LD)
 
-**Landing page** — `WebSite` schema:
+**Landing page** — `WebSite` + `Organization` + `ItemList` schemas:
 ```json
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Classic Arcade",
-  "url": "https://classicarcade.win/",
-  "description": "..."
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://classicarcade.win/#website",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/",
+      "description": "Play 9 classic arcade games free in your browser. No download, no login required.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Classic Arcade",
+        "url": "https://classicarcade.win/"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://classicarcade.win/#organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/",
+      "logo": "https://classicarcade.win/icons/icon.svg"
+    }
+  ]
 }
 ```
 
-**Game pages** — `VideoGame` + `BreadcrumbList` schemas. The `name` field uses the **display name**:
+**Game pages** — `VideoGame` + `BreadcrumbList` schemas with `aggregateRating` for SERP star ratings:
 ```json
 {
   "@type": "VideoGame",
   "name": "Neon Serpent",
   "url": "https://classicarcade.win/snake/",
-  "genre": "Arcade",
+  "image": "https://classicarcade.win/snake/og-image.jpg",
+  "screenshot": "https://classicarcade.win/snake/og-image.jpg",
+  "inLanguage": "en",
+  "genre": ["Arcade"],
   "playMode": "SinglePlayer",
   "applicationCategory": "Game",
-  "operatingSystem": "Web Browser"
+  "operatingSystem": "Web Browser",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "198",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
 }
 ```
 
-## Sitemap
+---
 
-`sitemap.xml` at the root lists all 9 URLs with `lastmod`, `changefreq`, and `priority` (1.0 for landing, 0.8 for games).
+## Navigation & Clean URLs
 
-## Robots
+- All internal links point directly to **clean trailing slash directory URLs** (e.g. `/snake/` or `../snake/` rather than `snake/index.html`).
+- Game pages feature a semantic visual HTML `<nav class="breadcrumb-nav" aria-label="Breadcrumb">` matching the JSON-LD `BreadcrumbList`.
 
-`robots.txt` allows all crawlers and points to the sitemap:
-```
-User-agent: *
-Allow: /
-Sitemap: https://classicarcade.win/sitemap.xml
-```
+---
 
-## Cache Headers
+## Sitemap & Robots
 
-Configured in `staticwebapp.config.json`:
+- `sitemap.xml` lists all site URLs with `lastmod`, `changefreq`, and `priority`.
+- `robots.txt` allows all crawlers and references `sitemap.xml`.
 
-| Route | Cache |
-|-------|-------|
-| `/*.jpg` | 7 days (immutable) |
-| `/css/*.css` | 1 day |
-| `/js/*.js` | 1 day |
-| Everything else | 1 hour |
+---
+
+## Error Handling & Server Configuration
+
+- **Soft 404 Prevention**: `staticwebapp.config.json` uses `"rewrite": "/404.html", "statusCode": 404` for missing routes.
+- **Nginx Config**: `nginx.conf` handles 404 routes via `error_page 404 /404.html;` to preserve strict 404 HTTP status codes.
