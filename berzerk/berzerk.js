@@ -1406,11 +1406,6 @@ document.getElementById('btn-victory').addEventListener('click', () => {
   requestAnimationFrame(loop);
 });
 
-document.getElementById('music-toggle').addEventListener('click', function () {
-  const { track, name } = NeonArcade.cycleTrack();
-  this.textContent = '♪ ' + name;
-  if (state === 'playing' || state === 'entering') NeonArcade.startMusic();
-});
 document.getElementById('music-mute').addEventListener('click', function () {
   const { on } = NeonArcade.toggleMusic();
   this.textContent = on ? 'Music: ON' : 'Music: OFF';

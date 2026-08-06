@@ -1097,10 +1097,6 @@ function sfxBombExpire() {
 
 // ── Music ─────────────────────────────────────────────────────
 NeonArcade.setTrack(3);
-document.getElementById('music-toggle').addEventListener('click', function () {
-  const { track, name } = NeonArcade.cycleTrack();
-  this.textContent = '♪ ' + name;
-});
 document.getElementById('music-mute').addEventListener('click', function () {
   const { on } = NeonArcade.toggleMusic();
   this.textContent = on ? 'Music: ON' : 'Music: OFF';

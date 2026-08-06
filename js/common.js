@@ -376,6 +376,63 @@ const SFX = {
     playTone(120, 0.10, { type: 'sawtooth', vol: 0.18 });
   },
 
+
+  // ── BLOCK'N'BALL (arkanoid) SFX ───────────────────────────────
+  // Ball hits a brick: crisp mid-frequency click
+  arkanoidHit() {
+    playTone(520, 0.04, { type: 'square', vol: 0.20 });
+    setTimeout(() => playTone(380, 0.03, { type: 'square', vol: 0.12 }), 20);
+  },
+
+  // Ball bounces off a wall or indestructible brick: short dull thud
+  arkanoidWall() {
+    playTone(200, 0.05, { type: 'square', vol: 0.14 });
+  },
+
+  // Ball hits paddle: satisfying mid-low pop
+  arkanoidPaddle() {
+    playTone(310, 0.06, { type: 'triangle', vol: 0.22 });
+    setTimeout(() => playTone(440, 0.04, { type: 'triangle', vol: 0.14 }), 25);
+  },
+
+  // Power-up capsule caught: bright ascending shimmer
+  arkanoidBonus() {
+    scheduleNotes([
+      { freq: 523,  start: 0,    dur: 0.055, opts: { type: 'square', vol: 0.18 } },
+      { freq: 784,  start: 0.06, dur: 0.055, opts: { type: 'square', vol: 0.22 } },
+      { freq: 1047, start: 0.12, dur: 0.09,  opts: { type: 'square', vol: 0.26 } },
+      { freq: 1319, start: 0.21, dur: 0.14,  opts: { type: 'square', vol: 0.30 } },
+    ]);
+  },
+
+  // Laser fired: sharp electronic zap
+  arkanoidLaser() {
+    playTone(1800, 0.04, { type: 'square', vol: 0.20 });
+    setTimeout(() => playTone(900, 0.06, { type: 'square', vol: 0.12 }), 25);
+  },
+
+  // Ball lost (miss): descending alarm pulse
+  arkanoidLose() {
+    scheduleNotes([
+      { freq: 440, start: 0,    dur: 0.12, opts: { type: 'sawtooth', vol: 0.28 } },
+      { freq: 330, start: 0.14, dur: 0.12, opts: { type: 'sawtooth', vol: 0.28 } },
+      { freq: 220, start: 0.28, dur: 0.18, opts: { type: 'sawtooth', vol: 0.30 } },
+      { freq: 110, start: 0.48, dur: 0.30, opts: { type: 'sawtooth', vol: 0.32 } },
+    ]);
+  },
+
+  // Level cleared: cheerful ascending fanfare
+  arkanoidLevelClear() {
+    scheduleNotes([
+      { freq: 523,  start: 0,    dur: 0.08, opts: { type: 'square', vol: 0.25 } },
+      { freq: 659,  start: 0.09, dur: 0.08, opts: { type: 'square', vol: 0.25 } },
+      { freq: 784,  start: 0.18, dur: 0.08, opts: { type: 'square', vol: 0.28 } },
+      { freq: 1047, start: 0.27, dur: 0.08, opts: { type: 'square', vol: 0.30 } },
+      { freq: 1319, start: 0.36, dur: 0.08, opts: { type: 'square', vol: 0.30 } },
+      { freq: 1568, start: 0.45, dur: 0.35, opts: { type: 'square', vol: 0.35 } },
+    ]);
+  },
+
   highScoreFanfare() {
     scheduleNotes([
       { freq: 523, start: 0,    dur: 0.10, opts: { type: 'square', vol: 0.25 } },
@@ -1390,7 +1447,8 @@ const HighScore = (function() {
     'berzerk':        { name: 'ROBO MAZE',         legacyKey: 'berzerk_hi', defaults: [9900, 7500, 5200, 3100, 1500] },
     'paratrooper':    { name: 'AIRBORNE',          legacyKey: 'pt-hi',      defaults: [620, 480, 340, 220, 120] },
     'lode-runner':    { name: 'GOLD RUSH',         legacyKey: 'lr_hi',      defaults: [14000, 10500, 7800, 4500, 2000] },
-    'highway':        { name: 'HIGHWAY DELIVERY',  legacyKey: 'hh_hi',      defaults: [16000, 12500, 9000, 6000, 3000] }
+    'highway':        { name: 'HIGHWAY DELIVERY',  legacyKey: 'hh_hi',      defaults: [16000, 12500, 9000, 6000, 3000] },
+    'arkanoid':       { name: "BLOCK'N'BALL",      legacyKey: 'blockball_best', defaults: [12000, 9000, 6000, 3500, 1500] }
   };
 
   const DEFAULT_BOTS = ['ACE', 'NEO', 'CYB', 'ARC', 'BOT'];
@@ -1407,6 +1465,7 @@ const HighScore = (function() {
     if (k === 'airborne') return 'paratrooper';
     if (k === 'goldrush') return 'lode-runner';
     if (k === 'highway-delivery') return 'highway';
+    if (k === 'blocknball' || k === 'block-n-ball' || k === 'blockball') return 'arkanoid';
     return 'tetris';
   }
 

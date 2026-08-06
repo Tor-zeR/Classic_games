@@ -1,0 +1,377 @@
+/* ============================================================
+   BLOCK'N'BALL — Game Page Styles
+   Accent color: --blue (#0088ff)
+   ============================================================ */
+
+/* ── Page layout ── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Top nav bar ── */
+.topbar {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 8px;
+}
+
+/* ── Music button accent (blue for this game) ── */
+.music-btn {
+  font-family: var(--font);
+  font-size: 8px;
+  background: transparent;
+  border: 1px solid rgba(0, 136, 255, 0.35);
+  color: rgba(0, 136, 255, 0.7);
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .music-btn:hover { border-color: var(--blue); color: var(--blue); }
+}
+.music-btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.music-btn.muted { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.3); }
+
+/* ── Main game area ── */
+.game-area {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 8px 20px 16px;
+  width: 100%;
+  flex: 1;
+}
+
+/* ── Side panels ── */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 96px;
+}
+#left-panel  { justify-self: end; }
+#right-panel { justify-self: start; }
+
+.panel-box {
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(0, 136, 255, 0.22);
+  padding: 10px 12px;
+}
+.panel-label {
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+.panel-value {
+  font-size: 15px;
+  color: var(--blue);
+  text-shadow: 0 0 8px var(--blue);
+  letter-spacing: 0.05em;
+}
+.panel-value.best {
+  font-size: 12px;
+  color: var(--yellow);
+  text-shadow: 0 0 8px var(--yellow);
+}
+.panel-value.lvl {
+  font-size: 20px;
+}
+.panel-value.lives-val {
+  font-size: 11px;
+  color: var(--blue);
+  text-shadow: 0 0 8px var(--blue);
+  letter-spacing: 0.05em;
+  word-break: break-all;
+}
+
+/* ── Bonus display ── */
+#bonus-display {
+  font-family: var(--font);
+  font-size: 6px;
+  color: var(--yellow);
+  text-shadow: 0 0 6px var(--yellow);
+  letter-spacing: 0.1em;
+  text-align: center;
+  min-height: 14px;
+  padding: 0 8px;
+  word-break: break-all;
+}
+
+/* ── Canvas wrapper ── */
+.canvas-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#game-canvas {
+  display: block;
+  background: #000814;
+  image-rendering: pixelated;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Canvas border glow — blue accent */
+.canvas-glow {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--blue);
+  box-shadow:
+    0 0 12px var(--blue),
+    0 0 30px rgba(0, 136, 255, 0.25),
+    inset 0 0 12px rgba(0, 136, 255, 0.06);
+  pointer-events: none;
+}
+
+/* ── Laser touch button ── */
+.laser-fire-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 0;
+  font-family: var(--font);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  background: rgba(255, 0, 68, 0.15);
+  border: 1px solid var(--red);
+  color: var(--red);
+  text-shadow: 0 0 8px var(--red);
+  box-shadow: 0 0 10px rgba(255, 0, 68, 0.3);
+  cursor: pointer;
+  animation: neon-pulse 1s ease-in-out infinite;
+}
+.laser-fire-btn:active {
+  background: rgba(255, 0, 68, 0.35);
+  transform: scale(0.97);
+}
+
+/* ── Overlay screens ── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  gap: 14px;
+  z-index: 10;
+}
+.overlay.hidden { display: none; }
+
+.overlay-title {
+  font-size: clamp(9px, 1.8vw, 14px);
+  letter-spacing: 0.15em;
+  text-align: center;
+  color: var(--blue);
+  text-shadow: 0 0 8px var(--blue), 0 0 22px var(--blue);
+}
+
+.overlay-sub {
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.18em;
+  text-align: center;
+  line-height: 2.2;
+}
+
+/* Mobile/desktop hint toggle */
+.mobile-hints  { display: none; }
+.desktop-hints { display: block; }
+@media (pointer: coarse) {
+  .mobile-hints  { display: block; }
+  .desktop-hints { display: none; }
+}
+
+.overlay-score {
+  font-size: 11px;
+  color: var(--yellow);
+  text-shadow: 0 0 10px var(--yellow);
+  letter-spacing: 0.1em;
+}
+.new-best { color: var(--yellow); font-size: 8px; }
+
+.overlay-btn {
+  font-family: var(--font);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  padding: 10px 22px;
+  background: transparent;
+  border: 2px solid var(--blue);
+  color: var(--blue);
+  box-shadow: 0 0 10px var(--blue);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+@media (hover: hover) {
+  .overlay-btn:hover {
+    background: rgba(0, 136, 255, 0.12);
+    box-shadow: 0 0 22px var(--blue);
+  }
+}
+.overlay-btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  background: rgba(0, 136, 255, 0.12);
+}
+.overlay-btn:active { transform: scale(0.95); }
+
+/* ── Controls hint ── */
+.controls-hint {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 6px 20px 16px;
+  line-height: 2.2;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .game-area { gap: 8px; padding: 4px 8px 8px; }
+  .side-panel { min-width: 74px; }
+  .panel-value { font-size: 12px; }
+  .panel-box { padding: 8px 8px; }
+  .panel-label { font-size: 5px; }
+  .controls-hint { display: none; }
+}
+@media (max-width: 440px) {
+  .topbar { padding: 10px 10px 4px; }
+  .side-panel { min-width: 60px; gap: 8px; }
+  .panel-value { font-size: 10px; }
+  .panel-value.lvl { font-size: 15px; }
+  .game-area { gap: 4px; padding: 2px 4px 4px; }
+}
+
+/* Portrait mobile: vertical stack */
+@media (orientation: portrait) and (max-width: 640px) {
+  html, body { overflow: hidden; height: 100%; }
+  .controls-hint { display: none; }
+
+  .game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0 8px;
+  }
+
+  /* Stats strip top */
+  #left-panel {
+    order: 1;
+    flex-direction: row;
+    width: 95vw;
+    min-width: unset;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  #left-panel .panel-box {
+    flex: 1;
+    text-align: center;
+    padding: 5px 3px;
+  }
+  #left-panel .panel-label { font-size: 5px; margin-bottom: 2px; }
+  #left-panel .panel-value { font-size: 10px; }
+  #left-panel .panel-value.best { font-size: 9px; }
+  #left-panel .panel-value.lvl  { font-size: 12px; }
+  #left-panel .panel-value.lives-val { font-size: 9px; }
+
+  /* Canvas middle */
+  .canvas-wrapper { order: 2; }
+
+  /* Right panel below canvas — shows bonus + laser btn only */
+  #right-panel {
+    order: 3;
+    flex-direction: row;
+    width: 95vw;
+    min-width: unset;
+    justify-content: center;
+    gap: 8px;
+  }
+  #right-panel .panel-box { display: none; }
+
+  #bonus-display {
+    font-size: 6px;
+    padding: 2px 6px;
+  }
+
+  .laser-fire-btn {
+    padding: 10px 20px;
+    font-size: 9px;
+    min-width: 80px;
+  }
+}
+
+/* ── Rotate-device overlay ── */
+.rotate-prompt {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.rotate-icon {
+  font-size: 64px;
+  color: var(--blue);
+  text-shadow: 0 0 20px var(--blue);
+  animation: rotate-hint 1.8s ease-in-out infinite;
+}
+.rotate-text {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--blue);
+  text-shadow: 0 0 10px var(--blue);
+  letter-spacing: 0.15em;
+}
+.rotate-sub {
+  font-family: var(--font);
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+@keyframes rotate-hint {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(-90deg); }
+  60%  { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@media (orientation: landscape) and (max-height: 640px) {
+  .rotate-prompt { display: flex; }
+  .page          { display: none; }
+}
+
+/* ── SEO Guide Section ── */
+.seo-guide-section {
+  border-color: rgba(0, 136, 255, 0.15);
+}
+.seo-guide-section h2 {
+  color: var(--blue);
+  text-shadow: 0 0 8px var(--blue);
+  border-bottom-color: rgba(0, 136, 255, 0.3);
+}

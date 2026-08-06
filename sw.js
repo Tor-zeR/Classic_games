@@ -43,7 +43,12 @@ const ASSETS_TO_CACHE = [
   '/highway/',
   '/highway/index.html',
   '/highway/highway.css',
-  '/highway/highway.js'
+  '/highway/highway.js',
+  '/arkanoid/',
+  '/arkanoid/index.html',
+  '/arkanoid/arkanoid.css',
+  '/arkanoid/arkanoid.js',
+  '/arkanoid/og-image.jpg'
 ];
 
 self.addEventListener('install', (event) => {

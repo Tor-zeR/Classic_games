@@ -1122,11 +1122,6 @@ document.getElementById('btn-pause').addEventListener('click', () => {
 });
 
 // ── Music toggle ───────────────────────────────────────────────
-const musicBtn = document.getElementById('music-toggle');
-musicBtn.addEventListener('click', () => {
-  const { track, name } = NeonArcade.cycleTrack();
-  musicBtn.textContent = '♪ ' + name;
-});
 const musicMuteBtn = document.getElementById('music-mute');
 musicMuteBtn.addEventListener('click', () => {
   const { on } = NeonArcade.toggleMusic();

@@ -1,6 +1,6 @@
 # NEON ARCADE
 
-A collection of 8 classic arcade games reimagined with a synthwave neon aesthetic. Built with vanilla HTML5/CSS3/JS — no frameworks, no build step, no dependencies.
+A collection of 10 classic arcade games reimagined with a synthwave neon aesthetic. Built with vanilla HTML5/CSS3/JS — no frameworks, no build step, no dependencies.
 
 ![Landing page with synthwave background, animated stars, and neon game cards]
 
@@ -16,6 +16,8 @@ A collection of 8 classic arcade games reimagined with a synthwave neon aestheti
 | **ROBO MAZE** | Purple | Landscape | 8BIT |
 | **GOLD RUSH** | Red | Landscape | DUNGEON |
 | **AIRBORNE** | Cyan | Landscape | PATRIOT |
+| **HIGHWAY DELIVERY** | Magenta | Landscape | SYNTH |
+| **BLOCK'N'BALL** | Blue | Portrait | CHIP |
 
 ### TETRIX
 Stack falling tetrominoes and clear lines to score. Speed increases with level.
@@ -56,6 +58,16 @@ Collect all gold to reveal the escape ladder, then climb to the top. Dig to trap
 Man a ground turret and shoot down planes and paratroopers. Don't let enemies surround the gun. Survive increasing waves.
 - **Desktop:** `◄ ►` rotate · `Space` fire · `P` pause
 - **Mobile:** D-pad + fire button
+
+### HIGHWAY DELIVERY
+Survive 5 stages of hostile combat traffic, utilize nitro boost and laser weapons, then match speed alongside the VIP limo to make each parcel delivery.
+- **Desktop:** `← →` / `A D` steer · `↑` / `W` accelerate/boost · `↓` / `S` brake · `Space` fire laser · `P` pause
+- **Mobile:** D-pad steer + boost/brake buttons + fire button
+
+### BLOCK'N'BALL
+Break all the bricks using your paddle and ball. Collect falling power-up capsules. Navigate 10 levels with Silver bricks (multi-hit) and indestructible Gold bricks. Enemies appear on levels 7–10.
+- **Desktop:** `← →` / `A D` move paddle · `Space` launch ball · `P` pause
+- **Mobile:** Slide finger to move paddle · Tap to launch ball
 
 ---
 
@@ -99,7 +111,9 @@ Classic_games/
 ├── xonix/
 ├── berzerk/
 ├── lode-runner/
-└── paratrooper/
+├── paratrooper/
+└── highway/
+├── arkanoid/
 ```
 
 Each game folder contains `index.html`, a game-specific `.css`, and one or more `.js` files. All games share the global stylesheet and audio engine.

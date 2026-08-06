@@ -902,10 +902,6 @@ document.getElementById('btn-resume').addEventListener('click',  () => { if (gam
 document.getElementById('btn-pause').addEventListener('click', () => {
   if (gameState === 'playing' || gameState === 'paused') togglePause();
 });
-document.getElementById('music-toggle').addEventListener('click', function () {
-  const { track, name } = NeonArcade.cycleTrack();
-  this.textContent = '♪ ' + name;
-});
 document.getElementById('music-mute').addEventListener('click', function () {
   const { on } = NeonArcade.toggleMusic();
   this.textContent = on ? 'Music: ON' : 'Music: OFF';

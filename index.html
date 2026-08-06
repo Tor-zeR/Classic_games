@@ -218,6 +218,7 @@
     .card-berzerk     { border-color: var(--purple);  box-shadow: 0 0 12px rgba(170,0,255,0.25),   inset 0 0 12px rgba(170,0,255,0.04);   }
     .card-loderunner  { border-color: var(--red);     box-shadow: 0 0 12px rgba(255,0,68,0.25),    inset 0 0 12px rgba(255,0,68,0.04);    }
     .card-highway     { border-color: var(--magenta); box-shadow: 0 0 12px rgba(255,0,255,0.25),   inset 0 0 12px rgba(255,0,255,0.04);   }
+    .card-arkanoid    { border-color: var(--blue);    box-shadow: 0 0 12px rgba(0,136,255,0.25),   inset 0 0 12px rgba(0,136,255,0.04);   }
 
     .card-tetris:hover      { box-shadow: 0 0 28px rgba(0,255,255,0.5),   inset 0 0 20px rgba(0,255,255,0.08);   }
     .card-xonix:hover       { box-shadow: 0 0 28px rgba(255,255,255,0.5), inset 0 0 20px rgba(255,255,255,0.08); }
@@ -228,6 +229,7 @@
     .card-berzerk:hover     { box-shadow: 0 0 28px rgba(170,0,255,0.5),   inset 0 0 20px rgba(170,0,255,0.08);   }
     .card-loderunner:hover  { box-shadow: 0 0 28px rgba(255,0,68,0.5),    inset 0 0 20px rgba(255,0,68,0.08);    }
     .card-highway:hover     { box-shadow: 0 0 28px rgba(255,0,255,0.5),   inset 0 0 20px rgba(255,0,255,0.08);   }
+    .card-arkanoid:hover    { box-shadow: 0 0 28px rgba(0,136,255,0.5),   inset 0 0 20px rgba(0,136,255,0.08);   }
 
     /* Hardcore badge */
     .hardcore-tag {
@@ -272,6 +274,7 @@
     .card-berzerk     .game-title { color: var(--purple);  text-shadow: 0 0 10px var(--purple);  }
     .card-loderunner  .game-title { color: var(--red);     text-shadow: 0 0 10px var(--red);     }
     .card-highway     .game-title { color: var(--magenta); text-shadow: 0 0 10px var(--magenta); }
+    .card-arkanoid    .game-title { color: var(--blue);    text-shadow: 0 0 10px var(--blue);    }
 
     .game-desc {
       font-size: 7px;
@@ -296,6 +299,7 @@
     .card-berzerk     .play-tag { color: var(--purple);  border-color: var(--purple);  }
     .card-loderunner  .play-tag { color: var(--red);     border-color: var(--red);     }
     .card-highway     .play-tag { color: var(--magenta); border-color: var(--magenta); }
+    .card-arkanoid    .play-tag { color: var(--blue);    border-color: var(--blue);    }
 
     .soon-tag {
       font-size: 7px;
@@ -567,9 +571,10 @@
         { text: '  > AIRBORNE..........[OK]',   delay: 140, cls: 'bios-game' },
         { text: '  > TERRITORY.........[OK]',   delay: 140, cls: 'bios-game' },
         { text: '  > GOLD RUSH.........[OK]',   delay: 140, cls: 'bios-game' },
-        { text: '  > HIGHWAY DELIVERY..[OK]',   delay: 200, cls: 'bios-game' },
+        { text: '  > HIGHWAY DELIVERY..[OK]',   delay: 140, cls: 'bios-game' },
+        { text: '  > BLOCK\'N\'BALL......[OK]',   delay: 200, cls: 'bios-game' },
         { text: '',                            delay: 140 },
-        { text: '9 CARTRIDGES READY.',          delay: 380 },
+        { text: '10 CARTRIDGES READY.',         delay: 380 },
       ];
 
       let stepIdx = 0;
@@ -631,8 +636,7 @@
   </script>
 
   <canvas id="bg"></canvas>
-  <button class="scores-btn" id="btn-scores" aria-label="High Scores" style="position:fixed;top:16px;right:110px;z-index:100;">🏆 SCORES</button>
-  <button class="music-btn muted" id="music-toggle">♪ OFF</button>
+  <button class="scores-btn" id="btn-scores" aria-label="High Scores" style="position:fixed;top:16px;right:20px;z-index:100;">🏆 SCORES</button>
 
   <div class="rotate-prompt" id="rotate-prompt">
     <div class="rotate-icon">⟳</div>
@@ -716,6 +720,13 @@
           <span class="play-tag">► PLAY</span>
         </a>
 
+        <a href="arkanoid/" class="game-card card-arkanoid">
+          <span class="game-icon">🧱</span>
+          <h2 class="game-title">BLOCK'N'BALL</h2>
+          <p class="game-desc">Break all the bricks.<br>Catch power-ups.<br>Survive 10 neon levels.</p>
+          <span class="play-tag">► PLAY</span>
+        </a>
+
       </div>
     </main>
 
@@ -736,11 +747,12 @@
         <li><strong>Territory</strong> — Capture 75% of the play field by drawing borders without being intercepted by bouncing enemies. A deceptively addictive strategy game.</li>
         <li><strong>Airborne</strong> — Man a ground-based anti-aircraft turret. Shoot down enemy planes and paratroopers before they land and surround your position.</li>
         <li><strong>Highway Delivery</strong> — Navigate your delivery vehicle through high-speed traffic on a multi-lane highway. Dodge cars, avoid crashes, and beat the clock.</li>
+        <li><strong>Block'n'Ball</strong> — A neon tribute to the classic brick-breaker arcade genre. Bounce your ball off the paddle to smash bricks, collect falling power-up capsules, and conquer all 10 levels with Gold and Silver bricks in your way.</li>
       </ul>
 
       <h3>Why Play Here?</h3>
       <p>
-        All 9 classic arcade games are completely <strong>free to play</strong> with no account required. Each game is built with pure JavaScript and HTML5 Canvas, runs at 60fps, and is fully optimised for both keyboard and touch controls. A built-in <strong>synthwave audio engine</strong> adds a retro-futuristic soundtrack, and a service worker enables <strong>offline play</strong> once you have loaded the page.
+        All 10 classic arcade games are completely <strong>free to play</strong> with no account required. Each game is built with pure JavaScript and HTML5 Canvas, runs at 60fps, and is fully optimised for both keyboard and touch controls. A built-in <strong>synthwave audio engine</strong> adds a retro-futuristic soundtrack, and a service worker enables <strong>offline play</strong> once you have loaded the page.
       </p>
 
       <h3>Frequently Asked Questions</h3>
@@ -768,12 +780,7 @@
 
   <script src="js/common.js"></script>
   <script>
-    NeonArcade.setTrack(0);  // landing page starts silent; first click → CHIP
-    document.getElementById('music-toggle').addEventListener('click', function () {
-      const { track, name } = NeonArcade.cycleTrack();
-      this.textContent = '♪ ' + name;
-      this.classList.toggle('muted', track === 0);
-    });
+    NeonArcade.setTrack(0);  // landing page starts silent
   </script>
 
   <!-- Synthwave background -->

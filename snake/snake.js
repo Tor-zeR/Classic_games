@@ -959,11 +959,6 @@ document.getElementById('btn-pause').addEventListener('click', () => {
 document.getElementById('btn-restart').addEventListener('click', () => { tryFullscreen(); startGame(); });
 
 // ── Music Toggle ──────────────────────────────────────────────
-document.getElementById('music-toggle').addEventListener('click', function () {
-  const { name } = NeonArcade.cycleTrack();
-  this.textContent = '♪ ' + name;
-  if (state === 'playing') NeonArcade.startMusic();
-});
 document.getElementById('music-mute').addEventListener('click', function () {
   const { on } = NeonArcade.toggleMusic();
   this.textContent = on ? 'Music: ON' : 'Music: OFF';
