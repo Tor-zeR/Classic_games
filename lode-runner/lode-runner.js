@@ -1079,11 +1079,6 @@ window.addEventListener('load', () => {
   hiEl.textContent = hiScore;
   if (window.NeonArcade) {
     NeonArcade.setTrack(4);
-    const btn = document.getElementById('music-toggle');
-    btn?.addEventListener('click', () => {
-      const { track, name } = NeonArcade.cycleTrack();
-      btn.textContent = '♪ ' + name;
-    });
     const muteBtn = document.getElementById('music-mute');
     muteBtn?.addEventListener('click', () => {
       const { on } = NeonArcade.toggleMusic();

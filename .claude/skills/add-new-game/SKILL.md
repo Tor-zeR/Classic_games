@@ -16,7 +16,8 @@ Follow this checklist when creating a new game under the Neon Arcade project.
    - Portrait games + landing page: show prompt via `@media (orientation: landscape) and (max-height: 640px)`.
 6. For landscape games: set `body.is-mobile` in JS when a touch device is detected, implement fullscreen with `.catch(() => {})` (see the mobile-touch-controls skill), add D-pad HTML in the left side-panel, fire button in the right panel.
 7. Add a card to the landing page `index.html` with the appropriate `card-<name>` class — define its accent color in the CSS variable block and the per-card rules (`.card-<name>`, hover, `.game-title`, `.play-tag`).
-8. Add a disclaimer footer: `<p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>`.
+8. Update the BIOS startup loading sequence in root `index.html`: add the game's display name under `Loading Game Cartridges:` (`  > DISPLAY NAME.....[OK]`) and increment the total count (`N CARTRIDGES READY.`).
+9. Add a disclaimer footer: `<p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>`.
 
 ## Trademark-safe display names
 

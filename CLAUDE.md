@@ -42,7 +42,8 @@ Classic_games/
 ├── berzerk/            ← Purple/green theme, 8BIT music (track 3), landscape orientation
 ├── paratrooper/        ← Cyan theme, PATRIOT music, landscape orientation
 ├── lode-runner/        ← Red theme, DUNGEON music (track 4), landscape orientation
-└── highway/            ← Magenta theme, SYNTH music (track 2), landscape orientation
+├── highway/            ← Magenta theme, SYNTH music (track 2), landscape orientation
+└── arkanoid/           ← Blue theme, CHIP music (track 1), portrait orientation
 ```
 
 Each game folder contains `index.html`, a game-specific `.css`, and one or more `.js` files. Every game page loads `../css/style.css` and `../js/common.js` before its own scripts.
@@ -67,7 +68,8 @@ All games use `requestAnimationFrame` + delta-time. State machine: `start` → `
 - **CSS variables** (defined in `style.css`): `--cyan`, `--magenta`, `--green`, `--yellow`, `--orange`, `--pink`, `--blue`, `--red`, `--purple`, `--white`, `--bg`, `--font`.
 - **CRT effect**: scanlines + vignette via `body::before` / `body::after` in `style.css`.
 - **Per-game accent color**: set via the game's own CSS using the shared variable.
-- **Music button**: every game page has `<button class="music-btn" id="music-toggle">` in the topbar. The JS wires it to `cycleTrack()` and updates the label to `♪ <NAME>`.
+- **Music button**: every game page has `<button class="music-mute-btn" id="music-mute">` in the topbar. The JS wires it to `toggleMusic()` (Music: ON / Music: OFF).
+- **BIOS Loading Screen**: when adding a new game, add its display name to the POST animation sequence under `Loading Game Cartridges:` in `index.html` and update the `N CARTRIDGES READY.` counter.
 
 ## Game Names (Trademark-Safe)
 
@@ -84,3 +86,4 @@ Folder/URL names are unchanged; all player-facing titles are renamed:
 | paratrooper/ | AIRBORNE |
 | lode-runner/ | GOLD RUSH |
 | highway/ | HIGHWAY DELIVERY |
+| arkanoid/ | BLOCK'N'BALL |

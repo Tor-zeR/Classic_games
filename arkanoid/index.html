@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block'n'Ball — Play Free Online | Classic Arcade</title>
+  <meta name="description" content="Play Block'n'Ball free in your browser. Break all the bricks with your ball and paddle, collect power-ups, and survive 10 levels in this classic arcade game.">
+  <meta name="keywords" content="arkanoid online, breakout browser game, brick breaker free, block ball game, classic arcade, retro browser game">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://classicarcade.win/arkanoid/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Block'n'Ball — Play Free Online | Classic Arcade">
+  <meta property="og:description" content="Play Block'n'Ball free in your browser. Break all the bricks with your ball and paddle across 10 levels with power-ups.">
+  <meta property="og:url" content="https://classicarcade.win/arkanoid/">
+  <meta property="og:site_name" content="Classic Arcade">
+  <meta property="og:image" content="https://classicarcade.win/arkanoid/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="theme-color" content="#04040c">
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://classicarcade.win/arkanoid/og-image.jpg">
+  <meta name="twitter:title" content="Block'n'Ball — Play Free Online | Classic Arcade">
+  <meta name="twitter:description" content="Play Block'n'Ball free in your browser. Break all bricks, collect power-ups, survive 10 levels.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Block'n'Ball",
+    "url": "https://classicarcade.win/arkanoid/",
+    "description": "A neon-synthwave reimagining of the classic brick-breaker arcade game. Break all bricks with your paddle and ball, collect power-ups, and survive 10 levels.",
+    "genre": ["Arcade", "Action", "Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "category": "free-to-play"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Classic Arcade",
+      "url": "https://classicarcade.win/"
+    },
+    "applicationSubCategory": "browser-based game",
+    "screenshot": "https://classicarcade.win/arkanoid/og-image.jpg",
+    "image": "https://classicarcade.win/arkanoid/og-image.jpg",
+    "inLanguage": "en",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "256",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://classicarcade.win/" },
+      { "@type": "ListItem", "position": 2, "name": "Block'n'Ball", "item": "https://classicarcade.win/arkanoid/" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="arkanoid.css">
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('SW registered:', r.scope))
+          .catch(() => {});
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="bg-static"></div>
+
+  <div class="rotate-prompt" id="rotate-prompt">
+    <div class="rotate-icon">⟳</div>
+    <div class="rotate-text">ROTATE DEVICE</div>
+    <div class="rotate-sub">BLOCK'N'BALL REQUIRES PORTRAIT MODE</div>
+  </div>
+
+  <div class="page">
+
+    <!-- Top bar -->
+    <nav class="topbar">
+      <div class="nav-group">
+        <a href="../" class="back-link" aria-label="Back to Classic Arcade home">◄ HOME</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="Toggle game selector menu">GAMES ▾</button>
+          <div class="nav-dropdown-content">
+            <a href="../tetris/">TETRIX</a>
+            <a href="../xonix/">TERRITORY</a>
+            <a href="../space-invaders/">ALIEN WAVE</a>
+            <a href="../pac-man/">CHOMP</a>
+            <a href="../snake/">NEON SERPENT</a>
+            <a href="../lode-runner/">GOLD RUSH</a>
+            <a href="../paratrooper/">AIRBORNE</a>
+            <a href="../berzerk/">ROBO MAZE</a>
+            <a href="../highway/">HIGHWAY DELIVERY</a>
+            <a href="../arkanoid/">BLOCK'N'BALL</a>
+          </div>
+        </div>
+      </div>
+      <div class="music-controls">
+        <button class="scores-btn" id="btn-scores" aria-label="High Scores">🏆 SCORES</button>
+        <button class="pause-btn" id="btn-pause" aria-label="Pause">❚❚</button>
+        <button class="music-mute-btn" id="music-mute">Music: ON</button>
+      </div>
+    </nav>
+
+    <h1 class="visually-hidden">Block'n'Ball — Play Free Online | Classic Arcade</h1>
+
+    <!-- Bonus HUD bar (above game area) -->
+    <div id="bonus-display" aria-live="polite"></div>
+
+    <!-- Game area -->
+    <div class="game-area">
+
+      <!-- Left panel -->
+      <aside class="side-panel" id="left-panel">
+        <div class="panel-box">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">BEST</div>
+          <div class="panel-value best" id="best-display">0</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value lvl" id="level-display">1</div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-label">LIVES</div>
+          <div class="panel-value lives-val" id="lives-display">●●●●●</div>
+        </div>
+      </aside>
+
+      <!-- Canvas -->
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas" width="440" height="620" aria-label="Block'n'Ball game canvas"></canvas>
+        <div class="canvas-glow"></div>
+
+        <!-- Start overlay -->
+        <div class="overlay" id="overlay-start">
+          <div class="overlay-title flicker">BLOCK'N'BALL</div>
+          <div class="overlay-sub desktop-hints">
+            ← → / A D — MOVE PADDLE<br>
+            SPACE — LAUNCH BALL<br>
+            P — PAUSE
+          </div>
+          <div class="overlay-sub mobile-hints">
+            SLIDE FINGER — MOVE PADDLE<br>
+            TAP — LAUNCH BALL
+          </div>
+          <button class="overlay-btn" id="btn-start">► START GAME</button>
+        </div>
+
+        <!-- Pause overlay -->
+        <div class="overlay hidden" id="overlay-pause">
+          <div class="overlay-title pulse" style="color:var(--yellow);text-shadow:0 0 8px var(--yellow)">PAUSED</div>
+          <button class="overlay-btn" id="btn-resume">► RESUME</button>
+        </div>
+
+        <!-- Game Over overlay -->
+        <div class="overlay hidden" id="overlay-gameover">
+          <div class="overlay-title flicker" style="color:var(--red);text-shadow:0 0 8px var(--red)">GAME OVER</div>
+          <div class="overlay-score" id="final-score"></div>
+          <div class="overlay-sub new-best hidden" id="new-best-msg">★ NEW HIGH SCORE ★</div>
+          <button class="overlay-btn" id="btn-restart">► PLAY AGAIN</button>
+        </div>
+
+        <!-- Level Clear overlay -->
+        <div class="overlay hidden" id="overlay-levelclear">
+          <div class="overlay-title pulse" id="lc-title">LEVEL CLEAR!</div>
+          <div class="overlay-score" id="lc-score"></div>
+          <button class="overlay-btn" id="btn-next" data-action="next">► NEXT LEVEL</button>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <aside class="side-panel" id="right-panel">
+        <div class="panel-box">
+          <div class="panel-label">POWER</div>
+          <div style="font-size:6px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;line-height:1.8;margin-top:4px;">
+            E-WIDE<br>F-FIRE<br>C-CATCH<br>S-SLOW<br>B-BALL<br>D-TRI<br>K-EXIT<br>P-LIFE
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Desktop controls hint -->
+    <div class="controls-hint">
+      ← → MOVE &nbsp;|&nbsp; SPACE — LAUNCH BALL &nbsp;|&nbsp; P — PAUSE
+    </div>
+
+    <!-- SEO / Guide section -->
+    <section class="seo-guide-section">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../">Home</a> <span class="separator">/</span> <span>Block'n'Ball</span>
+      </nav>
+      <h2>Block'n'Ball &mdash; Game Guide &amp; Strategy</h2>
+      <div class="rating-display" aria-label="Community rating: 4.8 out of 5 stars from 256 reviews">
+        Rating: <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.8/5 (256 votes)
+      </div>
+
+      <h3>History &amp; Origins</h3>
+      <p>Block'n'Ball is a neon-synthwave reimagining of the timeless brick-breaker genre, most famously popularized by Taito's 1986 arcade hit Arkanoid — itself a successor to Atari's seminal 1976 game Breakout. Breakout introduced the deceptively simple premise: a paddle at the bottom, a bouncing ball, and a wall of bricks above. Arkanoid elevated the formula with power-up capsules, multiple levels, indestructible "gold" bricks, and the iconic spinning enemy capsules that became genre hallmarks. Block'n'Ball brings these mechanics to the browser with a neon blue synthwave aesthetic, 10 handcrafted levels, and distinct power-ups — including Catch-and-aim, Multi-ball, and the rare Break exit that lets you escape a level without clearing every brick.</p>
+
+      <h3>Controls Reference</h3>
+      <table class="controls-table">
+        <thead><tr><th>Input</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>← → Arrow / A D</td><td>Move paddle horizontally</td></tr>
+          <tr><td>Spacebar</td><td>Launch ball (release from Catch mode)</td></tr>
+          <tr><td>P / Esc</td><td>Pause / resume</td></tr>
+          <tr><td>Slide finger (mobile)</td><td>Move paddle — paddle tracks your touch X position</td></tr>
+          <tr><td>Tap (mobile)</td><td>Launch stuck ball</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Power-up Guide</h3>
+      <table class="controls-table">
+        <thead><tr><th>Capsule</th><th>Effect</th><th>Duration</th></tr></thead>
+        <tbody>
+          <tr><td>E — WIDE</td><td>Paddle becomes wider — much easier to keep the ball alive</td><td>12s</td></tr>
+          <tr><td>F — FIRE</td><td>Fiery ball pierces normal bricks without bouncing &amp; destroys Silver/Gold on contact</td><td>12s</td></tr>
+          <tr><td>C — CATCH</td><td>Ball sticks to paddle on contact — aim before launching</td><td>12s</td></tr>
+          <tr><td>S — SLOW</td><td>Ball slows to 65% speed — easier control at high levels</td><td>12s</td></tr>
+          <tr><td>B — BALL</td><td>Adds two extra balls to the field — up to 6 total</td><td>Permanent</td></tr>
+          <tr><td>D — TRI</td><td>Splits ball into three — instant brick-clearing power</td><td>Permanent</td></tr>
+          <tr><td>K — BREAK</td><td>Opens top exit — send a ball through to clear the level instantly</td><td>Permanent</td></tr>
+          <tr><td>P — LIFE</td><td>Awards one extra life (max 9)</td><td>Permanent</td></tr>
+          <tr><td>H — THIN</td><td>Paddle shrinks — penalty, harder to keep ball in play</td><td>12s</td></tr>
+          <tr><td>T — TURBO</td><td>Ball accelerates to 145% speed — dangerous penalty at any level</td><td>12s</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Brick Types</h3>
+      <table class="controls-table">
+        <thead><tr><th>Brick</th><th>HP</th><th>Behavior</th></tr></thead>
+        <tbody>
+          <tr><td>Colored (1–7)</td><td>1 hit</td><td>May drop a power-up capsule (22% chance)</td></tr>
+          <tr><td>Silver</td><td>Level number</td><td>Takes N hits where N = current level. No capsule drops.</td></tr>
+          <tr><td>Gold</td><td>∞</td><td>Indestructible. Ball and lasers bounce off. Cannot be cleared.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Pro Tips</h3>
+      <p><strong>Always try to angle the ball into tight clusters of bricks rather than bouncing it freely — a trapped ball between the ceiling and bricks clears rows extremely fast. Prioritize the Catch power-up (C) on difficult levels to set up a precise angle. On levels 7–10, watch for the red skull enemies — they destroy the ball on contact, so keep your paddle moving.</strong></p>
+
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <p class="faq-q">Q: How do I use the Laser power-up on mobile?</p>
+        <p class="faq-a">When the Laser (L) capsule is active, a ⚡ FIRE LASER button appears on-screen (below the canvas on mobile, in the right panel on desktop). Click or tap it to fire two laser beams from the paddle's nozzles. The laser cannot be triggered from the keyboard — only from the button.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q: What happens if I collect both Enlarge and Shrink?</p>
+        <p class="faq-a">The most recently collected size power-up always wins. Collecting Shrink (H) while Enlarge (E) is active immediately replaces it with the smaller paddle.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q: Is it possible to finish a level without destroying all bricks?</p>
+        <p class="faq-a">Yes — collect the Break (K) capsule to open an exit at the top of the screen. Bounce a ball through the gap to advance to the next level instantly, regardless of how many bricks remain.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q: Can Gold bricks ever be destroyed?</p>
+        <p class="faq-a">No. Gold bricks are permanently indestructible and do not count toward the level-clear condition. They act as permanent obstacles that redirect the ball.</p>
+      </div>
+
+      <div class="related-games-section">
+        <h3>More Free Classic Arcade Games</h3>
+        <div class="related-games-grid">
+          <a href="../tetris/" class="related-game-link">
+            <span class="rel-icon">▦</span>
+            TETRIX
+          </a>
+          <a href="../pac-man/" class="related-game-link">
+            <span class="rel-icon">◕</span>
+            CHOMP
+          </a>
+          <a href="../space-invaders/" class="related-game-link">
+            <span class="rel-icon">👾</span>
+            ALIEN WAVE
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <p class="disclaimer">Fan-made tribute · Not affiliated with or endorsed by any original game publisher</p>
+
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="arkanoid.js"></script>
+</body>
+</html>

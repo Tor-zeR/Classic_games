@@ -651,11 +651,6 @@ document.getElementById('btn-pause').addEventListener('click', () => {
 document.getElementById('btn-restart').addEventListener('click', startGame);
 
 // Music toggle
-document.getElementById('music-toggle').addEventListener('click', function () {
-  // Cycle:  ♪ CHIP  →  ♪ SYNTH  →  ♪ OFF  →  ♪ CHIP  → …
-  const { name } = NeonArcade.cycleTrack();
-  this.textContent = '♪ ' + name;
-});
 document.getElementById('music-mute').addEventListener('click', function () {
   const { on } = NeonArcade.toggleMusic();
   this.textContent = on ? 'Music: ON' : 'Music: OFF';
